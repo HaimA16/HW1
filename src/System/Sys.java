@@ -37,7 +37,7 @@ public class Sys {
             for (int j = 0; j < numMedals; j++) {
                 System.out.print("Enter medal type (bronze, silver, gold): ");
                 String medalStr = sc.next();
-                medals[j] = Medal.valueOf(medalStr.toUpperCase());
+                medals[j] = medalStr;
             }
 
             System.out.print("Choose type of animal: \n" +
@@ -66,6 +66,8 @@ public class Sys {
                     }
                     break;
                 case 2:
+                    System.out.print("Enter dive depth");
+                    double diveDept = sc.nextDouble();
                     System.out.print("Choose animal:\n" +
                             "1) Alligator\n" +
                             "2) Whale\n" +
@@ -73,10 +75,14 @@ public class Sys {
                     int waterType = sc.nextInt();
                     switch (waterType) {
                         case 1:
-                            animals[i] = new Alligator(name, gender, weight, speed, medals, location);
+                            System.out.print("Enter area of living");
+                             String area = sc.next();
+                            animals[i] = new Alligator(name, gender, weight, speed, medals, location,diveDept,area);
                             break;
                         case 2:
-                            animals[i] = new Whale(name, gender, weight, speed, medals, location);
+                            System.out.print("Enter food type");
+                            String food = sc.next();
+                            animals[i] = new Whale(name, gender, weight, speed, medals, location,diveDept,food);
                             break;
                         case 3:
                             animals[i] = new Dolphin(name, gender, weight, speed, medals, location);
@@ -84,19 +90,24 @@ public class Sys {
                     }
                     break;
                 case 3:
+
                     System.out.print("Choose animal:\n" +
                             "1) Dog\n" +
                             "2) Cat\n" +
                             "3) Snake\n");
                     int terrestrialType = sc.nextInt();
+                    System.out.print("Enter number of legs");
+                    int noLeg = sc.nextInt();
                     switch (terrestrialType) {
                         case 1:
-                            animals[i] = new Dog(name, gender, weight, speed, medals, location);
+                            System.out.print("Enter breed");
+                            String breed = sc.next();
+                            animals[i] = new Dog(name, gender, weight, speed, medals, location,noLeg, breed);
                             break;
                         case 2:
                             System.out.print("Is the cat castrated? (true/false): ");
                             boolean castrated = sc.nextBoolean();
-                            animals[i] = new Cat(name, gender, weight, speed, medals, location, castrated);
+                            animals[i] = new Cat(name, gender, weight, speed, medals, location,noLeg, castrated);
                             break;
                         case 3:
                             System.out.print("Enter snake length: ");
@@ -104,7 +115,7 @@ public class Sys {
                             System.out.print("Enter if snake is poisonous (YES, NO): ");
                             String poisonousStr = sc.next();
                             Snake.Poisonous poisonous = Snake.Poisonous.valueOf(poisonousStr.toUpperCase());
-                            animals[i] = new Snake(name, gender, weight, speed, medals, location, length, poisonous);
+                            animals[i] = new Snake(name, gender, weight, speed, medals, location,noLeg, length, poisonous);
                             break;
                     }
                     break;
@@ -112,7 +123,10 @@ public class Sys {
         }
 
         while (true) {
-            System.out.print("Choose an option: \n1-View all animals\n2-Hear all animals\n3-Exit\n");
+            System.out.print("Choose an option: \n" +
+                    "1-View all animals\n" +
+                    "2-Hear all animals\n" +
+                    "3-Exit\n");
             int option = sc.nextInt();
             if (option == 3) {
                 break;

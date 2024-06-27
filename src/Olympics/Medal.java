@@ -1,8 +1,9 @@
 package Olympics;
 
- enum MedalType {bronze, silver, gold}
+
 
 public class Medal {
+    enum MedalType {bronze, silver, gold}
     private MedalType type;
     private String tournament;
     private int year;

@@ -6,9 +6,9 @@ import Mobility.Point;
 import java.util.Arrays;
 
 
-enum Gender{Male, Female, Hermaphrodite}
 
 public abstract class Animal extends Mobile {
+    enum Gender{Male, Female, Hermaphrodite}
     private String name;
     private Gender gender;
     private double weight, speed;
