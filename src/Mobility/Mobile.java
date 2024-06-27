@@ -9,12 +9,12 @@ public abstract class Mobile implements ILocatable {
         this.totalDistance = 0;
     }
 
-    public void updateTotalDistance(double distance) {
+    public void addTotalDistance(double distance) {
             totalDistance += distance;
     }
 
     public double calcDistance(Point point) {
-        if (point == null) {
+        if (point.getX() == 0 && point.getY() == 0) {
             return 0;
         }
         int dx = point.getX() - this.location.getX();
@@ -28,7 +28,7 @@ public abstract class Mobile implements ILocatable {
         }
 
         double distance = calcDistance(point);
-        updateTotalDistance(distance);
+        addTotalDistance(distance);
 
         this.location.setX(point.getX());
         this.location.setY(point.getY());
@@ -60,7 +60,6 @@ public abstract class Mobile implements ILocatable {
 
     public String toString() {
         return "(" + this.location.getX() + ", " + this.location.getY() + ")";
-
 
     }
 }

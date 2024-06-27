@@ -55,10 +55,9 @@ public class Medal {
 
 
     public String toString() {
-        return "Medal{" +
-                "type=" + type +
-                ", tournament='" + tournament + '\'' +
-                ", year=" + year +
-                '}';
+        return "Medal: " + " \n" +
+                "type= " + type + "\n" +
+                "tournament= " + tournament + "\n" +
+                "year= " + year;
     }
 }
