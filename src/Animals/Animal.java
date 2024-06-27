@@ -23,7 +23,7 @@ public abstract class Animal extends Mobile {
         this.weight = weight;
         this.speed = speed;
         this.medals = new Medal[medals.length];
-        Arrays.fill(this.medals, medals);
+
     }
     public void makeSound(){
         System.out.println("Animal " + name + " said ");
