@@ -2,8 +2,9 @@ package Animals;
 
 import Mobility.Point;
 import Olympics.Medal;
-enum Poisonous {yes,no};
+
 public class Snake extends TerrestrialAnimals{
+    public enum Poisonous {YES,NO};
     private Poisonous poisonous;
     private double length;
     public Snake(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, int noLegs, double lenght, Poisonous poisonous){

@@ -8,7 +8,9 @@ import java.util.Arrays;
 
 
 public abstract class Animal extends Mobile {
-    enum Gender{Male, Female, Hermaphrodite}
+    //public abstract void makeSound();
+
+    public enum Gender{MALE, FEMALE, HERMAPHHRODITE}
     private String name;
     private Gender gender;
     private double weight, speed;

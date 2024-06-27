@@ -3,7 +3,7 @@ package Olympics;
 
 
 public class Medal {
-    enum MedalType {bronze, silver, gold}
+    public enum MedalType { BRONZE, SILVER, GOLD }
     private MedalType type;
     private String tournament;
     private int year;

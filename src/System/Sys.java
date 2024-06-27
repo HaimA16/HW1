@@ -1,17 +1,7 @@
 package System;
-import java.util.Scanner;
 
-import Animals.AirAnimal;
-import Animals.Animal;
-import Animals.Gender;
-import Animals.Snake;
-import Animals.TerrestrialAnimals;
-import Animals.Dog;
-import Animals.Cat;
-import Animals.WaterAnimal;
-import Animals.Alligator;
-import Animals.Whale;
-import Animals.Dolphin;
+import java.util.Scanner;
+import Animals.*;
 import Mobility.Point;
 import Olympics.Medal;
 
@@ -26,7 +16,7 @@ public class Sys {
             String name = sc.next();
             System.out.print("Enter animal gender (Male, Female, Hermaphrodite): ");
             String genderStr = sc.next();
-            Gender gender = Gender.valueOf(genderStr.toUpperCase());
+            Animal.Gender gender = Animal.Gender.valueOf(genderStr.toUpperCase());
             System.out.print("Enter animal weight: ");
             double weight = sc.nextDouble();
             System.out.print("Enter animal speed: ");
@@ -35,9 +25,14 @@ public class Sys {
             int numMedals = sc.nextInt();
             Medal[] medals = new Medal[numMedals];
             for (int j = 0; j < numMedals; j++) {
-                System.out.print("Enter medal type (bronze, silver, gold): ");
-                String medalStr = sc.next();
-                medals[j] = medalStr;
+                System.out.print("Enter medal type (BRONZE, SILVER, GOLD): ");
+                String medalStr = sc.next().toUpperCase();
+                Medal.MedalType medalType = Medal.MedalType.valueOf(medalStr);
+                System.out.print("Enter tournament: ");
+                String tournament = sc.next();
+                System.out.print("Enter year: ");
+                int year = sc.nextInt();
+                medals[j] = new Medal(medalType, tournament, year);
             }
 
             System.out.print("Choose type of animal: \n" +
@@ -48,7 +43,7 @@ public class Sys {
             Point location = new Point(0, 0); // example location, can be changed
             switch (type) {
                 case 1:
-                    System.out.print("Enter wing span");
+                    System.out.print("Enter wing span: ");
                     double span = sc.nextDouble();
                     System.out.print("Choose animal:\n" +
                             "1) Eagle\n" +
@@ -56,17 +51,19 @@ public class Sys {
                     int airType = sc.nextInt();
                     switch (airType) {
                         case 1:
-                            System.out.print("Enter altitude of flight");
+                            System.out.print("Enter altitude of flight: ");
                             double altitude = sc.nextDouble();
-                            animals[i] = new Eagle(name, gender, weight, speed, medals, location,span,altitude);
+                            animals[i] = new Eagle(name, gender, weight, speed, medals, location, span, altitude);
                             break;
                         case 2:
-                            animals[i] = new Pigeon(name, gender, weight, speed, medals, location);
+                            System.out.print("Enter family: ");
+                            String family = sc.next();
+                            animals[i] = new Pigeon(name, gender, weight, speed, medals, location, span, family);
                             break;
                     }
                     break;
                 case 2:
-                    System.out.print("Enter dive depth");
+                    System.out.print("Enter dive depth: ");
                     double diveDept = sc.nextDouble();
                     System.out.print("Choose animal:\n" +
                             "1) Alligator\n" +
@@ -75,47 +72,49 @@ public class Sys {
                     int waterType = sc.nextInt();
                     switch (waterType) {
                         case 1:
-                            System.out.print("Enter area of living");
-                             String area = sc.next();
-                            animals[i] = new Alligator(name, gender, weight, speed, medals, location,diveDept,area);
+                            System.out.print("Enter area of living: ");
+                            String area = sc.next();
+                            animals[i] = new Alligator(name, gender, weight, speed, medals, location, diveDept, area);
                             break;
                         case 2:
-                            System.out.print("Enter food type");
+                            System.out.print("Enter food type: ");
                             String food = sc.next();
-                            animals[i] = new Whale(name, gender, weight, speed, medals, location,diveDept,food);
+                            animals[i] = new Whale(name, gender, weight, speed, medals, location, diveDept, food);
                             break;
                         case 3:
-                            animals[i] = new Dolphin(name, gender, weight, speed, medals, location);
+                            System.out.print("Enter water type (SEA, SWEET): ");
+                            String waterTypeStr = sc.next().toUpperCase();
+                            Dolphin.WaterType waterTypeEnum = Dolphin.WaterType.valueOf(waterTypeStr);
+                            animals[i] = new Dolphin(name, gender, weight, speed, medals, location, diveDept, waterTypeEnum);
                             break;
                     }
                     break;
                 case 3:
-
+                    System.out.print("Enter number of legs: ");
+                    int noLegs = sc.nextInt();
                     System.out.print("Choose animal:\n" +
                             "1) Dog\n" +
                             "2) Cat\n" +
                             "3) Snake\n");
                     int terrestrialType = sc.nextInt();
-                    System.out.print("Enter number of legs");
-                    int noLeg = sc.nextInt();
                     switch (terrestrialType) {
                         case 1:
-                            System.out.print("Enter breed");
+                            System.out.print("Enter breed: ");
                             String breed = sc.next();
-                            animals[i] = new Dog(name, gender, weight, speed, medals, location,noLeg, breed);
+                            animals[i] = new Dog(name, gender, weight, speed, medals, location, noLegs, breed);
                             break;
                         case 2:
                             System.out.print("Is the cat castrated? (true/false): ");
                             boolean castrated = sc.nextBoolean();
-                            animals[i] = new Cat(name, gender, weight, speed, medals, location,noLeg, castrated);
+                            animals[i] = new Cat(name, gender, weight, speed, medals, location, noLegs, castrated);
                             break;
                         case 3:
                             System.out.print("Enter snake length: ");
                             double length = sc.nextDouble();
                             System.out.print("Enter if snake is poisonous (YES, NO): ");
-                            String poisonousStr = sc.next();
-                            Snake.Poisonous poisonous = Snake.Poisonous.valueOf(poisonousStr.toUpperCase());
-                            animals[i] = new Snake(name, gender, weight, speed, medals, location,noLeg, length, poisonous);
+                            String poisonousStr = sc.next().toUpperCase();
+                            Snake.Poisonous poisonous = Snake.Poisonous.valueOf(poisonousStr);
+                            animals[i] = new Snake(name, gender, weight, speed, medals, location, noLegs, length, poisonous);
                             break;
                     }
                     break;
@@ -139,7 +138,7 @@ public class Sys {
                     break;
                 case 2:
                     for (Animal animal : animals) {
-                        animal.makeSound();
+                        //animal.makeSound();
                     }
                     break;
             }
