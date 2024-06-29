@@ -2,17 +2,16 @@ package Animals;
 import Mobility.Mobile;
 import Olympics.Medal;
 import Mobility.Point;
-
 import java.util.Arrays;
 
 
 
 public abstract class Animal extends Mobile {
-    //public abstract void makeSound();
+
 
     public enum Gender{MALE, FEMALE, HERMAPHHRODITE}
-    private String name;
-    private Gender gender;
+    private final String name;
+    private final Gender gender;
     private double weight, speed;
     private Medal [] medals;
     public Animal(String name, Gender gender, double weight, double speed, Medal [] medals, Point location) {
@@ -40,9 +39,8 @@ public abstract class Animal extends Mobile {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!(obj instanceof Animal))
+        if (!(obj instanceof Animal other))
             return false;
-        Animal other = (Animal) obj;
         return this.name.equals(other.name) &&
                 this.gender == other.gender &&
                 this.weight == other.weight &&
@@ -56,8 +54,11 @@ public abstract class Animal extends Mobile {
                 "Gender: " + gender + "\n" +
                 "Weight: " + weight + "\n" +
                 "Speed: " + speed + "\n" +
-                "Medals: " + Arrays.toString(medals) + "\n" +
-                "Location: " + getLocation();
+                "Medals: \n" + Arrays.toString(medals) + "\n" +
+                "Location: " + getLocation() + "\n" +
+                "****************************************************";
+
+
     }
 }
 

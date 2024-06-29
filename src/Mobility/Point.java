@@ -1,11 +1,13 @@
 package Mobility;
 
-
 public class Point {
     private int x;
     private int y;
 
     public Point(int x, int y) {
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException("Coordinates must be non-negative.");
+        }
         this.x = x;
         this.y = y;
     }
@@ -15,15 +17,41 @@ public class Point {
     }
 
     public boolean setX(int x) {
-        this.x = Math.max(0, x);
-        return x > 0;
+        if (x < 0) {
+            return false;
+        }
+        if (this.x != x) {
+            this.x = x;
+            return true;
+        }
+        return false;
     }
+
     public int getY() {
         return y;
     }
 
     public boolean setY(int y) {
-        this.y = Math.max(0, y);
-        return y > 0;
+        if (y < 0) {
+            return false;
+        }
+        if (this.y != y) {
+            this.y = y;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Point point = (Point) obj;
+        return x == point.x && y == point.y;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
     }
 }

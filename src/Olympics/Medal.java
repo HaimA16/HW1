@@ -8,6 +8,11 @@ public class Medal {
     private String tournament;
     private int year;
 
+    public Medal(){
+        type=MedalType.BRONZE;
+        tournament="Olympics";
+        year=2024;
+    }
     public Medal(MedalType type, String tournament, int year) {
         this.type = type;
         this.tournament = tournament;
@@ -56,9 +61,8 @@ public class Medal {
 
 
     public String toString() {
-        return "Medal: " + " \n" +
-                "type= " + type + "\n" +
-                "tournament= " + tournament + "\n" +
-                "year= " + year;
+        return "Type= " + type + "," +
+                "Tournament= " + tournament + "," +
+                "Year= " + year + "\n";
     }
 }
