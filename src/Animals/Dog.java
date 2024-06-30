@@ -9,4 +9,7 @@ public class Dog extends TerrestrialAnimals{
         super(name, gender, weight, speed, medals, location, noLegs);
         this.breed = breed;
     }
+    protected String getSound() {
+        return "Woof Woof";
+    }
 }

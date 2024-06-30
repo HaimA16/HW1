@@ -3,7 +3,7 @@ package Animals;
 import Mobility.Point;
 import Olympics.Medal;
 
-public class WaterAnimal extends Animal{
+public abstract class WaterAnimal extends Animal{
     private static final int MAX_DIVE = -800;
     private double diveDept;
     public WaterAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, double diveDept){

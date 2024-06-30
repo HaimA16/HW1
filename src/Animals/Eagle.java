@@ -14,4 +14,7 @@ public class Eagle extends AirAnimal {
         this.altitudeOfFlight = altitudeOfFlight;
 
     }
+    protected String getSound() {
+        return "Clack-wack-chack";
+    }
 }

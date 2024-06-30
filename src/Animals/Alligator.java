@@ -9,4 +9,7 @@ public class Alligator extends WaterAnimal{
         super(name, gender, weight, speed, medals, location, diveDept);
         this.AreaOfLiving = AreaOfLiving;
     }
+    protected String getSound() {
+        return "Roar";
+    }
 }

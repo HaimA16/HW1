@@ -12,4 +12,8 @@ public class Dolphin extends WaterAnimal{
         this.waterType = waterType;
     }
 
+    @Override
+    protected String getSound() {
+        return "Click-click";
+    }
 }

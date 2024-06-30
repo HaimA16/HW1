@@ -9,4 +9,7 @@ public class Whale extends WaterAnimal{
         super(name, gender, weight, speed, medals, location, diveDept);
         this.foodType = foodType;
     }
+    protected String getSound() {
+        return "Splash";
+    }
 }

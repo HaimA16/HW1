@@ -32,9 +32,11 @@ public abstract class Animal extends Mobile {
         }
 
     }
-    /*public void makeSound(){
-        System.out.println("Animal " + name + " said ");
-    }*/
+    protected abstract String getSound();
+
+    public final void makeSound() {
+        System.out.println("Animal: " + getClass().getSimpleName() + " name: " + name + " said " + getSound());
+    }
 
     public boolean equals(Object obj) {
         if (this == obj)

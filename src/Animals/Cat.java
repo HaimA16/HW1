@@ -9,4 +9,7 @@ public class Cat extends TerrestrialAnimals {
         super(name, gender, weight, speed, medals, location, noLegs);
         this.castrated = castrated;
     }
+    protected String getSound() {
+        return "Meow";
+    }
 }

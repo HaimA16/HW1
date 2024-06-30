@@ -245,8 +245,8 @@ public class Sys {
                     }
                     break;
                 case 2:
-                    for (Animal animal : animals) {
-                        // animal.makeSound();
+                    for (int i = 0; i < animals.length; i++) {
+                        animals[i].makeSound();
                     }
                     break;
                 default:

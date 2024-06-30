@@ -15,5 +15,8 @@ public class Snake extends TerrestrialAnimals{
         this.poisonous = poisonous;
         this.length = lenght;
     }
+    protected String getSound() {
+        return "sssssss";
+    }
 
 }

@@ -9,4 +9,7 @@ public class Pigeon extends AirAnimal{
         super(name, gender, weight, speed, medals, location, wingspan);
         this.family = family;
     }
+    protected String getSound() {
+        return "Arr-rar-rar-rar-raah";
+    }
 }
