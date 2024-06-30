@@ -235,7 +235,7 @@ public class Sys {
                     """);
             int option = sc.nextInt();
             if (option == 3) {
-                System.out.println("thank you, bye!");
+                System.out.println("thank you,bye!");
                 break;
             }
             switch (option) {
