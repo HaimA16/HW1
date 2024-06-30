@@ -32,6 +32,16 @@ public abstract class Animal extends Mobile {
         }
 
     }
+    boolean setSpeed(double speed){
+        if(speed > 0){
+            this.speed = speed;
+            return true;
+        }
+        return false;
+    }
+    double getSpeed(){
+        return speed;
+    }
     protected String getSound(){return null;}
 
     public void makeSound() {
@@ -47,10 +57,9 @@ public abstract class Animal extends Mobile {
                 this.gender == other.gender &&
                 this.weight == other.weight &&
                 this.speed == other.speed &&
-                Arrays.equals(this.medals, other.medals);
+                this.medals.equals(other.medals);
     }
 
-    @Override
     public String toString() {
         return "Animal: " + name + "\n" +
                 "Gender: " + gender + "\n" +
