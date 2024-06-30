@@ -3,7 +3,7 @@ package Animals;
 import Mobility.Point;
 import Olympics.Medal;
 
-public abstract class TerrestrialAnimals extends Animal{
+public class TerrestrialAnimals extends Animal{
     private int noLegs;
     public TerrestrialAnimals(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, int noLegs) {
         super(name, gender, weight, speed, medals, location);

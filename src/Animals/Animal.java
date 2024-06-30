@@ -32,9 +32,9 @@ public abstract class Animal extends Mobile {
         }
 
     }
-    protected abstract String getSound();
+    protected String getSound(){return null;}
 
-    public final void makeSound() {
+    public void makeSound() {
         System.out.println("Animal: " + getClass().getSimpleName() + " name: " + name + " said " + getSound());
     }
 

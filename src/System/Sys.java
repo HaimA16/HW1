@@ -21,7 +21,7 @@ public class Sys {
                 break;
             } catch (Exception e) {
                 System.out.println("Invalid input. Please enter a valid number.");
-                sc.next(); // clear the invalid input
+                sc.next();
             }
         }
 
@@ -46,7 +46,7 @@ public class Sys {
                     break;
                 } catch (Exception e) {
                     System.out.println("Invalid input. Please enter a valid number.");
-                    sc.next(); // clear the invalid input
+                    sc.next();
                 }
             }
 
@@ -79,7 +79,7 @@ public class Sys {
                     break;
                 } catch (Exception e) {
                     System.out.println("Invalid input. Please enter a valid weight.");
-                    sc.next(); // clear the invalid input
+                    sc.next();
                 }
             }
 
@@ -111,7 +111,7 @@ public class Sys {
                     break;
                 } catch (Exception e) {
                     System.out.println("Invalid input. Please enter a valid number of medals.");
-                    sc.next(); // clear the invalid input
+                    sc.next();
                 }
             }
 
@@ -131,7 +131,7 @@ public class Sys {
                         break;
                     } catch (Exception e) {
                         System.out.println("Invalid input for medal. Please try again.");
-                        sc.next(); // clear the invalid input
+                        sc.next();
                     }
                 }
             }
