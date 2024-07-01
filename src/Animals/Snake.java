@@ -16,8 +16,8 @@ public class Snake extends TerrestrialAnimals implements IReptile{
         return "sssssss";
     }
 
-    public boolean speedUp(int increment) {
-        return getSpeed() + increment < MAX_SPEED && setSpeed(increment);
+    public boolean speedUp(int speeder) {
+        return getSpeed() + speeder < MAX_SPEED && setSpeed(speeder);
     }
 }
 

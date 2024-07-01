@@ -53,10 +53,6 @@ public abstract class Mobile implements ILocatable {
         return location;
     }
 
-    public double getTotalDistance() {
-        return totalDistance;
-    }
-
 
     public boolean equals(Object obj) {
         if (this == obj)

@@ -19,36 +19,6 @@ public class Medal {
         this.year = year;
     }
 
-    public MedalType getType() {
-        return type;
-    }
-
-    public boolean setType(MedalType type) {
-        this.type = type;
-        return true;
-    }
-
-    public String getTournament() {
-        return tournament;
-    }
-
-    public boolean setTournament(String tournament) {
-        if (tournament != null) {
-            this.tournament = tournament;
-            return true;
-        }
-        return false;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public boolean setYear(int year) {
-        this.year = Math.max(0, year);
-        return year > 0;
-    }
-
 
     public boolean equals(Object obj) {
         if (this == obj)

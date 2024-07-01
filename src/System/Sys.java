@@ -305,10 +305,11 @@ public class Sys {
                     Choose an option:
                     1-View all animals
                     2-Hear all animals
-                    3-Exit
+                    3-compare
+                    4-Exit
                     """);
             int option = sc.nextInt();
-            if (option == 3) {
+            if (option == 4) {
                 System.out.println("Thank you, bye!");
                 break;
             }
@@ -321,6 +322,17 @@ public class Sys {
                 case 2:
                     for (Animal animal : animals) {
                         animal.makeSound();
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < animals.length; i++) {
+                        if (animals.length<2) {
+                            System.out.println("cant compare only one animal.");
+                            break;
+                        }
+                        if(animals[i].equals(animals[i+1]))
+                            System.out.println("Yes!");
+
                     }
                     break;
                 default:

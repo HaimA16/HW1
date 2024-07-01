@@ -12,7 +12,7 @@ public class Alligator extends WaterAnimal implements IReptile{
     protected String getSound() {
         return "Roar";
     }
-    public boolean speedUp(int increment) {
-        return getSpeed() + increment < MAX_SPEED && setSpeed(increment);
+    public boolean speedUp(int speeder) {
+        return getSpeed() + speeder < MAX_SPEED && setSpeed(speeder);
     }
 }

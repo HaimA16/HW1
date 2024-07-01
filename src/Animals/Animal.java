@@ -32,14 +32,14 @@ public abstract class Animal extends Mobile {
         }
 
     }
-    boolean setSpeed(double speed){
+    public boolean setSpeed(double speed){
         if(speed > 0){
             this.speed = speed;
             return true;
         }
         return false;
     }
-    double getSpeed(){
+    public double getSpeed(){
         return speed;
     }
     protected String getSound(){return null;}
@@ -66,7 +66,7 @@ public abstract class Animal extends Mobile {
                 "Weight: " + weight + "\n" +
                 "Speed: " + speed + "\n" +
                 "Medals: \n" + Arrays.toString(medals) + "\n" +
-                "Location: " + getLocation() + "\n" +
+                super.toString() + "\n" +
                 "****************************************************";
 
 
