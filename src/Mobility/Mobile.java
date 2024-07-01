@@ -3,14 +3,8 @@ package Mobility;
 public abstract class Mobile implements ILocatable {
     private Point location;
     private double totalDistance;
-    public Mobile(){
-        location = new Point(0,0);
-    }
 
     public Mobile(Point location) {
-        if (location == null) {
-            throw new IllegalArgumentException("Location cannot be null.");
-        }
         this.location = location;
         this.totalDistance = 0;
     }
@@ -53,13 +47,17 @@ public abstract class Mobile implements ILocatable {
         return location;
     }
 
+    public double getTotalDistance() {
+        return totalDistance;
+    }
+
 
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (!(obj instanceof Mobile other))
             return false;
-        return this.location.equals(other.location);
+        return this.location.getX() == other.location.getX() && this.location.getY() == other.location.getY();
     }
 
 

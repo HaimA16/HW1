@@ -325,16 +325,27 @@ public class Sys {
                     }
                     break;
                 case 3:
-                    for (int i = 0; i < animals.length; i++) {
-                        if (animals.length<2) {
-                            System.out.println("cant compare only one animal.");
-                            break;
+                    if (animals.length < 2) {
+                        System.out.println("Can't compare, only 1 animal!.");
+                    } else {
+                        boolean allIdentical = true;
+                        for (int i = 0; i < animals.length; i++) {
+                            for (int j = i + 1; j < animals.length; j++) {
+                                if (!animals[i].equals(animals[j])) {
+                                    allIdentical = false;
+                                    break;
+                                }
+                            }
                         }
-                        if(animals[i].equals(animals[i+1]))
-                            System.out.println("Yes!");
 
+                        if (allIdentical) {
+                            System.out.println("All animals identical.");
+                        } else {
+                            System.out.println("All animals not identical.");
+                        }
                     }
                     break;
+
                 default:
                     System.out.println("Invalid option. Please choose a valid option.");
             }
