@@ -11,6 +11,6 @@ public class AirAnimal extends Animal {
     }
     public AirAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, double wingspan) {
         super(name, gender, weight, speed, medals, new Point(0,100));
-        this.wingspan = wingspan;
+        this.wingspan = wn;
     }
 }
