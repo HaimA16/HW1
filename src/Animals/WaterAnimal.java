@@ -21,4 +21,31 @@ public class WaterAnimal extends Animal{
         }
         return diveDept;
     }
+
+     public boolean setDiveDept(double dive){
+        if (dive > MAX_DIVE && diveDept + dive > MAX_DIVE) {
+            return false;
+        }
+        diveDept = dive;
+        return true;
+     }
+
+     public double getDiveDept(){return diveDept;}
+
+    /**
+     * Checks if two water animals are equal.
+     *
+     * @param obj the object to compare with
+     * @return true if the water animals are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof WaterAnimal other)) {
+            return false;
+        }
+        return super.equals(obj) && diveDept == other.diveDept;
+    }
 }

@@ -18,4 +18,24 @@ public class TerrestrialAnimals extends Animal{
         }
         this.noLegs = noLegs;
     }
+
+    public boolean setNoLegs(int noLegs) {
+        if (noLegs < 0) {
+            return false;
+        }
+        this.noLegs = noLegs;
+        return true;
+    }
+
+    public int getNoLegs() {return noLegs;}
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof TerrestrialAnimals other)) {
+            return false;
+        }
+        return super.equals(obj) && noLegs == other.noLegs;
+    }
 }
