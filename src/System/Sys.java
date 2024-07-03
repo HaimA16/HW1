@@ -2,8 +2,8 @@ package System;
 
 import java.util.Scanner;
 import Animals.*;
-import Mobility.Point;
-import Olympics.Medal;
+import Mobility.*;
+import Olympics.*;
 
 public class Sys {
     public static void main(String[] args) {
@@ -50,7 +50,7 @@ public class Sys {
                 }
             }
 
-            Point location;
+            Point location = null;
             System.out.print("Enter animal name: ");
             String name = sc.next();
             Animal.Gender gender;
@@ -151,7 +151,7 @@ public class Sys {
 
             switch (type) {
                 case 1:
-                    location = new Point(0, 100);
+                    //location = new Point(0, 100);
                     int airType;
                     while (true) {
                         try {
@@ -187,7 +187,7 @@ public class Sys {
                     }
                     break;
                 case 2:
-                    location = new Point(50, 0);
+                    //location = new Point(50, 0);
                     int waterType;
                     while (true) {
                         try {
@@ -252,7 +252,7 @@ public class Sys {
                     }
                     break;
                 case 3:
-                    location = new Point(0, 20);
+                    //location = new Point(0, 20);
                     int terrestrialType;
                     while (true) {
                         try {

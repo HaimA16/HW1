@@ -5,11 +5,15 @@ import Olympics.Medal;
 
 public class Alligator extends WaterAnimal implements IReptile{
     private String AreaOfLiving;
+    public Alligator(){
+        super();
+        AreaOfLiving = null;
+    }
     public Alligator(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, double diveDept, String AreaOfLiving) {
         super(name, gender, weight, speed, medals, location, diveDept);
         this.AreaOfLiving = AreaOfLiving;
     }
-    protected String getSound() {
+    public String getSound() {
         return "Roar";
     }
     public boolean speedUp(int speeder) {

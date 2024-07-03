@@ -4,6 +4,11 @@ public abstract class Mobile implements ILocatable {
     private Point location;
     private double totalDistance;
 
+    public Mobile(){
+        location = new Point(0,0);
+        totalDistance = 0;
+    }
+
     public Mobile(Point location) {
         this.location = location;
         this.totalDistance = 0;

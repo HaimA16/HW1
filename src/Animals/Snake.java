@@ -7,12 +7,17 @@ public class Snake extends TerrestrialAnimals implements IReptile{
     public enum Poisonous {YES,NO}
     private Poisonous poisonous;
     private double length;
+    public Snake(){
+        super();
+        poisonous = Poisonous.YES;
+        length = 0.0;
+    }
     public Snake(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, int noLegs, double length, Poisonous poisonous){
         super(name, gender, weight, speed, medals, location, noLegs);
         this.poisonous = poisonous;
         this.length = length;
     }
-    protected String getSound() {
+    public String getSound() {
         return "sssssss";
     }
 

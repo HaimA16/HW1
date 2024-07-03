@@ -5,11 +5,15 @@ import Olympics.Medal;
 
 public class Whale extends WaterAnimal{
     private String foodType;
+    public Whale(){
+        super();
+        foodType = null;
+    }
     public Whale(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, double diveDept, String foodType) {
         super(name, gender, weight, speed, medals, location, diveDept);
         this.foodType = foodType;
     }
-    protected String getSound() {
+    public String getSound() {
         return "Splash";
     }
 }

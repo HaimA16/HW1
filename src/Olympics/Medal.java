@@ -8,6 +8,7 @@ public class Medal {
     private String tournament;
     private int year;
 
+
     public Medal(){
         type=MedalType.BRONZE;
         tournament="Olympics";
