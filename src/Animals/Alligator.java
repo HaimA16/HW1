@@ -19,4 +19,12 @@ public class Alligator extends WaterAnimal implements IReptile{
     public boolean speedUp(int speeder) {
         return getSpeed() + speeder < MAX_SPEED && setSpeed(speeder);
     }
+    public boolean setArea(String area) {
+        if(AreaOfLiving == null){
+            return false;
+        }
+        AreaOfLiving = area;
+        return true;
+    }
+    public String getArea() {return AreaOfLiving;}
 }

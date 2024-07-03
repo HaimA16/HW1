@@ -15,8 +15,8 @@ public abstract class Animal extends Mobile {
      */
     public enum Gender { MALE, FEMALE, HERMAPHRODITE }
 
-    private final String name;
-    private final Gender gender;
+    private String name;
+    private Gender gender;
     private double weight, speed;
     private Medal[] medals;
 
@@ -93,6 +93,104 @@ public abstract class Animal extends Mobile {
      */
     public void makeSound() {
         System.out.println("Animal: " + getClass().getSimpleName() + " said " + getSound());
+    }
+
+    /**
+     * Sets the name of the animal.
+     *
+     * @param name the new name of the animal
+     * @return true if the name is valid and set, false otherwise
+     */
+    public boolean setName(String name) {
+        if (name != null && !name.isEmpty()) {
+            this.name = name;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Gets the name of the animal.
+     *
+     * @return the name of the animal
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the gender of the animal.
+     *
+     * @param gender the new gender of the animal
+     * @return true if the gender is valid and set, false otherwise
+     */
+    public boolean setGender(Gender gender) {
+        if (gender != null) {
+            this.gender = gender;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Gets the gender of the animal.
+     *
+     * @return the gender of the animal
+     */
+    public Gender getGender() {
+        return gender;
+    }
+
+    /**
+     * Sets the weight of the animal.
+     *
+     * @param weight the new weight of the animal
+     * @return true if the weight is valid and set, false otherwise
+     */
+    public boolean setWeight(double weight) {
+        if (weight > 0) {
+            this.weight = weight;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Gets the weight of the animal.
+     *
+     * @return the weight of the animal
+     */
+    public double getWeight() {
+        return weight;
+    }
+
+    /**
+     * Sets the medals of the animal.
+     *
+     * @param medals the new medals of the animal
+     * @return true if the medals are valid and set, false otherwise
+     */
+    public boolean setMedals(Medal[] medals) {
+        if (medals != null) {
+            this.medals = new Medal[medals.length];
+            for (int i = 0; i < medals.length; i++) {
+                if (medals[i] == null) {
+                    return false;
+                }
+                this.medals[i] = medals[i];
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Gets the medals of the animal.
+     *
+     * @return the medals of the animal
+     */
+    public Medal[] getMedals() {
+        return medals;
     }
 
     /**

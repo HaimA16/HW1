@@ -8,6 +8,7 @@ public class WaterAnimal extends Animal{
     private double diveDept;
     public WaterAnimal(){
         super();
+
         diveDept=0.0;
     }
     public WaterAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, double diveDept){

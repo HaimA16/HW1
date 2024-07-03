@@ -3,9 +3,8 @@ package System;
 import java.util.Scanner;
 import Animals.*;
 import Mobility.*;
-import Olympics.*;
-
 public class Sys {
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int size;
@@ -50,108 +49,12 @@ public class Sys {
                 }
             }
 
-            Point location = null;
-            System.out.print("Enter animal name: ");
-            String name = sc.next();
-            Animal.Gender gender;
-
-            while (true) {
-                try {
-                    System.out.print("Enter animal gender (Male, Female, Hermaphrodite): ");
-                    String genderStr = sc.next();
-                    gender = Animal.Gender.valueOf(genderStr.toUpperCase());
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Invalid gender. Please enter 'Male', 'Female', or 'Hermaphrodite'.");
-                }
-            }
-
-            double weight, speed;
-
-            while (true) {
-                try {
-                    System.out.print("Enter animal weight: ");
-                    weight = sc.nextDouble();
-                    if (weight <= 0) {
-                        System.out.println("Weight must be positive.");
-                        continue;
-                    }
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Invalid input. Please enter a valid weight.");
-                    sc.next();
-                }
-            }
-
-            while (true) {
-                try {
-                    System.out.print("Enter animal speed: ");
-                    speed = sc.nextDouble();
-                    if (speed <= 0) {
-                        System.out.println("Speed must be positive.");
-                        continue;
-                    }
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Invalid input. Please enter a valid speed.");
-                    sc.next();
-                }
-            }
-
-            int numMedals;
-
-            while (true) {
-                try {
-                    System.out.print("Enter number of medals: ");
-                    numMedals = sc.nextInt();
-                    if (numMedals < 0) {
-                        System.out.println("Number of medals cannot be negative.");
-                        continue;
-                    }
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Invalid input. Please enter a valid number of medals.");
-                    sc.next();
-                }
-            }
-
-            Medal[] medals = new Medal[numMedals];
-
-            for (int j = 0; j < numMedals; j++) {
-                while (true) {
-                    try {
-                        System.out.print("Enter medal type (BRONZE, SILVER, GOLD): ");
-                        String medalStr = sc.next().toUpperCase();
-                        Medal.MedalType medalType = Medal.MedalType.valueOf(medalStr);
-                        System.out.print("Enter tournament: ");
-                        String tournament = sc.next();
-                        int year;
-                        while (true) {
-                            try {
-                                System.out.print("Enter year: ");
-                                year = sc.nextInt();
-                                if (year < 1900 || year > 2024) {
-                                    System.out.println("Year must be between 1900 and 2024.");
-                                    continue;
-                                }
-                                break;
-                            } catch (Exception e) {
-                                System.out.println("Invalid input. Please enter a valid year.");
-                                sc.next();
-                            }
-                        }
-                        medals[j] = new Medal(medalType, tournament, year);
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("Invalid input for medal. Please try again.");
-                        sc.next();
-                    }
-                }
-            }
+            Point location;
+            AnimalAttributes attributes = new AnimalAttributes();
 
             switch (type) {
                 case 1:
-                    //location = new Point(0, 100);
+                    location = new Point(0, 100);
                     int airType;
                     while (true) {
                         try {
@@ -175,19 +78,21 @@ public class Sys {
                     double span = sc.nextDouble();
                     switch (airType) {
                         case 1:
+                            attributes.input(attributes);
                             System.out.print("Enter altitude of flight: ");
                             double altitude = sc.nextDouble();
-                            animals[i] = new Eagle(name, gender, weight, speed, medals, location, span, altitude);
+                            animals[i] = new Eagle(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, span, altitude);
                             break;
                         case 2:
+                            attributes.input(attributes);
                             System.out.print("Enter family: ");
                             String family = sc.next();
-                            animals[i] = new Pigeon(name, gender, weight, speed, medals, location, span, family);
+                            animals[i] = new Pigeon(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, span, family);
                             break;
                     }
                     break;
                 case 2:
-                    //location = new Point(50, 0);
+                    location = new Point(50, 0);
                     int waterType;
                     while (true) {
                         try {
@@ -225,16 +130,19 @@ public class Sys {
                     }
                     switch (waterType) {
                         case 1:
+                            attributes.input(attributes);
                             System.out.print("Enter area of living: ");
                             String area = sc.next();
-                            animals[i] = new Alligator(name, gender, weight, speed, medals, location, diveDept, area);
+                            animals[i] = new Alligator(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDept, area);
                             break;
                         case 2:
+                            attributes.input(attributes);
                             System.out.print("Enter food type: ");
                             String food = sc.next();
-                            animals[i] = new Whale(name, gender, weight, speed, medals, location, diveDept, food);
+                            animals[i] = new Whale(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDept, food);
                             break;
                         case 3:
+                            attributes.input(attributes);
                             Dolphin.WaterType waterTypeEnum;
                             while (true) {
                                 try {
@@ -247,12 +155,12 @@ public class Sys {
                                     sc.next();
                                 }
                             }
-                            animals[i] = new Dolphin(name, gender, weight, speed, medals, location, diveDept, waterTypeEnum);
+                            animals[i] = new Dolphin(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDept, waterTypeEnum);
                             break;
                     }
                     break;
                 case 3:
-                    //location = new Point(0, 20);
+                    location = new Point(0, 20);
                     int terrestrialType;
                     while (true) {
                         try {
@@ -277,23 +185,26 @@ public class Sys {
                     int noLegs = sc.nextInt();
                     switch (terrestrialType) {
                         case 1:
+                            attributes.input(attributes);
                             System.out.print("Enter breed: ");
                             String breed = sc.next();
-                            animals[i] = new Dog(name, gender, weight, speed, medals, location, noLegs, breed);
+                            animals[i] = new Dog(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, breed);
                             break;
                         case 2:
+                            attributes.input(attributes);
                             System.out.print("Is the cat castrated? (true/false): ");
                             boolean castrated = sc.nextBoolean();
-                            animals[i] = new Cat(name, gender, weight, speed, medals, location, noLegs, castrated);
+                            animals[i] = new Cat(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, castrated);
                             break;
                         case 3:
+                            attributes.input(attributes);
                             noLegs = 0;
                             System.out.print("Enter snake length: ");
                             double length = sc.nextDouble();
                             System.out.print("Enter if snake is poisonous (YES, NO): ");
                             String poisonousStr = sc.next().toUpperCase();
                             Snake.Poisonous poisonous = Snake.Poisonous.valueOf(poisonousStr);
-                            animals[i] = new Snake(name, gender, weight, speed, medals, location, noLegs, length, poisonous);
+                            animals[i] = new Snake(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, length, poisonous);
                             break;
                     }
                     break;
@@ -350,7 +261,6 @@ public class Sys {
                     System.out.println("Invalid option. Please choose a valid option.");
             }
         }
-
         sc.close();
     }
 }
