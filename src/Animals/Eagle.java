@@ -95,6 +95,5 @@ public class Eagle extends AirAnimal {
             return false;
         }
         return super.equals(obj) && other.altitudeOfFlight == altitudeOfFlight;
-
     }
 }
