@@ -38,4 +38,7 @@ public class TerrestrialAnimals extends Animal{
         }
         return super.equals(obj) && noLegs == other.noLegs;
     }
+    public String toString() {
+        return super.toString() + "number of legs: " + noLegs + "\n";
+    }
 }

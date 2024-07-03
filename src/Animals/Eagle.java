@@ -76,7 +76,7 @@ public class Eagle extends AirAnimal {
      */
     @Override
     public String toString() {
-        return super.toString() + "\n" +
+        return super.toString() +
                 "Altitude of Flight: " + altitudeOfFlight + "\n";
     }
 

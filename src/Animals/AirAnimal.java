@@ -33,4 +33,8 @@ public class AirAnimal extends Animal {
         }
         return super.equals(obj) && wingspan == other.wingspan;
     }
+
+    public String toString() {
+        return super.toString() + "wing span: " + wingspan + "\n";
+    }
 }

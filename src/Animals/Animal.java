@@ -224,7 +224,6 @@ public abstract class Animal extends Mobile {
                 "Weight: " + weight + "\n" +
                 "Speed: " + speed + "\n" +
                 "Medals: \n" + Arrays.toString(medals) + "\n" +
-                super.toString() + "\n" +
-                "****************************************************";
+                super.toString() + "\n";
     }
 }

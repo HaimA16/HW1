@@ -27,4 +27,18 @@ public class Alligator extends WaterAnimal implements IReptile{
         return true;
     }
     public String getArea() {return AreaOfLiving;}
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Alligator other)) {
+            return false;
+        }
+        return super.equals(obj) && other.AreaOfLiving.equals(AreaOfLiving);
+    }
+
+    public String toString() {
+        return super.toString() + "area: " + AreaOfLiving + "\n";
+    }
 }

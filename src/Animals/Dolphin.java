@@ -77,7 +77,7 @@ public class Dolphin extends WaterAnimal {
      */
     @Override
     public String toString() {
-        return super.toString() + "\n" +
+        return super.toString() +
                 "Water Type: " + waterType + "\n";
     }
     public boolean equals(Object obj) {

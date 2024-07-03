@@ -48,4 +48,8 @@ public class WaterAnimal extends Animal{
         }
         return super.equals(obj) && diveDept == other.diveDept;
     }
+
+    public String toString() {
+        return super.toString() + "dive: " + diveDept + "\n";
+    }
 }

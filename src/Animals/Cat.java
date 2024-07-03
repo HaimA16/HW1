@@ -36,4 +36,7 @@ public class Cat extends TerrestrialAnimals {
         }
         return super.equals(obj) && other.castrated == castrated;
     }
+    public String toString() {
+        return super.toString() + "castrated: " + castrated + "\n";
+    }
 }
