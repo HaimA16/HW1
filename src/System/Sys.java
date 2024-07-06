@@ -1,8 +1,12 @@
+/**
+ * Name: Haim Armias 315569061
+ * Name: Yeuda Baza
+ */
 package System;
-
 import java.util.Scanner;
 import Animals.*;
 import Mobility.*;
+
 public class Sys {
 
     public static void main(String[] args) {
@@ -74,20 +78,44 @@ public class Sys {
                             sc.next();
                         }
                     }
-                    System.out.print("Enter wing span: ");
-                    double span = sc.nextDouble();
+                    double span;
+                    while (true) {
+                        try {
+                            System.out.print("Enter wing span: ");
+                            span = sc.nextDouble();
+                            if (span <= 0) {
+                                System.out.println("Wing span must be positive.");
+                                continue;
+                            }
+                            break;
+                        } catch (Exception e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                            sc.next();
+                        }
+                    }
+
                     switch (airType) {
                         case 1:
-                            attributes.input(attributes);
-                            System.out.print("Enter altitude of flight: ");
-                            double altitude = sc.nextDouble();
-                            animals[i] = new Eagle(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, span, altitude);
+                            try {
+                                attributes.input(attributes);
+                                System.out.print("Enter altitude of flight: ");
+                                double altitude = sc.nextDouble();
+                                animals[i] = new Eagle(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, span, altitude);
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please try again.");
+                                sc.next();
+                            }
                             break;
                         case 2:
-                            attributes.input(attributes);
-                            System.out.print("Enter family: ");
-                            String family = sc.next();
-                            animals[i] = new Pigeon(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, span, family);
+                            try {
+                                attributes.input(attributes);
+                                System.out.print("Enter family: ");
+                                String family = sc.next();
+                                animals[i] = new Pigeon(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, span, family);
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please try again.");
+                                sc.next();
+                            }
                             break;
                     }
                     break;
@@ -113,13 +141,13 @@ public class Sys {
                             sc.next();
                         }
                     }
-                    double diveDept;
+                    double diveDepth;
                     while (true) {
                         try {
                             System.out.print("Enter dive depth: ");
-                            diveDept = sc.nextDouble();
-                            if (diveDept >= 0) {
-                                System.out.println("Dive depth must be Negative.");
+                            diveDepth = sc.nextDouble();
+                            if (diveDepth >= 0) {
+                                System.out.println("Dive depth must be negative.");
                                 continue;
                             }
                             break;
@@ -130,32 +158,47 @@ public class Sys {
                     }
                     switch (waterType) {
                         case 1:
-                            attributes.input(attributes);
-                            System.out.print("Enter area of living: ");
-                            String area = sc.next();
-                            animals[i] = new Alligator(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDept, area);
+                            try {
+                                attributes.input(attributes);
+                                System.out.print("Enter area of living: ");
+                                String area = sc.next();
+                                animals[i] = new Alligator(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDepth, area);
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please try again.");
+                                sc.next();
+                            }
                             break;
                         case 2:
-                            attributes.input(attributes);
-                            System.out.print("Enter food type: ");
-                            String food = sc.next();
-                            animals[i] = new Whale(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDept, food);
+                            try {
+                                attributes.input(attributes);
+                                System.out.print("Enter food type: ");
+                                String food = sc.next();
+                                animals[i] = new Whale(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDepth, food);
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please try again.");
+                                sc.next();
+                            }
                             break;
                         case 3:
-                            attributes.input(attributes);
-                            Dolphin.WaterType waterTypeEnum;
-                            while (true) {
-                                try {
-                                    System.out.print("Enter water type (SEA, SWEET): ");
-                                    String waterTypeStr = sc.next().toUpperCase();
-                                    waterTypeEnum = Dolphin.WaterType.valueOf(waterTypeStr);
-                                    break;
-                                } catch (Exception e) {
-                                    System.out.println("SEA or SWEET only!");
-                                    sc.next();
+                            try {
+                                attributes.input(attributes);
+                                Dolphin.WaterType waterTypeEnum;
+                                while (true) {
+                                    try {
+                                        System.out.print("Enter water type (SEA, SWEET): ");
+                                        String waterTypeStr = sc.next().toUpperCase();
+                                        waterTypeEnum = Dolphin.WaterType.valueOf(waterTypeStr);
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("SEA or SWEET only!");
+                                        sc.next();
+                                    }
                                 }
+                                animals[i] = new Dolphin(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDepth, waterTypeEnum);
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please try again.");
+                                sc.next();
                             }
-                            animals[i] = new Dolphin(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, diveDept, waterTypeEnum);
                             break;
                     }
                     break;
@@ -181,30 +224,76 @@ public class Sys {
                             sc.next();
                         }
                     }
-                    System.out.print("Enter number of legs: ");
-                    int noLegs = sc.nextInt();
+                    int noLegs;
+                    while (true) {
+                        try {
+                            System.out.print("Enter number of legs: ");
+                            noLegs = sc.nextInt();
+                            if (noLegs < 0) {
+                                System.out.println("Number of legs must be non-negative.");
+                                continue;
+                            }
+                            break;
+                        } catch (Exception e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                            sc.next();
+                        }
+                    }
                     switch (terrestrialType) {
                         case 1:
-                            attributes.input(attributes);
-                            System.out.print("Enter breed: ");
-                            String breed = sc.next();
-                            animals[i] = new Dog(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, breed);
+                            try {
+                                attributes.input(attributes);
+                                System.out.print("Enter breed: ");
+                                String breed = sc.next();
+                                animals[i] = new Dog(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, breed);
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please try again.");
+                                sc.next();
+                            }
                             break;
                         case 2:
-                            attributes.input(attributes);
-                            System.out.print("Is the cat castrated? (true/false): ");
-                            boolean castrated = sc.nextBoolean();
-                            animals[i] = new Cat(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, castrated);
+                            try {
+                                attributes.input(attributes);
+                                boolean castrated;
+                                while (true) {
+                                    try {
+                                        System.out.print("Is the cat castrated? (true/false): ");
+                                        castrated = sc.nextBoolean();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("Invalid input. Please enter true or false.");
+                                        sc.next();
+                                    }
+                                }
+                                animals[i] = new Cat(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, castrated);
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please try again.");
+                                sc.next();
+                            }
                             break;
                         case 3:
-                            attributes.input(attributes);
-                            noLegs = 0;
-                            System.out.print("Enter snake length: ");
-                            double length = sc.nextDouble();
-                            System.out.print("Enter if snake is poisonous (YES, NO): ");
-                            String poisonousStr = sc.next().toUpperCase();
-                            Snake.Poisonous poisonous = Snake.Poisonous.valueOf(poisonousStr);
-                            animals[i] = new Snake(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, length, poisonous);
+                            try {
+                                attributes.input(attributes);
+                                noLegs = 0;
+                                System.out.print("Enter snake length: ");
+                                double length = sc.nextDouble();
+                                Snake.Poisonous poisonous;
+                                while (true) {
+                                    try {
+                                        System.out.print("Enter if snake is poisonous (YES, NO): ");
+                                        String poisonousStr = sc.next().toUpperCase();
+                                        poisonous = Snake.Poisonous.valueOf(poisonousStr);
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("Invalid input. Please enter YES or NO.");
+                                        sc.next();
+                                    }
+                                }
+                                animals[i] = new Snake(attributes.name, attributes.gender, attributes.weight, attributes.speed, attributes.medals, location, noLegs, length, poisonous);
+                            } catch (Exception e) {
+                                System.out.println("Invalid input. Please try again.");
+                                sc.next();
+                            }
                             break;
                     }
                     break;
@@ -212,53 +301,58 @@ public class Sys {
         }
 
         while (true) {
-            System.out.print("""
-                    Choose an option:
-                    1-View all animals
-                    2-Hear all animals
-                    3-compare
-                    4-Exit
-                    """);
-            int option = sc.nextInt();
-            if (option == 4) {
-                System.out.println("Thank you, bye!");
-                break;
-            }
-            switch (option) {
-                case 1:
-                    for (Animal animal : animals) {
-                        System.out.println(animal.toString());
-                    }
+            try {
+                System.out.print("""
+                        Choose an option:
+                        1-View all animals
+                        2-Hear all animals
+                        3-compare
+                        4-Exit
+                        """);
+                int option = sc.nextInt();
+                if (option == 4) {
+                    System.out.println("Thank you, bye!");
                     break;
-                case 2:
-                    for (Animal animal : animals) {
-                        animal.makeSound();
-                    }
-                    break;
-                case 3:
-                    if (animals.length < 2) {
-                        System.out.println("Can't compare, only 1 animal!.");
-                    } else {
-                        boolean allIdentical = true;
-                        for (int i = 0; i < animals.length; i++) {
-                            for (int j = i + 1; j < animals.length; j++) {
-                                if (!animals[i].equals(animals[j])) {
-                                    allIdentical = false;
-                                    break;
+                }
+                switch (option) {
+                    case 1:
+                        for (Animal animal : animals) {
+                            System.out.println(animal.toString());
+                        }
+                        break;
+                    case 2:
+                        for (Animal animal : animals) {
+                            animal.makeSound();
+                        }
+                        break;
+                    case 3:
+                        if (animals.length < 2) {
+                            System.out.println("Can't compare, only 1 animal!.");
+                        } else {
+                            boolean allIdentical = true;
+                            for (int i = 0; i < animals.length; i++) {
+                                for (int j = i + 1; j < animals.length; j++) {
+                                    if (!animals[i].equals(animals[j])) {
+                                        allIdentical = false;
+                                        break;
+                                    }
                                 }
                             }
-                        }
 
-                        if (allIdentical) {
-                            System.out.println("All animals identical.");
-                        } else {
-                            System.out.println("All animals not identical.");
+                            if (allIdentical) {
+                                System.out.println("All animals identical.");
+                            } else {
+                                System.out.println("All animals not identical.");
+                            }
                         }
-                    }
-                    break;
+                        break;
 
-                default:
-                    System.out.println("Invalid option. Please choose a valid option.");
+                    default:
+                        System.out.println("Invalid option. Please choose a valid option.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid option.");
+                sc.next();
             }
         }
         sc.close();

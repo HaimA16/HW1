@@ -1,3 +1,8 @@
+/**
+ * Name: Haim Armias 315569061
+ * Name: Yeuda Baza
+ */
+
 package Animals;
 
 import Mobility.Point;

@@ -1,3 +1,7 @@
+/**
+ * Name: Haim Armias 315569061
+ * Name: Yeuda Baza
+ */
 package Mobility;
 
 /**
@@ -122,6 +126,6 @@ public abstract class Mobile implements ILocatable {
      */
     @Override
     public String toString() {
-        return "(" + this.location.getX() + ", " + this.location.getY() + ")";
+        return "Location: " + "(" + this.location.getX() + ", " + this.location.getY() + ")";
     }
 }

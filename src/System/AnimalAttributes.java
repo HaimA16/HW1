@@ -1,7 +1,10 @@
+/**
+ * Name: Haim Armias 315569061
+ * Name: Yeuda Baza
+ */
 package System;
 import java.util.Scanner;
 import Animals.*;
-import Mobility.*;
 import Olympics.*;
 
 public class AnimalAttributes {

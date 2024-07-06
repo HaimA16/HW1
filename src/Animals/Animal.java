@@ -1,3 +1,7 @@
+/**
+ * Name: Haim Armias 315569061
+ * Name: Yeuda Baza
+ */
 package Animals;
 
 import Mobility.Mobile;
@@ -219,7 +223,8 @@ public abstract class Animal extends Mobile {
      */
     @Override
     public String toString() {
-        return "Animal: " + name + "\n" +
+        return "Animal: " + getClass().getSimpleName() +"\n"+
+                "Animal name: " + name + "\n" +
                 "Gender: " + gender + "\n" +
                 "Weight: " + weight + "\n" +
                 "Speed: " + speed + "\n" +
