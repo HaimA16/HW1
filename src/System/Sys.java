@@ -6,8 +6,8 @@
  * Each animal type requires specific attributes to be entered by the user:
  * The program continues to run until the user chooses to exit. It allows the user to view all
  * animals created and hear the sound each animal makes.
- * Author: Haim Armias 315569061
- * Author: Yeuda Baza 208029819
+ * @Author: Haim Armias 315569061
+ * @Author: Yeuda Baza 208029819
  */
 package System;
 
@@ -328,8 +328,8 @@ public class Sys {
             try {
                 System.out.print("Enter number of legs: ");
                 noLegs = sc.nextInt();
-                if (noLegs < 0) {
-                    System.out.println("Number of legs must be non-negative.");
+                if (noLegs < 0 || noLegs > 4) {
+                    System.out.println("Number of legs must be non-negative and max 4.");
                     continue;
                 }
                 break;

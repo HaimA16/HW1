@@ -1,6 +1,6 @@
 /**
- * Name: Haim Armias 315569061
- * Name: Yeuda Baza 208029819
+ * @Author: Haim Armias 315569061
+ * @Author: Yeuda Baza 208029819
  */
 package Animals;
 
