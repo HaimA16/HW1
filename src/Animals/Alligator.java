@@ -1,6 +1,6 @@
 /**
  * Name: Haim Armias 315569061
- * Name: Yeuda Baza
+ * Name: Yeuda Baza 208029819
  */
 package Animals;
 
@@ -55,7 +55,7 @@ public class Alligator extends WaterAnimal implements IReptile {
      * @return true if the speed is valid and set, false otherwise
      */
     public boolean speedUp(int speeder) {
-        return getSpeed() + speeder < MAX_SPEED && setSpeed(getSpeed() + speeder);
+        return getSpeed() + speeder <= MAX_SPEED && setSpeed(getSpeed() + speeder);
     }
 
     /**

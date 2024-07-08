@@ -1,6 +1,6 @@
 /**
  * Name: Haim Armias 315569061
- * Name: Yeuda Baza
+ * Name: Yeuda Baza 208029819
  */
 package Animals;
 
@@ -18,6 +18,7 @@ public class AirAnimal extends Animal {
      */
     public AirAnimal() {
         super();
+        super.setLocation(new Point(0, 100));
         wingspan = 0.0;
     }
 
@@ -33,7 +34,7 @@ public class AirAnimal extends Animal {
      * @param wingspan   the wingspan of the air animal
      */
     public AirAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, double wingspan) {
-        super(name, gender, weight, speed, medals, new Point(0, 100));
+        super(name, gender, weight, speed, medals, location);
         this.wingspan = wingspan;
     }
 

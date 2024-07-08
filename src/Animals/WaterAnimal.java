@@ -1,6 +1,6 @@
 /**
  * Name: Haim Armias 315569061
- * Name: Yeuda Baza
+ * Name: Yeuda Baza 208029819
  */
 package Animals;
 
@@ -20,6 +20,7 @@ public class WaterAnimal extends Animal {
      */
     public WaterAnimal() {
         super();
+        super.setLocation(new Point(50, 0));
         diveDept = 0.0;
     }
 
@@ -35,7 +36,7 @@ public class WaterAnimal extends Animal {
      * @param diveDept  the initial dive depth of the animal
      */
     public WaterAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, double diveDept) {
-        super(name, gender, weight, speed, medals, new Point(50, 0));
+        super(name, gender, weight, speed, medals, location);
         this.diveDept = diveDept;
     }
 
@@ -46,7 +47,7 @@ public class WaterAnimal extends Animal {
      * @return the new dive depth
      */
     public double Dive(double dive) {
-        if (Math.abs(dive) > MAX_DIVE && dive > 0 && diveDept + dive > MAX_DIVE) {
+        if (diveDept + dive < MAX_DIVE) {
             diveDept = diveDept + dive;
         }
         return diveDept;

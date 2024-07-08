@@ -1,6 +1,6 @@
 /**
  * Name: Haim Armias 315569061
- * Name: Yeuda Baza
+ * Name: Yeuda Baza 208029819
  */
 
 package Animals;
@@ -67,9 +67,8 @@ public class Snake extends TerrestrialAnimals implements IReptile {
      */
     @Override
     public boolean speedUp(int speeder) {
-        return getSpeed() + speeder < MAX_SPEED && setSpeed(speeder);
+        return getSpeed() + speeder <= MAX_SPEED && setSpeed(getSpeed() + speeder);
     }
-
     /**
      * Sets the length of the snake.
      *

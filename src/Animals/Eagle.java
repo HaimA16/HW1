@@ -1,6 +1,6 @@
 /**
  * Name: Haim Armias 315569061
- * Name: Yeuda Baza
+ * Name: Yeuda Baza 208029819
  */
 package Animals;
 
@@ -13,7 +13,7 @@ import Olympics.Medal;
 public class Eagle extends AirAnimal {
 
     private double altitudeOfFlight;
-    private static final int MAX_ALTITUDE = 100;
+    private static final int MAX_ALTITUDE = 1000;
 
     public Eagle() {
         super();

@@ -1,6 +1,6 @@
 /**
  * Name: Haim Armias 315569061
- * Name: Yeuda Baza
+ * Name: Yeuda Baza 208029819
  */
 package Animals;
 
@@ -19,6 +19,7 @@ public class TerrestrialAnimals extends Animal {
      */
     public TerrestrialAnimals() {
         super();
+        super.setLocation(new Point(0, 20));
         noLegs = 0;
     }
 
@@ -34,7 +35,7 @@ public class TerrestrialAnimals extends Animal {
      * @param noLegs    the number of legs of the animal
      */
     public TerrestrialAnimals(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, int noLegs) {
-        super(name, gender, weight, speed, medals, new Point(0, 20));
+        super(name, gender, weight, speed, medals,location);
         if (noLegs < 0) {
             throw new IllegalArgumentException("legs number must be positive!");
         }
