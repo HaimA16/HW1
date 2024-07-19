@@ -3,7 +3,7 @@ package Animals;
 import Mobility.Point;
 import Olympics.Medal;
 
-public class Alligator extends WaterAnimal implements IReptile{
+public class Alligator extends WaterAnimal implements IReptile,terrestrial_feature{
     private String AreaOfLiving;
     public Alligator(){
         super();

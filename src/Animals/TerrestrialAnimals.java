@@ -18,4 +18,6 @@ public class TerrestrialAnimals extends Animal{
         }
         this.noLegs = noLegs;
     }
+
+
 }
