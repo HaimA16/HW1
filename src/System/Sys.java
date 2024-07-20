@@ -1,5 +1,5 @@
 package System;
-
+/*
 import java.util.Scanner;
 import Animals.*;
 import Mobility.*;
@@ -354,3 +354,6 @@ public class Sys {
         sc.close();
     }
 }
+
+
+ */
