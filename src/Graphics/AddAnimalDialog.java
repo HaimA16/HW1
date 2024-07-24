@@ -1,253 +1,218 @@
 package Graphics;
 
-import Animals.Animal;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AddAnimalDialog extends JDialog {
-    // רכיבי ה- GUI
-    private JComboBox<String> animalTypeComboBox; // תפריט נפתח לסוג החיה
-    private JTextField nameField; // שדה טקסט לשם החיה
-    private JTextField weightField; // שדה טקסט למשקל החיה
-    private JTextField speedField; // שדה טקסט למהירות החיה
-    private JTextField positionField; // שדה טקסט למיקום החיה
-    private JLabel positionLabel; // תווית למיקום החיה
-    private JComboBox<String> genderComboBox; // תפריט נפתח למין החיה
-    private JComboBox<String> orientationComboBox; // תפריט נפתח לכיוון החיה
-    private JTextField sizeField; // שדה טקסט לגודל החיה
-    private JTextField idField; // שדה טקסט ל-ID של החיה
-    private JTextField maxEnergyField; // שדה טקסט לאנרגיה מקסימלית
-    private JTextField energyPerMeterField; // שדה טקסט לאנרגיה לכל מטר
-    private JComboBox<String> competitionTypeComboBox; // תפריט נפתח לסוג התחרות
+    private JComboBox<String> competitionTypeComboBox;
+    private JComboBox<String> animalTypeComboBox;
+    private JTextField nameField;
+    private JTextField weightField;
+    private JTextField speedField;
+    private JTextField positionField;
+    private JComboBox<String> genderComboBox;
+    private JComboBox<String> orientationComboBox;
+    private JTextField sizeField;
+    private JTextField idField;
+    private JTextField maxEnergyField;
+    private JTextField energyPerMeterField;
 
-    private String animalType; // סוג החיה שנבחר
+    private String animalType;
+    private String competitionType;
 
     public AddAnimalDialog() {
-        setTitle("Add Animal"); // קובע את הכותרת של חלון הדיאלוג
-        setSize(500, 500); // קובע את גודל חלון הדיאלוג
-        setLocationRelativeTo(null); // ממקם את חלון הדיאלוג במרכז המסך
-        setLayout(new GridBagLayout()); // מגדיר את Layout Manager ל-GridBagLayout
-        GridBagConstraints gbc = new GridBagConstraints(); // אובייקט לקביעת מיקומים
-        gbc.insets = new Insets(5, 5, 5, 5); // מרווחים בין רכיבים
+        setTitle("Add Animal");
+        setSize(500, 550);
+        setLocationRelativeTo(null);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // סוג חיה
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST; // מקבע את התווית לשמאל
-        add(new JLabel("Select Animal Type:"), gbc); // מוסיף את התווית
-        animalTypeComboBox = new JComboBox<>(new String[] {"Dog", "Cat", "Snake", "Eagle", "Pigeon", "Alligator", "Whale", "Dolphin"}); // יוצר את תפריט הבחירה לסוגי חיות
+        gbc.anchor = GridBagConstraints.WEST;
+        add(new JLabel("Select Animal Type:"), gbc);
+        animalTypeComboBox = new JComboBox<>(new String[] {"", "Dog", "Cat", "Snake", "Eagle", "Pigeon", "Alligator", "Whale", "Dolphin"});
         gbc.gridx = 1;
-        add(animalTypeComboBox, gbc); // מוסיף את תפריט הבחירה לחלון
+        add(animalTypeComboBox, gbc);
 
-        // שם
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(new JLabel("Name:"), gbc); // מוסיף תווית לשם
-        nameField = new JTextField(20); // יוצר שדה טקסט לשם עם רוחב 20 תווים
+        add(new JLabel("Select Competition Type:"), gbc);
+        competitionTypeComboBox = new JComboBox<>(new String[] {"", "Air", "Water", "Terrestrial"});
         gbc.gridx = 1;
-        add(nameField, gbc); // מוסיף את שדה הטקסט לחלון
+        add(competitionTypeComboBox, gbc);
 
-        // משקל
         gbc.gridx = 0;
         gbc.gridy = 2;
-        add(new JLabel("Weight:"), gbc); // מוסיף תווית למשקל
-        weightField = new JTextField(20); // יוצר שדה טקסט למשקל עם רוחב 20 תווים
+        add(new JLabel("Name:"), gbc);
+        nameField = new JTextField(15);
         gbc.gridx = 1;
-        add(weightField, gbc); // מוסיף את שדה הטקסט לחלון
+        add(nameField, gbc);
 
-        // מהירות
         gbc.gridx = 0;
         gbc.gridy = 3;
-        add(new JLabel("Speed:"), gbc); // מוסיף תווית למהירות
-        speedField = new JTextField(20); // יוצר שדה טקסט למהירות עם רוחב 20 תווים
+        add(new JLabel("Weight:"), gbc);
+        weightField = new JTextField(15);
         gbc.gridx = 1;
-        add(speedField, gbc); // מוסיף את שדה הטקסט לחלון
+        add(weightField, gbc);
 
-        // מיקום
-        positionLabel = new JLabel("Position (for Air/Water):"); // יוצר תווית למיקום
         gbc.gridx = 0;
         gbc.gridy = 4;
-        add(positionLabel, gbc); // מוסיף את התווית לחלון
-        positionField = new JTextField(20); // יוצר שדה טקסט למיקום עם רוחב 20 תווים
+        add(new JLabel("Speed:"), gbc);
+        speedField = new JTextField(15);
         gbc.gridx = 1;
-        add(positionField, gbc); // מוסיף את שדה הטקסט לחלון
+        add(speedField, gbc);
 
-
-        // מין
         gbc.gridx = 0;
         gbc.gridy = 5;
-        add(new JLabel("Gender:"), gbc); // מוסיף תווית למין
-        genderComboBox = new JComboBox<>(new String[] {"MALE", "FEMALE", "HERMAPHRODITE"}); // יוצר תפריט הבחירה למין
+        add(new JLabel("Position:"), gbc);
+        positionField = new JTextField(15);
         gbc.gridx = 1;
-        add(genderComboBox, gbc); // מוסיף את תפריט הבחירה לחלון
+        add(positionField, gbc);
 
-        // כיוון
         gbc.gridx = 0;
         gbc.gridy = 6;
-        add(new JLabel("Orientation:"), gbc); // מוסיף תווית לכיוון
-        orientationComboBox = new JComboBox<>(new String[] {"NORTH", "SOUTH", "EAST", "WEST"}); // יוצר תפריט הבחירה לכיוון
+        add(new JLabel("Gender:"), gbc);
+        genderComboBox = new JComboBox<>(new String[] {"", "Male", "Female"});
         gbc.gridx = 1;
-        add(orientationComboBox, gbc); // מוסיף את תפריט הבחירה לחלון
+        add(genderComboBox, gbc);
 
-        // גודל
         gbc.gridx = 0;
         gbc.gridy = 7;
-        add(new JLabel("Size:"), gbc); // מוסיף תווית לגודל
-        sizeField = new JTextField(20); // יוצר שדה טקסט לגודל עם רוחב 20 תווים
+        add(new JLabel("Orientation:"), gbc);
+        orientationComboBox = new JComboBox<>(new String[] {"", "North", "South", "East", "West"});
         gbc.gridx = 1;
-        add(sizeField, gbc); // מוסיף את שדה הטקסט לחלון
+        add(orientationComboBox, gbc);
 
-        // ID
         gbc.gridx = 0;
         gbc.gridy = 8;
-        add(new JLabel("ID:"), gbc); // מוסיף תווית ל-ID
-        idField = new JTextField(20); // יוצר שדה טקסט ל-ID עם רוחב 20 תווים
+        add(new JLabel("Size:"), gbc);
+        sizeField = new JTextField(15);
         gbc.gridx = 1;
-        add(idField, gbc); // מוסיף את שדה הטקסט לחלון
+        add(sizeField, gbc);
 
-        // אנרגיה מקסימלית
         gbc.gridx = 0;
         gbc.gridy = 9;
-        add(new JLabel("Max Energy:"), gbc); // מוסיף תווית לאנרגיה מקסימלית
-        maxEnergyField = new JTextField(20); // יוצר שדה טקסט לאנרגיה מקסימלית עם רוחב 20 תווים
+        add(new JLabel("ID:"), gbc);
+        idField = new JTextField(15);
         gbc.gridx = 1;
-        add(maxEnergyField, gbc); // מוסיף את שדה הטקסט לחלון
+        add(idField, gbc);
 
-        // אנרגיה לכל מטר
         gbc.gridx = 0;
         gbc.gridy = 10;
-        add(new JLabel("Energy Per Meter:"), gbc); // מוסיף תווית לאנרגיה לכל מטר
-        energyPerMeterField = new JTextField(20); // יוצר שדה טקסט לאנרגיה לכל מטר עם רוחב 20 תווים
+        add(new JLabel("Max Energy:"), gbc);
+        maxEnergyField = new JTextField(15);
         gbc.gridx = 1;
-        add(energyPerMeterField, gbc); // מוסיף את שדה הטקסט לחלון
+        add(maxEnergyField, gbc);
 
-        // סוג תחרות
         gbc.gridx = 0;
         gbc.gridy = 11;
-        add(new JLabel("Competition Type:"), gbc); // מוסיף תווית לסוג התחרות
-        competitionTypeComboBox = new JComboBox<>(new String[] {}); // יוצר תפריט הבחירה לסוג התחרות
+        add(new JLabel("Energy per Meter:"), gbc);
+        energyPerMeterField = new JTextField(15);
         gbc.gridx = 1;
-        add(competitionTypeComboBox, gbc); // מוסיף את תפריט הבחירה לחלון
+        add(energyPerMeterField, gbc);
 
-        // כפתור אישור
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 12;
-        gbc.anchor = GridBagConstraints.CENTER; // מרכז את כפתור האישור
-        JButton okButton = new JButton("OK"); // יוצר כפתור אישור
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                animalType = (String) animalTypeComboBox.getSelectedItem(); // שומר את סוג החיה הנבחר
-                setVisible(false); // סוגר את חלון הדיאלוג
-            }
-        });
-        add(okButton, gbc); // מוסיף את כפתור האישור לחלון
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        JButton okButton = new JButton("OK");
+        JButton cancelButton = new JButton("Cancel");
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+        add(buttonPanel, gbc);
 
-        // מאזין לשינויים בתפריט סוג החיה
+        // Listeners for validation
         animalTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateUIForAnimalType(); // מעדכן את ה- UI לפי סוג החיה הנבחר
+                validateAnimalAndCompetitionType();
             }
         });
 
-        updateUIForAnimalType(); // מעדכן את ה- UI לפי סוג החיה הנבחר כבר בעת פתיחת החלון
-        setVisible(true); // מציג את חלון הדיאלוג
+        competitionTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                validateAnimalAndCompetitionType();
+            }
+        });
+
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                animalType = (String) animalTypeComboBox.getSelectedItem();
+                competitionType = (String) competitionTypeComboBox.getSelectedItem();
+
+                if (!isValidCompetitionTypeForAnimal(animalType, competitionType)) {
+                    JOptionPane.showMessageDialog(
+                            AddAnimalDialog.this,
+                            "The selected animal cannot participate in the chosen competition type.",
+                            "Invalid Competition Type",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                } else {
+                    // Optionally, collect other animal details
+                    setVisible(false);
+                }
+            }
+        });
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+
+        pack();
+        setModal(true);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    // פונקציה לעדכון התצוגה לפי סוג החיה הנבחר
-    private void updateUIForAnimalType() {
-        String selectedType = (String) animalTypeComboBox.getSelectedItem(); // מקבל את סוג החיה שנבחר
+    private void validateAnimalAndCompetitionType() {
+        String animalType = (String) animalTypeComboBox.getSelectedItem();
+        String competitionType = (String) competitionTypeComboBox.getSelectedItem();
 
-        boolean isAir = "Eagle".equals(selectedType) || "Pigeon".equals(selectedType); // בודק אם החיה היא עוף
-        boolean isWater = "Whale".equals(selectedType) || "Dolphin".equals(selectedType); // בודק אם החיה היא ימית
-        boolean isTerrestrial = "Dog".equals(selectedType) || "Cat".equals(selectedType) || "Snake".equals(selectedType); // בודק אם החיה היא יבשתית
-
-
-        positionLabel.setVisible(isAir || isWater);
-        positionField.setVisible(isAir || isWater);
-
-        // עדכון סוג התחרות
-        if (isAir) {
-            competitionTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] {"Air"}));
-        } else if (isWater) {
-            competitionTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] {"Water"}));
-        } else if (isTerrestrial) {
-            competitionTypeComboBox.setModel(new DefaultComboBoxModel<>(new String[] {"Terrestrial"}));
+        if (animalType.isEmpty() || competitionType.isEmpty()) {
+            return; // Don't validate if either field is empty
         }
 
-        sizeField.setVisible(isAir || isWater || isTerrestrial); // מציג את שדה הגודל לכל סוגי החיות
+        if (!isValidCompetitionTypeForAnimal(animalType, competitionType)) {
+            JOptionPane.showMessageDialog(
+                    AddAnimalDialog.this,
+                    "The selected animal cannot participate in the chosen competition type.",
+                    "Invalid Competition Type",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 
-    // פונקציות לקבלת נתונים מהשדות
     public String getAnimalType() {
-        return animalType; // מחזיר את סוג החיה שנבחר
-    }
-
-    public String getName() {
-        return nameField.getText(); // מחזיר את השם שנכנס לשדה השם
-    }
-
-    public double getWeight() {
-        try {
-            return Double.parseDouble(weightField.getText()); // מנסה להמיר את המשקל למספר
-        } catch (NumberFormatException e) {
-            return 0; // מחזיר 0 במקרה של שגיאה
-        }
-    }
-
-    public double getSpeed() {
-        try {
-            return Double.parseDouble(speedField.getText()); // מנסה להמיר את המהירות למספר
-        } catch (NumberFormatException e) {
-            return 0; // מחזיר 0 במקרה של שגיאה
-        }
-    }
-
-    public int getPositionX() {
-        try {
-            return Integer.parseInt(positionField.getText()); // מנסה להמיר את המיקום למספר
-        } catch (NumberFormatException e) {
-            return 0; // מחזיר 0 במקרה של שגיאה
-        }
-    }
-
-
-    public Animal.Gender getGender() {
-        return Animal.Gender.valueOf((String) genderComboBox.getSelectedItem()); // מחזיר את המין הנבחר
-    }
-
-    public Animal.Orientation getOrientation() {
-        return Animal.Orientation.valueOf((String) orientationComboBox.getSelectedItem()); // מחזיר את הכיוון הנבחר
-    }
-
-    public int getId() {
-        try {
-            return Integer.parseInt(idField.getText()); // מנסה להמיר את ה-ID למספר
-        } catch (NumberFormatException e) {
-            return 0; // מחזיר 0 במקרה של שגיאה
-        }
-    }
-
-    public int getMaxEnergy() {
-        try {
-            return Integer.parseInt(maxEnergyField.getText()); // מנסה להמיר את האנרגיה המקסימלית למספר
-        } catch (NumberFormatException e) {
-            return 0; // מחזיר 0 במקרה של שגיאה
-        }
-    }
-
-    public int getEnergyPerMeter() {
-        try {
-            return Integer.parseInt(energyPerMeterField.getText()); // מנסה להמיר את האנרגיה לכל מטר למספר
-        } catch (NumberFormatException e) {
-            return 0; // מחזיר 0 במקרה של שגיאה
-        }
+        return animalType;
     }
 
     public String getCompetitionType() {
-        return (String) competitionTypeComboBox.getSelectedItem(); // מחזיר את סוג התחרות שנבחר
+        return competitionType;
+    }
+
+    private boolean isValidCompetitionTypeForAnimal(String animalType, String competitionType) {
+        switch (animalType) {
+            case "Dog":
+            case "Cat":
+            case "Snake":
+                return competitionType.equals("Terrestrial");
+            case "Eagle":
+            case "Pigeon":
+                return competitionType.equals("Air");
+            case "Whale":
+            case "Dolphin":
+                return competitionType.equals("Water");
+            default:
+                return false;
+        }
     }
 }
