@@ -1,12 +1,12 @@
-/**
- * @Author: Haim Armias 315569061
- * @Author: Yeuda Baza 208029819
- */
 package Animals;
 
+import Graphics.CompetitionPanel;
 import Mobility.Mobile;
 import Olympics.Medal;
 import Mobility.Point;
+
+import javax.xml.stream.Location;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 /**
@@ -18,33 +18,54 @@ public abstract class Animal extends Mobile {
      * Enum representing the gender of the animal.
      */
     public enum Gender { MALE, FEMALE, HERMAPHRODITE }
+    public enum Orientation {
+        NORTH, SOUTH, EAST, WEST
+    }
 
-    private String name;
-    private Gender gender;
+    private final String name;
+    private final Gender gender;
     private double weight, speed;
     private Medal[] medals;
+    private int size;
+    private int id;
+    private Location loc;
+    private Orientation orientation;
+    private int maxEnergy;
+    private int energyPerMeter;
+    private CompetitionPanel pan;
+    private BufferedImage img1, img2, img3, img4;
 
     public Animal(){
-        name=null;
-        gender=null;
-        weight=0;
-        speed=0;
-        medals=null;
+        name = null;
+        gender = null;
+        weight = 0;
+        speed = 0;
+        medals = null;
     }
 
     /**
      * Constructor for the Animal class.
      *
-     * @param name     the name of the animal
-     * @param gender   the gender of the animal
-     * @param weight   the weight of the animal
-     * @param speed    the speed of the animal
-     * @param medals   an array of medals won by the animal
-     * @param location the initial location of the animal
+     * @param name           the name of the animal
+     * @param gender         the gender of the animal
+     * @param weight         the weight of the animal
+     * @param speed          the speed of the animal
+     * @param medals         an array of medals won by the animal
+     * @param location       the initial location of the animal
+
+     * @param orientation    the initial orientation of the animal
+     * @param size           the size of the animal
+     * @param id             the id of the animal
+     * @param maxEnergy      the maximum energy of the animal
+     * @param energyPerMeter the energy consumption per meter of the animal
+     * @param pan            the competition panel associated with the animal
+     * @param img1           the first image of the animal
      */
-    public Animal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location) {
+    public Animal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+                  Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
+                  BufferedImage img1) {
         super(location);
-        if (name == null || gender == null || weight <= 0 || speed <= 0) {
+        if (name == null || gender == null || weight <= 0 || speed <= 0 || orientation == null || location == null || loc == null) {
             throw new IllegalArgumentException("Invalid animal value!");
         }
         this.name = name;
@@ -58,6 +79,158 @@ public abstract class Animal extends Mobile {
             }
             this.medals[i] = medals[i];
         }
+        this.loc = loc;
+        this.orientation = orientation;
+        this.size = size;
+        this.id = id;
+        this.maxEnergy = maxEnergy;
+        this.energyPerMeter = energyPerMeter;
+        this.pan = pan;
+        this.img1 = img1;
+
+    }
+
+    // Getter and Setter for size
+    public int getSize() {
+        return size;
+    }
+
+    public boolean setSize(int size) {
+        if (size > 0) {
+            this.size = size;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for id
+    public int getId() {
+        return id;
+    }
+
+    public boolean setId(int id) {
+        if (id > 0) {
+            this.id = id;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for loc
+    public Location getLoc() {
+        return loc;
+    }
+
+    public boolean setLoc(Location loc) {
+        if (loc != null) {
+            this.loc = loc;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for orientation
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public boolean setOrientation(Orientation orientation) {
+        if (orientation != null) {
+            this.orientation = orientation;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for maxEnergy
+    public int getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public boolean setMaxEnergy(int maxEnergy) {
+        if (maxEnergy > 0) {
+            this.maxEnergy = maxEnergy;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for energyPerMeter
+    public int getEnergyPerMeter() {
+        return energyPerMeter;
+    }
+
+    public boolean setEnergyPerMeter(int energyPerMeter) {
+        if (energyPerMeter > 0) {
+            this.energyPerMeter = energyPerMeter;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for pan
+    public CompetitionPanel getPan() {
+        return pan;
+    }
+
+    public boolean setPan(CompetitionPanel pan) {
+        if (pan != null) {
+            this.pan = pan;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for img1
+    public BufferedImage getImg1() {
+        return img1;
+    }
+
+    public boolean setImg1(BufferedImage img1) {
+        if (img1 != null) {
+            this.img1 = img1;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for img2
+    public BufferedImage getImg2() {
+        return img2;
+    }
+
+    public boolean setImg2(BufferedImage img2) {
+        if (img2 != null) {
+            this.img2 = img2;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for img3
+    public BufferedImage getImg3() {
+        return img3;
+    }
+
+    public boolean setImg3(BufferedImage img3) {
+        if (img3 != null) {
+            this.img3 = img3;
+            return true;
+        }
+        return false;
+    }
+
+    // Getter and Setter for img4
+    public BufferedImage getImg4() {
+        return img4;
+    }
+
+    public boolean setImg4(BufferedImage img4) {
+        if (img4 != null) {
+            this.img4 = img4;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -100,104 +273,6 @@ public abstract class Animal extends Mobile {
     }
 
     /**
-     * Sets the name of the animal.
-     *
-     * @param name the new name of the animal
-     * @return true if the name is valid and set, false otherwise
-     */
-    public boolean setName(String name) {
-        if (name != null && !name.isEmpty()) {
-            this.name = name;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Gets the name of the animal.
-     *
-     * @return the name of the animal
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the gender of the animal.
-     *
-     * @param gender the new gender of the animal
-     * @return true if the gender is valid and set, false otherwise
-     */
-    public boolean setGender(Gender gender) {
-        if (gender != null) {
-            this.gender = gender;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Gets the gender of the animal.
-     *
-     * @return the gender of the animal
-     */
-    public Gender getGender() {
-        return gender;
-    }
-
-    /**
-     * Sets the weight of the animal.
-     *
-     * @param weight the new weight of the animal
-     * @return true if the weight is valid and set, false otherwise
-     */
-    public boolean setWeight(double weight) {
-        if (weight > 0) {
-            this.weight = weight;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Gets the weight of the animal.
-     *
-     * @return the weight of the animal
-     */
-    public double getWeight() {
-        return weight;
-    }
-
-    /**
-     * Sets the medals of the animal.
-     *
-     * @param medals the new medals of the animal
-     * @return true if the medals are valid and set, false otherwise
-     */
-    public boolean setMedals(Medal[] medals) {
-        if (medals != null) {
-            this.medals = new Medal[medals.length];
-            for (int i = 0; i < medals.length; i++) {
-                if (medals[i] == null) {
-                    return false;
-                }
-                this.medals[i] = medals[i];
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Gets the medals of the animal.
-     *
-     * @return the medals of the animal
-     */
-    public Medal[] getMedals() {
-        return medals;
-    }
-
-    /**
      * Checks if two animals are equal.
      *
      * @param obj the object to compare with
@@ -223,12 +298,18 @@ public abstract class Animal extends Mobile {
      */
     @Override
     public String toString() {
-        return "Animal: " + getClass().getSimpleName() +"\n"+
-                "Animal name: " + name + "\n" +
+        return "Animal: " + name + "\n" +
                 "Gender: " + gender + "\n" +
                 "Weight: " + weight + "\n" +
                 "Speed: " + speed + "\n" +
                 "Medals: \n" + Arrays.toString(medals) + "\n" +
-                super.toString() + "\n";
+                "Location: " + loc + "\n" +
+                "Orientation: " + orientation + "\n" +
+                "Size: " + size + "\n" +
+                "ID: " + id + "\n" +
+                "Max Energy: " + maxEnergy + "\n" +
+                "Energy Per Meter: " + energyPerMeter + "\n" +
+                super.toString() + "\n" +
+                "****************************************************";
     }
 }

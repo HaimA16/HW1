@@ -1,90 +1,56 @@
-/**
- * @Author: Haim Armias 315569061
- * @Author: Yeuda Baza 208029819
- */
 package Animals;
 
+import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
 
-/**
- * Class representing an air animal, extending the Animal class.
- */
+import javax.xml.stream.Location;
+import java.awt.image.BufferedImage;
+
 public class AirAnimal extends Animal {
     private double wingspan;
 
-    /**
-     * Default constructor for the AirAnimal class.
-     */
     public AirAnimal() {
         super();
-        super.setLocation(new Point(0, 100));
         wingspan = 0.0;
     }
 
     /**
      * Constructor for the AirAnimal class.
      *
-     * @param name       the name of the air animal
-     * @param gender     the gender of the air animal
-     * @param weight     the weight of the air animal
-     * @param speed      the speed of the air animal
-     * @param medals     an array of medals won by the air animal
-     * @param location   the initial location of the air animal
-     * @param wingspan   the wingspan of the air animal
+     * @param name           the name of the animal
+     * @param gender         the gender of the animal
+     * @param weight         the weight of the animal
+     * @param speed          the speed of the animal
+     * @param medals         an array of medals won by the animal
+     * @param location       the initial location of the animal
+
+     * @param orientation    the initial orientation of the animal
+     * @param size           the size of the animal
+     * @param id             the id of the animal
+     * @param maxEnergy      the maximum energy of the animal
+     * @param energyPerMeter the energy consumption per meter of the animal
+     * @param pan            the competition panel associated with the animal
+     * @param img1           the first image of the animal
+
+     * @param wingspan       the wingspan of the air animal
      */
-    public AirAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, double wingspan) {
-        super(name, gender, weight, speed, medals, location);
+    public AirAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+                     Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
+                     BufferedImage img1, double wingspan) {
+        super(name, gender, weight, speed, medals, location, orientation, size, id, maxEnergy, energyPerMeter, pan, img1);
         this.wingspan = wingspan;
     }
 
-    /**
-     * Sets the wingspan of the air animal.
-     *
-     * @param wingspan the new wingspan of the air animal
-     * @return true if the wingspan is valid and set, false otherwise
-     */
-    public boolean setWingspan(double wingspan) {
-        if (wingspan < 0.0) {
-            return false;
-        }
-        this.wingspan = wingspan;
-        return true;
-    }
-
-    /**
-     * Gets the wingspan of the air animal.
-     *
-     * @return the wingspan of the air animal
-     */
     public double getWingspan() {
         return wingspan;
     }
 
-    /**
-     * Checks if two air animals are equal.
-     *
-     * @param obj the object to compare with
-     * @return true if the air animals are equal, false otherwise
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean setWingspan(double wingspan) {
+        if (wingspan > 0) {
+            this.wingspan = wingspan;
             return true;
         }
-        if (!(obj instanceof AirAnimal other)) {
-            return false;
-        }
-        return super.equals(obj) && wingspan == other.wingspan;
-    }
-
-    /**
-     * Returns a string representation of the air animal.
-     *
-     * @return a string representation of the air animal
-     */
-    @Override
-    public String toString() {
-        return super.toString() + "wing span: " + wingspan + "\n";
+        return false;
     }
 }

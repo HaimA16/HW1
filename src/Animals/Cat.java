@@ -1,21 +1,22 @@
-/**
- * @Author: Haim Armias 315569061
- * @Author: Yeuda Baza 208029819
- */
 package Animals;
 
+import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
 
+import javax.xml.stream.Location;
+import java.awt.image.BufferedImage;
+
 /**
- * Class representing a Cat, extending the TerrestrialAnimals class.
+ * Class representing a Cat, which is a type of Terrestrial Animal.
+ * Extends the TerrestrialAnimals class and includes specific attributes for cats.
  */
 public class Cat extends TerrestrialAnimals {
-
     private Boolean castrated;
 
     /**
-     * Default constructor for the Cat class.
+     * Default constructor for Cat.
+     * Initializes the castrated status to null.
      */
     public Cat() {
         super();
@@ -31,16 +32,26 @@ public class Cat extends TerrestrialAnimals {
      * @param speed     the speed of the cat
      * @param medals    an array of medals won by the cat
      * @param location  the initial location of the cat
+
+     * @param orientation the orientation of the cat
+     * @param size      the size of the cat
+     * @param id        the ID of the cat
+     * @param maxEnergy the maximum energy of the cat
+     * @param energyPerMeter the energy consumption per meter for the cat
+     * @param pan       the CompetitionPanel associated with the cat
+     * @param img1      the first image of the cat
      * @param noLegs    the number of legs the cat has
-     * @param castrated whether the cat is castrated or not
+     * @param castrated the castrated status of the cat
      */
-    public Cat(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, int noLegs, Boolean castrated) {
-        super(name, gender, weight, speed, medals, location, noLegs);
+    public Cat(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+               Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
+               BufferedImage img1, int noLegs, Boolean castrated) {
+        super(name, gender, weight, speed, medals, location, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs);
         this.castrated = castrated;
     }
 
     /**
-     * Gets the sound of the cat.
+     * Gets the sound the cat makes.
      *
      * @return the sound of the cat
      */
@@ -52,15 +63,10 @@ public class Cat extends TerrestrialAnimals {
     /**
      * Sets the castrated status of the cat.
      *
-     * @param castrated the new castrated status
-     * @return true if the status is changed, false otherwise
+     * @param castrated the new castrated status of the cat
      */
-    public boolean setCastrated(Boolean castrated) {
-        if (this.castrated == castrated) {
-            return false;
-        }
+    public void setCastrated(Boolean castrated) {
         this.castrated = castrated;
-        return true;
     }
 
     /**
@@ -70,32 +76,5 @@ public class Cat extends TerrestrialAnimals {
      */
     public Boolean getCastrated() {
         return castrated;
-    }
-
-    /**
-     * Checks if two cats are equal.
-     *
-     * @param obj the object to compare with
-     * @return true if the cats are equal, false otherwise
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof Cat other)) {
-            return false;
-        }
-        return super.equals(obj) && other.castrated.equals(castrated);
-    }
-
-    /**
-     * Returns a string representation of the cat.
-     *
-     * @return a string representation of the cat
-     */
-    @Override
-    public String toString() {
-        return super.toString() + "castrated: " + castrated + "\n";
     }
 }
