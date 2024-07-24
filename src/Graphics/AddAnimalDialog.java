@@ -14,6 +14,13 @@ public class AddAnimalDialog extends JDialog {
     private JComboBox<String> genderComboBox;
     private JComboBox<String> competitionTypeComboBox; // תיבת בחירה לסוג תחרות
 
+    // Additional fields for all animals
+    private JComboBox<String> directionComboBox;
+    private JTextField sizeField;
+    private JTextField idField;
+    private JTextField maxEnergyField;
+    private JTextField energyPerMeterField;
+
     // Specific fields
     private JTextField breedField; // Dog
     private JComboBox<String> castratedComboBox; // Cat
@@ -31,15 +38,15 @@ public class AddAnimalDialog extends JDialog {
 
     public AddAnimalDialog(Frame owner) {
         super(owner, "Add Animal", true);
-        setSize(300, 400);
+        setSize(300, 500);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(2, 2, 2, 2); // רווחים מינימליים
+        gbc.anchor = GridBagConstraints.WEST;
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
         add(new JLabel("Select Animal Type:"), gbc);
         animalTypeComboBox = new JComboBox<>(new String[] {"", "Dog", "Cat", "Snake", "Eagle", "Pigeon", "Alligator", "Whale", "Dolphin"});
         gbc.gridx = 1;
@@ -88,10 +95,46 @@ public class AddAnimalDialog extends JDialog {
         gbc.gridx = 1;
         add(competitionTypeComboBox, gbc);
 
+        // Additional fields for all animals
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        add(new JLabel("Direction:"), gbc);
+        directionComboBox = new JComboBox<>(new String[] {"", "North", "South", "East", "West"});
+        gbc.gridx = 1;
+        add(directionComboBox, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        add(new JLabel("Size:"), gbc);
+        sizeField = new JTextField(15);
+        gbc.gridx = 1;
+        add(sizeField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        add(new JLabel("ID:"), gbc);
+        idField = new JTextField(15);
+        gbc.gridx = 1;
+        add(idField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        add(new JLabel("Max Energy:"), gbc);
+        maxEnergyField = new JTextField(15);
+        gbc.gridx = 1;
+        add(maxEnergyField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 11;
+        add(new JLabel("Energy per Meter:"), gbc);
+        energyPerMeterField = new JTextField(15);
+        gbc.gridx = 1;
+        add(energyPerMeterField, gbc);
+
         // Specific fields panel
         specificFieldsPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 12;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 2; // Make the panel span two columns
         add(specificFieldsPanel, gbc);
@@ -140,7 +183,7 @@ public class AddAnimalDialog extends JDialog {
         buttonPanel.add(closeButton);
 
         gbc.gridx = 0;
-        gbc.gridy = 12;
+        gbc.gridy = 13;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         add(buttonPanel, gbc);
@@ -160,24 +203,24 @@ public class AddAnimalDialog extends JDialog {
         switch (animalType) {
             case "Dog":
                 if (breedField == null) breedField = new JTextField(15);
+                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Breed:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(breedField, gbc);
                 gbc.gridx = 0;
                 gbc.gridy++;
-                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(numberOfLegsField, gbc);
                 break;
             case "Cat":
                 if (castratedComboBox == null) castratedComboBox = new JComboBox<>(new String[] {"","Castrated", "Not Castrated"});
+                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Castrated:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(castratedComboBox, gbc);
                 gbc.gridx = 0;
                 gbc.gridy++;
-                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(numberOfLegsField, gbc);
@@ -190,81 +233,63 @@ public class AddAnimalDialog extends JDialog {
                 break;
             case "Eagle":
                 if (altitudeOfFlightField == null) altitudeOfFlightField = new JTextField(15);
+                if (wingSpanField == null) wingSpanField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Altitude of Flight:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(altitudeOfFlightField, gbc);
                 gbc.gridx = 0;
                 gbc.gridy++;
-                if (wingSpanField == null) wingSpanField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Wing Span:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(wingSpanField, gbc);
                 break;
             case "Pigeon":
                 if (familyField == null) familyField = new JTextField(15);
+                if (wingSpanField == null) wingSpanField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Family:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(familyField, gbc);
                 gbc.gridx = 0;
                 gbc.gridy++;
-                if (wingSpanField == null) wingSpanField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Wing Span:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(wingSpanField, gbc);
                 break;
             case "Alligator":
                 if (habitatLocationField == null) habitatLocationField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Habitat Location:"), gbc);
+                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Area of living:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(habitatLocationField, gbc);
                 gbc.gridx = 0;
                 gbc.gridy++;
-                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(numberOfLegsField, gbc);
                 break;
             case "Whale":
                 if (foodTypeField == null) foodTypeField = new JTextField(15);
+                if (divingDepthField == null) divingDepthField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Food Type:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(foodTypeField, gbc);
                 gbc.gridx = 0;
                 gbc.gridy++;
-                if (divingDepthField == null) divingDepthField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Diving Depth:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(divingDepthField, gbc);
                 break;
             case "Dolphin":
-                if (waterTypeComboBox == null) waterTypeComboBox = new JComboBox<>(new String[] {"","Sea", "Fresh"});
+                if (waterTypeComboBox == null) waterTypeComboBox = new JComboBox<>(new String[] {"","Sea", "Sweet"});
+                if (divingDepthField == null) divingDepthField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Water Type:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(waterTypeComboBox, gbc);
                 gbc.gridx = 0;
                 gbc.gridy++;
-                if (divingDepthField == null) divingDepthField = new JTextField(15);
                 specificFieldsPanel.add(new JLabel("Diving Depth:"), gbc);
                 gbc.gridx = 1;
                 specificFieldsPanel.add(divingDepthField, gbc);
-                break;
-            case "Water":
-                if (divingDepthField == null) divingDepthField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Diving Depth:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(divingDepthField, gbc);
-                break;
-            case "Air":
-                if (wingSpanField == null) wingSpanField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Wing Span:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(wingSpanField, gbc);
-                break;
-            case "Terrestrial":
-                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(numberOfLegsField, gbc);
                 break;
         }
 
