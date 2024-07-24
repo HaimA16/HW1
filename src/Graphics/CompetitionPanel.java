@@ -69,22 +69,26 @@ public class CompetitionPanel extends JPanel {
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            AddAnimalDialog dialog = new AddAnimalDialog();
+                            AddAnimalDialog dialog = new AddAnimalDialog((Frame) SwingUtilities.getWindowAncestor(CompetitionPanel.this));
                             dialog.setVisible(true);
                             // Wait for dialog to close
                             int result = JOptionPane.showConfirmDialog(CompetitionPanel.this, dialog, "Add Animal", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                             if (result == JOptionPane.OK_OPTION) {
-                                String animalType = dialog.getAnimalType();
-                                String competitionType = dialog.getCompetitionType();
-                                if (!isValidCompetitionTypeForAnimal(animalType, competitionType)) {
+                                try {
+                                    String animalType = dialog.getAnimalType();
+                                    String competitionType = dialog.getCompetitionType();
+                                    if (!isValidCompetitionTypeForAnimal(animalType, competitionType)) {
+                                        throw new Exception("The selected animal cannot participate in the chosen competition type.");
+                                    } else {
+                                        // Handle valid animal addition here
+                                    }
+                                } catch (Exception ex) {
                                     JOptionPane.showMessageDialog(
                                             CompetitionPanel.this,
-                                            "The selected animal cannot participate in the chosen competition type.",
-                                            "Invalid Competition Type",
+                                            ex.getMessage(),
+                                            "Invalid Data",
                                             JOptionPane.ERROR_MESSAGE
                                     );
-                                } else {
-                                    // Handle valid animal addition here
                                 }
                             }
                         }

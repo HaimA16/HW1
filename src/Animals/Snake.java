@@ -7,19 +7,19 @@ import Olympics.Medal;
 import java.awt.image.BufferedImage;
 
 public class Snake extends TerrestrialAnimals implements IReptile{
-    public enum Poisonous {YES,NO}
-    private Poisonous poisonous;
+    public enum PoisonousLevel {LOW,MEDIUM,HIGH}
+    private PoisonousLevel poisonousLevel;
     private double length;
     public Snake(){
         super();
-        poisonous = Poisonous.YES;
+        poisonousLevel = PoisonousLevel.LOW;
         length = 0.0;
     }
     public Snake(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
                  Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
-                 BufferedImage img1, int noLegs,double length, Poisonous poisonous){
+                 BufferedImage img1, int noLegs,double length, PoisonousLevel poisonousLevel){
         super(name, gender, weight, speed, medals, location, orientation, size, id, maxEnergy, energyPerMeter, pan, img1,noLegs);
-        this.poisonous = poisonous;
+        this.poisonousLevel = poisonousLevel;
         this.length = length;
     }
     public String getSound() {

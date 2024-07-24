@@ -6,29 +6,36 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AddAnimalDialog extends JDialog {
-    private JComboBox<String> competitionTypeComboBox;
     private JComboBox<String> animalTypeComboBox;
     private JTextField nameField;
     private JTextField weightField;
     private JTextField speedField;
-    private JTextField positionField;
+    private JTextField medalsField;
     private JComboBox<String> genderComboBox;
-    private JComboBox<String> orientationComboBox;
-    private JTextField sizeField;
-    private JTextField idField;
-    private JTextField maxEnergyField;
-    private JTextField energyPerMeterField;
+    private JComboBox<String> competitionTypeComboBox; // תיבת בחירה לסוג תחרות
 
-    private String animalType;
-    private String competitionType;
+    // Specific fields
+    private JTextField breedField; // Dog
+    private JComboBox<String> castratedComboBox; // Cat
+    private JComboBox<String> venomLevelComboBox; // Snake
+    private JTextField habitatLocationField; // Alligator
+    private JTextField altitudeOfFlightField; // Eagle
+    private JTextField familyField; // Pigeon
+    private JComboBox<String> waterTypeComboBox; // Dolphin
+    private JTextField foodTypeField; // Whale
+    private JTextField divingDepthField; // Water animals
+    private JTextField wingSpanField; // Air animals
+    private JTextField numberOfLegsField; // Terrestrial animals
 
-    public AddAnimalDialog() {
-        setTitle("Add Animal");
-        setSize(500, 550);
+    private JPanel specificFieldsPanel;
+
+    public AddAnimalDialog(Frame owner) {
+        super(owner, "Add Animal", true);
+        setSize(300, 400);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(2, 2, 2, 2); // רווחים מינימליים
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -40,179 +47,250 @@ public class AddAnimalDialog extends JDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(new JLabel("Select Competition Type:"), gbc);
-        competitionTypeComboBox = new JComboBox<>(new String[] {"", "Air", "Water", "Terrestrial"});
-        gbc.gridx = 1;
-        add(competitionTypeComboBox, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
         add(new JLabel("Name:"), gbc);
         nameField = new JTextField(15);
         gbc.gridx = 1;
         add(nameField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         add(new JLabel("Weight:"), gbc);
         weightField = new JTextField(15);
         gbc.gridx = 1;
         add(weightField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         add(new JLabel("Speed:"), gbc);
         speedField = new JTextField(15);
         gbc.gridx = 1;
         add(speedField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
-        add(new JLabel("Position:"), gbc);
-        positionField = new JTextField(15);
+        gbc.gridy = 4;
+        add(new JLabel("Number of Medals:"), gbc);
+        medalsField = new JTextField(15);
         gbc.gridx = 1;
-        add(positionField, gbc);
+        add(medalsField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 5;
         add(new JLabel("Gender:"), gbc);
-        genderComboBox = new JComboBox<>(new String[] {"", "Male", "Female"});
+        genderComboBox = new JComboBox<>(new String[] {"Male", "Female"});
         gbc.gridx = 1;
         add(genderComboBox, gbc);
 
+        // תווית ותיבת בחירה לסוג תחרות
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        add(new JLabel("Competition Type:"), gbc);
+        competitionTypeComboBox = new JComboBox<>(new String[] {"","Air", "Terrestrial", "Water"});
+        gbc.gridx = 1;
+        add(competitionTypeComboBox, gbc);
+
+        // Specific fields panel
+        specificFieldsPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
         gbc.gridy = 7;
-        add(new JLabel("Orientation:"), gbc);
-        orientationComboBox = new JComboBox<>(new String[] {"", "North", "South", "East", "West"});
-        gbc.gridx = 1;
-        add(orientationComboBox, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 2; // Make the panel span two columns
+        add(specificFieldsPanel, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-        add(new JLabel("Size:"), gbc);
-        sizeField = new JTextField(15);
-        gbc.gridx = 1;
-        add(sizeField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 9;
-        add(new JLabel("ID:"), gbc);
-        idField = new JTextField(15);
-        gbc.gridx = 1;
-        add(idField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 10;
-        add(new JLabel("Max Energy:"), gbc);
-        maxEnergyField = new JTextField(15);
-        gbc.gridx = 1;
-        add(maxEnergyField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 11;
-        add(new JLabel("Energy per Meter:"), gbc);
-        energyPerMeterField = new JTextField(15);
-        gbc.gridx = 1;
-        add(energyPerMeterField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 12;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        JButton okButton = new JButton("OK");
-        JButton cancelButton = new JButton("Cancel");
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(okButton);
-        buttonPanel.add(cancelButton);
-        add(buttonPanel, gbc);
-
-        // Listeners for validation
         animalTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                validateAnimalAndCompetitionType();
+                String selectedAnimalType = (String) animalTypeComboBox.getSelectedItem();
+                showSpecificFields(selectedAnimalType);
             }
         });
 
         competitionTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                validateAnimalAndCompetitionType();
-            }
-        });
-
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                animalType = (String) animalTypeComboBox.getSelectedItem();
-                competitionType = (String) competitionTypeComboBox.getSelectedItem();
-
-                if (!isValidCompetitionTypeForAnimal(animalType, competitionType)) {
-                    JOptionPane.showMessageDialog(
-                            AddAnimalDialog.this,
-                            "The selected animal cannot participate in the chosen competition type.",
-                            "Invalid Competition Type",
-                            JOptionPane.ERROR_MESSAGE
-                    );
-                } else {
-                    // Optionally, collect other animal details
-                    setVisible(false);
+                try {
+                    validateAnimalAndCompetitionType();
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(AddAnimalDialog.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-        cancelButton.addActionListener(new ActionListener() {
+        JPanel buttonPanel = new JPanel();
+        JButton addButton = new JButton("ADD");
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    validateAnimalAndCompetitionType();
+                    setVisible(false);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(AddAnimalDialog.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        buttonPanel.add(addButton);
+
+        JButton closeButton = new JButton("CLOSE");
+        closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
             }
         });
+        buttonPanel.add(closeButton);
 
-        pack();
-        setModal(true);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(buttonPanel, gbc);
+    }
+
+    private void showSpecificFields(String animalType) {
+        // Remove all components from the specific fields panel
+        specificFieldsPanel.removeAll();
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 2, 2, 2); // רווחים מינימליים
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Add specific fields based on the selected animal type
+        switch (animalType) {
+            case "Dog":
+                if (breedField == null) breedField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Breed:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(breedField, gbc);
+                gbc.gridx = 0;
+                gbc.gridy++;
+                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(numberOfLegsField, gbc);
+                break;
+            case "Cat":
+                if (castratedComboBox == null) castratedComboBox = new JComboBox<>(new String[] {"","Castrated", "Not Castrated"});
+                specificFieldsPanel.add(new JLabel("Castrated:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(castratedComboBox, gbc);
+                gbc.gridx = 0;
+                gbc.gridy++;
+                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(numberOfLegsField, gbc);
+                break;
+            case "Snake":
+                if (venomLevelComboBox == null) venomLevelComboBox = new JComboBox<>(new String[] {"","Low", "Medium", "High"});
+                specificFieldsPanel.add(new JLabel("Venom Level:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(venomLevelComboBox, gbc);
+                break;
+            case "Eagle":
+                if (altitudeOfFlightField == null) altitudeOfFlightField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Altitude of Flight:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(altitudeOfFlightField, gbc);
+                gbc.gridx = 0;
+                gbc.gridy++;
+                if (wingSpanField == null) wingSpanField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Wing Span:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(wingSpanField, gbc);
+                break;
+            case "Pigeon":
+                if (familyField == null) familyField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Family:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(familyField, gbc);
+                gbc.gridx = 0;
+                gbc.gridy++;
+                if (wingSpanField == null) wingSpanField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Wing Span:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(wingSpanField, gbc);
+                break;
+            case "Alligator":
+                if (habitatLocationField == null) habitatLocationField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Habitat Location:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(habitatLocationField, gbc);
+                gbc.gridx = 0;
+                gbc.gridy++;
+                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(numberOfLegsField, gbc);
+                break;
+            case "Whale":
+                if (foodTypeField == null) foodTypeField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Food Type:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(foodTypeField, gbc);
+                gbc.gridx = 0;
+                gbc.gridy++;
+                if (divingDepthField == null) divingDepthField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Diving Depth:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(divingDepthField, gbc);
+                break;
+            case "Dolphin":
+                if (waterTypeComboBox == null) waterTypeComboBox = new JComboBox<>(new String[] {"","Sea", "Fresh"});
+                specificFieldsPanel.add(new JLabel("Water Type:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(waterTypeComboBox, gbc);
+                gbc.gridx = 0;
+                gbc.gridy++;
+                if (divingDepthField == null) divingDepthField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Diving Depth:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(divingDepthField, gbc);
+                break;
+            case "Water":
+                if (divingDepthField == null) divingDepthField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Diving Depth:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(divingDepthField, gbc);
+                break;
+            case "Air":
+                if (wingSpanField == null) wingSpanField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Wing Span:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(wingSpanField, gbc);
+                break;
+            case "Terrestrial":
+                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
+                specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
+                gbc.gridx = 1;
+                specificFieldsPanel.add(numberOfLegsField, gbc);
+                break;
+        }
+
+        // Refresh the dialog to show the new specific fields
+        specificFieldsPanel.revalidate();
+        specificFieldsPanel.repaint();
     }
 
     private void validateAnimalAndCompetitionType() {
-        String animalType = (String) animalTypeComboBox.getSelectedItem();
-        String competitionType = (String) competitionTypeComboBox.getSelectedItem();
+        String animalType = getAnimalType();
+        String competitionType = getCompetitionType();
 
-        if (animalType.isEmpty() || competitionType.isEmpty()) {
-            return; // Don't validate if either field is empty
-        }
-
-        if (!isValidCompetitionTypeForAnimal(animalType, competitionType)) {
-            JOptionPane.showMessageDialog(
-                    AddAnimalDialog.this,
-                    "The selected animal cannot participate in the chosen competition type.",
-                    "Invalid Competition Type",
-                    JOptionPane.ERROR_MESSAGE
-            );
+        if ((animalType.equals("Dog") || animalType.equals("Cat") || animalType.equals("Snake") || animalType.equals("Alligator")) && !competitionType.equals("Terrestrial")) {
+            throw new IllegalArgumentException("The selected animal type is not suitable for the selected competition type.");
+        } else if ((animalType.equals("Eagle") || animalType.equals("Pigeon")) && !competitionType.equals("Air")) {
+            throw new IllegalArgumentException("The selected animal type is not suitable for the selected competition type.");
+        } else if ((animalType.equals("Whale") || animalType.equals("Dolphin")) && !competitionType.equals("Water")) {
+            throw new IllegalArgumentException("The selected animal type is not suitable for the selected competition type.");
         }
     }
 
     public String getAnimalType() {
-        return animalType;
+        return (String) animalTypeComboBox.getSelectedItem();
     }
 
     public String getCompetitionType() {
-        return competitionType;
-    }
-
-    private boolean isValidCompetitionTypeForAnimal(String animalType, String competitionType) {
-        switch (animalType) {
-            case "Dog":
-            case "Cat":
-            case "Snake":
-                return competitionType.equals("Terrestrial");
-            case "Eagle":
-            case "Pigeon":
-                return competitionType.equals("Air");
-            case "Whale":
-            case "Dolphin":
-                return competitionType.equals("Water");
-            default:
-                return false;
-        }
+        return (String) competitionTypeComboBox.getSelectedItem();
     }
 }

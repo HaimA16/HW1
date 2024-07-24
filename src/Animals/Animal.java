@@ -1,10 +1,10 @@
 package Animals;
 
-import Graphics.CompetitionPanel;
+import Graphics.*;
+import Mobility.ILocatable;
 import Mobility.Mobile;
 import Olympics.Medal;
 import Mobility.Point;
-
 import javax.xml.stream.Location;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
