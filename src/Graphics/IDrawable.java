@@ -7,3 +7,5 @@ public interface IDrawable {
     public void loadImages(String nm);
     public void drawObject(Graphics g); // שימוש ב-Graphics עם ה-import הנכון
 }
+
+

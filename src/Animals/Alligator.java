@@ -4,6 +4,7 @@ import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
 
+import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -45,11 +46,11 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
      * @param diveDept      the dive depth of the alligator
      * @param areaOfLiving  the area of living of the alligator
      */
-    public Alligator(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+    public Alligator(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                      Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
                      BufferedImage img1, double diveDept,
                      String areaOfLiving) {
-        super(name, gender, weight,speed,medals, location,
+        super(name, gender, weight,speed,medals, location,loc,
                 orientation,size, id,maxEnergy,energyPerMeter,pan,
                 img1, diveDept);
         this.areaOfLiving = areaOfLiving;
@@ -110,19 +111,5 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
         this.areaOfLiving = areaOfLiving;
     }
 
-    @Override
-    public boolean eat(int energy) {
-        return false;
-    }
-
-    @Override
-    public void loadImages(String nm) {
-
-    }
-
-    @Override
-    public void drawObject(Graphics g) {
-
-    }
 
 }

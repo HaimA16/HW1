@@ -4,6 +4,7 @@ import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
 
+import javax.xml.stream.Location;
 import java.awt.image.BufferedImage;
 
 public class Snake extends TerrestrialAnimals implements IReptile{
@@ -15,10 +16,10 @@ public class Snake extends TerrestrialAnimals implements IReptile{
         poisonousLevel = PoisonousLevel.LOW;
         length = 0.0;
     }
-    public Snake(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+    public Snake(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                  Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
                  BufferedImage img1, int noLegs, double length, PoisonousLevel poisonousLevel){
-        super(name, gender, weight, speed, medals, location, orientation, size, id, maxEnergy, energyPerMeter, pan, img1,noLegs);
+        super(name, gender, weight, speed, medals, location,loc, orientation, size, id, maxEnergy, energyPerMeter, pan, img1,noLegs);
         this.poisonousLevel = poisonousLevel;
         this.length = length;
     }

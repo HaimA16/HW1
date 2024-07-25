@@ -67,10 +67,10 @@ public abstract class TerrestrialAnimals extends Animal {
      * @param noLegs         the number of legs of the terrestrial animal
      * @throws IllegalArgumentException if the number of legs is negative
      */
-    public TerrestrialAnimals(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+    public TerrestrialAnimals(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                               Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
                               BufferedImage img1, int noLegs) {
-        super(name, gender, weight, speed, medals, location,
+        super(name, gender, weight, speed, medals, location,loc,
                 orientation, size, id, maxEnergy, energyPerMeter, pan,
                 img1);
         if (noLegs < 0) {

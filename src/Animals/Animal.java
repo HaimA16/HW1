@@ -5,27 +5,21 @@ import Mobility.ILocatable;
 import Mobility.Mobile;
 import Olympics.Medal;
 import Mobility.Point;
+
+import javax.imageio.ImageIO;
 import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
  * Abstract class representing an Animal, extending the Mobile class.
  */
-public abstract class Animal extends Mobile implements ILocatable, IMoveable, IDrawable, IClonable, IAnimal{
+public abstract class Animal extends Mobile implements ILocatable, IMoveable, IDrawable, IClonable, IAnimal {
 
-    public Object getName() {
-        return name;
-    }
 
-    public Object getEnergyAmount() {
-        return energyPerMeter;
-    }
-
-    public Object getEnergyConsumption() {
-        return maxEnergy;
-    }
 
     /**
      * Enum representing the gender of the animal.
@@ -43,10 +37,13 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
     private int id;
     private Location loc;
     private Orientation orientation;
-    private int maxEnergy;
+    private int maxEnergy, Energy,sumEnergy;
     private int energyPerMeter;
     private CompetitionPanel pan;
-    private BufferedImage img1, img2, img3, img4;
+    BufferedImage img1;
+    BufferedImage img2;
+    BufferedImage img3;
+    protected BufferedImage img4;
 
     public Animal(){
         name = null;
@@ -73,25 +70,20 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
      * @param pan            the competition panel associated with the animal
      * @param img1           the first image of the animal
      */
-    public Animal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+    public Animal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                   Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
                   BufferedImage img1) {
         super(location);
-        if (name == null || gender == null || weight <= 0 || speed <= 0 || orientation == null || location == null || loc == null) {
+        if (name == null || gender == null || weight <= 0 || speed <= 0 || orientation == null || location == null) {
             throw new IllegalArgumentException("Invalid animal value!");
         }
         this.name = name;
         this.gender = gender;
         this.weight = weight;
         this.speed = speed;
-        this.medals = new Medal[medals.length];
-        for (int i = 0; i < medals.length; i++) {
-            if (medals[i] == null) {
-                throw new IllegalArgumentException("Medal cannot be null!");
-            }
-            this.medals[i] = medals[i];
-        }
-        this.loc = loc;
+        this.medals = null;
+
+        this.loc = loc; // Use the provided location
         this.orientation = orientation;
         this.size = size;
         this.id = id;
@@ -99,8 +91,17 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         this.energyPerMeter = energyPerMeter;
         this.pan = pan;
         this.img1 = img1;
-
+        this.Energy = maxEnergy;
     }
+
+    public boolean setMedals(Medal[] medals) {
+        if (medals != null) {
+            this.medals = medals;
+            return true;
+        }
+        return false;
+    }
+
 
     // Getter and Setter for size
     public int getSize() {
@@ -170,6 +171,19 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
     // Getter and Setter for energyPerMeter
     public int getEnergyPerMeter() {
         return energyPerMeter;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getEnergyAmount() {
+        return Energy;
+    }
+
+
+    public int getEnergyConsumption() {
+        return maxEnergy;
     }
 
     public boolean setEnergyPerMeter(int energyPerMeter) {
@@ -276,24 +290,59 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         addTotalDistance(distance);
         this.getLocation().setX(point.getX());
         this.getLocation().setY(point.getY());
+        int lowerEnergy = (int) (Energy - energyPerMeter*distance);
+        setEnergy(lowerEnergy);
 
         return distance;
     }
 
     @Override
     public boolean eat(int energy) {
+        if (energy > 0 && getEnergy() + energy <= getMaxEnergy()) {
+            setEnergy(getEnergy() + energy);
+            sumEnergy+=energy;
+            return true;
+        }
         return false;
+    }
+
+    public int getSumEnergy(){
+        return sumEnergy;
+    }
+
+    private void setEnergy(int e) {
+        Energy = e;
+    }
+
+    private int getEnergy() {
+        return Energy;
     }
 
     @Override
     public void loadImages(String nm) {
-
+        try {
+            img1 = ImageIO.read(new File(nm + "_east.png")); // תמונה לכיוון מזרח
+            img2 = ImageIO.read(new File(nm + "_south.png")); // תמונה לכיוון דרום
+            img3 = ImageIO.read(new File(nm + "_west.png")); // תמונה לכיוון מערב
+            img4 = ImageIO.read(new File(nm + "_north.png")); // תמונה לכיוון צפון
+        } catch (IOException e) {
+            System.out.println("Cannot load image for " + nm);
+        }
     }
 
     @Override
     public void drawObject(Graphics g) {
-
+        if (orientation == Orientation.EAST) {
+            g.drawImage(img1, getLocation().getX(), getLocation().getY() - size / 10, size * 2, size, pan);
+        } else if (orientation == Orientation.SOUTH) {
+            g.drawImage(img2, getLocation().getX(), getLocation().getY() - size / 10, size, size, pan);
+        } else if (orientation == Orientation.WEST) {
+            g.drawImage(img3, getLocation().getX(), getLocation().getY() - size / 10, size * 2, size, pan);
+        } else if (orientation == Orientation.NORTH) {
+            g.drawImage(img4, getLocation().getX() - size / 2, getLocation().getY() - size / 10, size, size * 2, pan);
+        }
     }
+
 
     /**
      * Gets the speed of the animal.

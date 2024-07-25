@@ -77,13 +77,6 @@ public class AddAnimalDialog extends JDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 4;
-        add(new JLabel("Number of Medals:"), gbc);
-        medalsField = new JTextField(15);
-        gbc.gridx = 1;
-        add(medalsField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 5;
         add(new JLabel("Gender:"), gbc);
         genderComboBox = new JComboBox<>(new String[] {"Male", "Female"});
         gbc.gridx = 1;
@@ -91,7 +84,7 @@ public class AddAnimalDialog extends JDialog {
 
         // תווית ותיבת בחירה לסוג תחרות
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 5;
         add(new JLabel("Competition Type:"), gbc);
         competitionTypeComboBox = new JComboBox<>(new String[] {"","Air", "Terrestrial", "Water"});
         gbc.gridx = 1;
@@ -99,35 +92,35 @@ public class AddAnimalDialog extends JDialog {
 
         // Additional fields for all animals
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 6;
         add(new JLabel("Direction:"), gbc);
         directionComboBox = new JComboBox<>(new String[] {"", "North", "South", "East", "West"});
         gbc.gridx = 1;
         add(directionComboBox, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 7;
         add(new JLabel("Size:"), gbc);
         sizeField = new JTextField(15);
         gbc.gridx = 1;
         add(sizeField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 8;
         add(new JLabel("ID:"), gbc);
         idField = new JTextField(15);
         gbc.gridx = 1;
         add(idField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 9;
         add(new JLabel("Max Energy:"), gbc);
         maxEnergyField = new JTextField(15);
         gbc.gridx = 1;
         add(maxEnergyField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 10;
         add(new JLabel("Energy per Meter:"), gbc);
         energyPerMeterField = new JTextField(15);
         gbc.gridx = 1;
@@ -136,7 +129,7 @@ public class AddAnimalDialog extends JDialog {
         // Specific fields panel
         specificFieldsPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
-        gbc.gridy = 12;
+        gbc.gridy = 11;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 2; // Make the panel span two columns
         add(specificFieldsPanel, gbc);

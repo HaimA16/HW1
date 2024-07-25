@@ -44,10 +44,10 @@ public class Cat extends TerrestrialAnimals {
      * @param noLegs    the number of legs the cat has
      * @param castrated the castrated status of the cat
      */
-    public Cat(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+    public Cat(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
                BufferedImage img1, int noLegs, Boolean castrated) {
-        super(name, gender, weight, speed, medals, location, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs);
+        super(name, gender, weight, speed, medals, location,loc, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs);
         this.castrated = castrated;
     }
 
