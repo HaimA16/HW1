@@ -4,9 +4,12 @@ import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
 
+import javax.imageio.ImageIO;
 import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Class representing an Alligator, which is a type of Water Animal.
@@ -54,6 +57,7 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
                 orientation,size, id,maxEnergy,energyPerMeter,pan,
                 img1, diveDept);
         this.areaOfLiving = areaOfLiving;
+        loadImages("alligator");
     }
 
     /**
@@ -111,5 +115,15 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
         this.areaOfLiving = areaOfLiving;
     }
 
+    public void loadImages(String nm) {
+        try {
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "1.png")); // תמונה לכיוון מזרח
+            img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "2.png")); // תמונה לכיוון דרום
+            img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "3.png")); // תמונה לכיוון מערב
+            img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "3.png")); // תמונה לכיוון צפון
+        } catch (IOException e) {
+            System.out.println("Cannot load image for " + nm);
+        }
+    }
 
 }

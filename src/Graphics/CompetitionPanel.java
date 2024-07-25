@@ -329,55 +329,62 @@ public class CompetitionPanel extends JPanel {
     }
 
     private Animal createAnimalFromDialog(AddAnimalDialog dialog) {
-        String name = dialog.getNameField().getText();
-        Animal.Gender gender = Animal.Gender.valueOf(dialog.getGenderComboBox().getSelectedItem().toString().toUpperCase());
-        double weight = Double.parseDouble(dialog.getWeightField().getText());
-        double speed = Double.parseDouble(dialog.getSpeedField().getText());
-        Point location = new Point(0, 0); // You might want to get this from the dialog or set it differently
-        Animal.Orientation orientation = Animal.Orientation.valueOf(dialog.getDirectionComboBox().getSelectedItem().toString().toUpperCase());
-        int size = Integer.parseInt(dialog.getSizeField().getText());
-        int id = Integer.parseInt(dialog.getIdField().getText());
-        int maxEnergy = Integer.parseInt(dialog.getMaxEnergyField().getText());
-        int energyPerMeter = Integer.parseInt(dialog.getEnergyPerMeterField().getText());
-        CompetitionPanel pan = this;
-        BufferedImage img1 = null; // You might want to load an image based on the animal type
+        try {
+            String name = dialog.getNameField().getText();
+            Animal.Gender gender = Animal.Gender.valueOf(dialog.getGenderComboBox().getSelectedItem().toString().toUpperCase());
+            double weight = Double.parseDouble(dialog.getWeightField().getText());
+            double speed = Double.parseDouble(dialog.getSpeedField().getText());
+            Point location = new Point(0, 0); // You might want to get this from the dialog or set it differently
+            Animal.Orientation orientation = Animal.Orientation.valueOf(dialog.getDirectionComboBox().getSelectedItem().toString().toUpperCase());
+            int size = Integer.parseInt(dialog.getSizeField().getText());
+            int id = Integer.parseInt(dialog.getIdField().getText());
+            int maxEnergy = Integer.parseInt(dialog.getMaxEnergyField().getText());
+            int energyPerMeter = Integer.parseInt(dialog.getEnergyPerMeterField().getText());
+            CompetitionPanel pan = this;
+            BufferedImage img1 = null; // You might want to load an image based on the animal type
 
-        String animalType = dialog.getAnimalType();
-        switch (animalType) {
-            case "Dog":
-                String breed = dialog.getBreedField().getText();
-                int noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
-                return new Dog(name, gender, weight, speed, null, location,null ,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, breed);
-            case "Cat":
-                boolean castrated = dialog.getCastratedComboBox().getSelectedItem().toString().equalsIgnoreCase("Yes");
-                noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
-                return new Cat(name, gender, weight, speed, null, location,null ,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, castrated);
-            case "Snake":
-                Snake.PoisonousLevel venomLevel = Snake.PoisonousLevel.valueOf(dialog.getVenomLevelComboBox().getSelectedItem().toString());
-                double length = Double.parseDouble(dialog.getLengthField().getText());
-                return new Snake(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1,0 ,length,venomLevel);
-            case "Eagle":
-                double altitudeOfFlight = Double.parseDouble(dialog.getAltitudeOfFlightField().getText());
-                double wingSpan = Double.parseDouble(dialog.getWingSpanField().getText());
-                return new Eagle(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, altitudeOfFlight, wingSpan);
-            case "Pigeon":
-                String family = dialog.getFamilyField().getText();
-                wingSpan = Double.parseDouble(dialog.getWingSpanField().getText());
-                return new Pigeon(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, wingSpan, family);
-            case "Alligator":
-                String habitatLocation = dialog.getHabitatLocationField().getText();
-                noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
-                return new Alligator(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, habitatLocation);
-            case "Whale":
-                String foodType = dialog.getFoodTypeField().getText();
-                double divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
-                return new Whale(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, foodType);
-            case "Dolphin":
-                Dolphin.WaterType waterType = Dolphin.WaterType.valueOf(dialog.getWaterTypeComboBox().getSelectedItem().toString());
-                divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
-                return new Dolphin(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, waterType);
-            default:
-                throw new IllegalArgumentException("Invalid animal type!");
+            String animalType = dialog.getAnimalType();
+            switch (animalType) {
+                case "Dog":
+                    String breed = dialog.getBreedField().getText();
+                    int noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
+                    return new Dog(name, gender, weight, speed, null, location,null ,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, breed);
+                case "Cat":
+                    boolean castrated = dialog.getCastratedComboBox().getSelectedItem().toString().equalsIgnoreCase("Yes");
+                    noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
+                    return new Cat(name, gender, weight, speed, null, location,null ,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, castrated);
+                case "Snake":
+                    Snake.PoisonousLevel venomLevel = Snake.PoisonousLevel.valueOf(dialog.getVenomLevelComboBox().getSelectedItem().toString());
+                    double length = Double.parseDouble(dialog.getLengthField().getText());
+                    return new Snake(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1,0 ,length,venomLevel);
+                case "Eagle":
+                    double altitudeOfFlight = Double.parseDouble(dialog.getAltitudeOfFlightField().getText());
+                    double wingSpan = Double.parseDouble(dialog.getWingSpanField().getText());
+                    return new Eagle(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, altitudeOfFlight, wingSpan);
+                case "Pigeon":
+                    String family = dialog.getFamilyField().getText();
+                    wingSpan = Double.parseDouble(dialog.getWingSpanField().getText());
+                    return new Pigeon(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, wingSpan, family);
+                case "Alligator":
+                    String habitatLocation = dialog.getHabitatLocationField().getText();
+                    noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
+                    return new Alligator(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, habitatLocation);
+                case "Whale":
+                    String foodType = dialog.getFoodTypeField().getText();
+                    double divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
+                    return new Whale(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, foodType);
+                case "Dolphin":
+                    Dolphin.WaterType waterType = Dolphin.WaterType.valueOf(dialog.getWaterTypeComboBox().getSelectedItem().toString());
+                    divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
+                    return new Dolphin(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, waterType);
+                default:
+                    throw new IllegalArgumentException("Invalid animal type!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error creating animal: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
     }
+
 }

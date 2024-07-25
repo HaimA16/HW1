@@ -4,8 +4,11 @@ import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
 
+import javax.imageio.ImageIO;
 import javax.xml.stream.Location;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Eagle extends AirAnimal {
     private double altitudeOfFlight;
@@ -24,9 +27,18 @@ public class Eagle extends AirAnimal {
         if(altitudeOfFlight > MAX_ALTITUDE)
             throw new IllegalArgumentException("Altitude of flight exceeds maximum allowed.");
         this.altitudeOfFlight = altitudeOfFlight;
+        loadImages("eagle");
 
     }
     public String getSound() {
         return "Clack-wack-chack";
+    }
+
+    public void loadImages(String nm) {
+        try {
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "1.png")); // תמונה לכיוון מזרח
+        } catch (IOException e) {
+            System.out.println("Cannot load image for " + nm);
+        }
     }
 }
