@@ -59,18 +59,7 @@ public abstract class Mobile implements ILocatable {
      * @param point the new location to move to
      * @return the distance traveled to reach the new location
      */
-    public double Move(Point point) {
-        if (point == null || point.equals(this.location)) {
-            return 0;
-        }
 
-        double distance = calcDistance(point);
-        addTotalDistance(distance);
-        this.location.setX(point.getX());
-        this.location.setY(point.getY());
-
-        return distance;
-    }
 
     /**
      * Sets the location of the mobile object to a new point.

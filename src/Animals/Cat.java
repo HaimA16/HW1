@@ -5,6 +5,7 @@ import Mobility.Point;
 import Olympics.Medal;
 
 import javax.xml.stream.Location;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -77,4 +78,7 @@ public class Cat extends TerrestrialAnimals {
     public Boolean getCastrated() {
         return castrated;
     }
+
+
+
 }

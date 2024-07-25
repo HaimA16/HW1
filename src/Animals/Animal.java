@@ -6,13 +6,14 @@ import Mobility.Mobile;
 import Olympics.Medal;
 import Mobility.Point;
 import javax.xml.stream.Location;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 /**
  * Abstract class representing an Animal, extending the Mobile class.
  */
-public abstract class Animal extends Mobile implements ILocatable, IMoveable, IDrawable, IClonable  {
+public abstract class Animal extends Mobile implements ILocatable, IMoveable, IDrawable, IClonable, IAnimal{
 
     public Object getName() {
         return name;
@@ -64,7 +65,6 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
      * @param speed          the speed of the animal
      * @param medals         an array of medals won by the animal
      * @param location       the initial location of the animal
-
      * @param orientation    the initial orientation of the animal
      * @param size           the size of the animal
      * @param id             the id of the animal
@@ -267,9 +267,32 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return name;
     }
 
+    public double move(Point point) {
+        if (point == null || point.equals(this.getLocation())) {
+            return 0;
+        }
+
+        double distance = calcDistance(point);
+        addTotalDistance(distance);
+        this.getLocation().setX(point.getX());
+        this.getLocation().setY(point.getY());
+
+        return distance;
+    }
+
     @Override
-    public boolean move(Point p) {
+    public boolean eat(int energy) {
         return false;
+    }
+
+    @Override
+    public void loadImages(String nm) {
+
+    }
+
+    @Override
+    public void drawObject(Graphics g) {
+
     }
 
     /**

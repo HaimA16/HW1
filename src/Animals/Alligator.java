@@ -4,7 +4,7 @@ import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
 
-import javax.xml.stream.Location;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -108,6 +108,21 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
      */
     public void setAreaOfLiving(String areaOfLiving) {
         this.areaOfLiving = areaOfLiving;
+    }
+
+    @Override
+    public boolean eat(int energy) {
+        return false;
+    }
+
+    @Override
+    public void loadImages(String nm) {
+
+    }
+
+    @Override
+    public void drawObject(Graphics g) {
+
     }
 
 }
