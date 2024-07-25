@@ -59,7 +59,7 @@ public abstract class Mobile implements ILocatable {
      * @param point the new location to move to
      * @return the distance traveled to reach the new location
      */
-    public double move(Point point) {
+    public double Move(Point point) {
         if (point == null || point.equals(this.location)) {
             return 0;
         }
@@ -128,4 +128,6 @@ public abstract class Mobile implements ILocatable {
     public String toString() {
         return "Location: " + "(" + this.location.getX() + ", " + this.location.getY() + ")";
     }
+
+
 }

@@ -109,4 +109,5 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
     public void setAreaOfLiving(String areaOfLiving) {
         this.areaOfLiving = areaOfLiving;
     }
+
 }

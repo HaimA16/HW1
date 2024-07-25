@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AddAnimalDialog extends JDialog {
+    private boolean confirmed = false;
     private JComboBox<String> animalTypeComboBox;
     private JTextField nameField;
     private JTextField weightField;
@@ -25,6 +26,7 @@ public class AddAnimalDialog extends JDialog {
     private JTextField breedField; // Dog
     private JComboBox<String> castratedComboBox; // Cat
     private JComboBox<String> venomLevelComboBox; // Snake
+    private JTextField LengthField; // snake animals
     private JTextField habitatLocationField; // Alligator
     private JTextField altitudeOfFlightField; // Eagle
     private JTextField familyField; // Pigeon
@@ -165,6 +167,7 @@ public class AddAnimalDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 try {
                     validateAnimalAndCompetitionType();
+                    confirmed = true;
                     setVisible(false);
                 } catch (IllegalArgumentException ex) {
                     JOptionPane.showMessageDialog(AddAnimalDialog.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -177,6 +180,7 @@ public class AddAnimalDialog extends JDialog {
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                confirmed = false;
                 setVisible(false);
             }
         });
@@ -190,112 +194,58 @@ public class AddAnimalDialog extends JDialog {
     }
 
     private void showSpecificFields(String animalType) {
-        // Remove all components from the specific fields panel
         specificFieldsPanel.removeAll();
-
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(2, 2, 2, 2); // רווחים מינימליים
+        gbc.insets = new Insets(2, 2, 2, 2);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Add specific fields based on the selected animal type
         switch (animalType) {
             case "Dog":
-                if (breedField == null) breedField = new JTextField(15);
-                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Breed:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(breedField, gbc);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(numberOfLegsField, gbc);
+                addSpecificField("Breed:", breedField = new JTextField(15), gbc);
+                addSpecificField("Number of Legs:", numberOfLegsField = new JTextField(15), gbc);
                 break;
             case "Cat":
-                if (castratedComboBox == null) castratedComboBox = new JComboBox<>(new String[] {"","Castrated", "Not Castrated"});
-                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Castrated:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(castratedComboBox, gbc);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(numberOfLegsField, gbc);
+                addSpecificField("Castrated:", castratedComboBox = new JComboBox<>(new String[]{"", "Yes", "No"}), gbc);
+                addSpecificField("Number of Legs:", numberOfLegsField = new JTextField(15), gbc);
                 break;
             case "Snake":
-                if (venomLevelComboBox == null) venomLevelComboBox = new JComboBox<>(new String[] {"","Low", "Medium", "High"});
-                specificFieldsPanel.add(new JLabel("Venom Level:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(venomLevelComboBox, gbc);
+                addSpecificField("Venom Level:", venomLevelComboBox = new JComboBox<>(new String[]{"", "Low", "Medium", "High"}), gbc);
+                addSpecificField("Length:", LengthField = new JTextField(15), gbc);
                 break;
             case "Eagle":
-                if (altitudeOfFlightField == null) altitudeOfFlightField = new JTextField(15);
-                if (wingSpanField == null) wingSpanField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Altitude of Flight:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(altitudeOfFlightField, gbc);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                specificFieldsPanel.add(new JLabel("Wing Span:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(wingSpanField, gbc);
+                addSpecificField("Altitude of Flight:", altitudeOfFlightField = new JTextField(15), gbc);
+                addSpecificField("Wing Span:", wingSpanField = new JTextField(15), gbc);
                 break;
             case "Pigeon":
-                if (familyField == null) familyField = new JTextField(15);
-                if (wingSpanField == null) wingSpanField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Family:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(familyField, gbc);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                specificFieldsPanel.add(new JLabel("Wing Span:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(wingSpanField, gbc);
+                addSpecificField("Family:", familyField = new JTextField(15), gbc);
+                addSpecificField("Wing Span:", wingSpanField = new JTextField(15), gbc);
                 break;
             case "Alligator":
-                if (habitatLocationField == null) habitatLocationField = new JTextField(15);
-                if (numberOfLegsField == null) numberOfLegsField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Area of living:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(habitatLocationField, gbc);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                specificFieldsPanel.add(new JLabel("Number of Legs:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(numberOfLegsField, gbc);
+                addSpecificField("Area of living:", habitatLocationField = new JTextField(15), gbc);
+                addSpecificField("Number of Legs:", numberOfLegsField = new JTextField(15), gbc);
                 break;
             case "Whale":
-                if (foodTypeField == null) foodTypeField = new JTextField(15);
-                if (divingDepthField == null) divingDepthField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Food Type:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(foodTypeField, gbc);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                specificFieldsPanel.add(new JLabel("Diving Depth:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(divingDepthField, gbc);
+                addSpecificField("Food Type:", foodTypeField = new JTextField(15), gbc);
+                addSpecificField("Diving Depth:", divingDepthField = new JTextField(15), gbc);
                 break;
             case "Dolphin":
-                if (waterTypeComboBox == null) waterTypeComboBox = new JComboBox<>(new String[] {"","Sea", "Sweet"});
-                if (divingDepthField == null) divingDepthField = new JTextField(15);
-                specificFieldsPanel.add(new JLabel("Water Type:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(waterTypeComboBox, gbc);
-                gbc.gridx = 0;
-                gbc.gridy++;
-                specificFieldsPanel.add(new JLabel("Diving Depth:"), gbc);
-                gbc.gridx = 1;
-                specificFieldsPanel.add(divingDepthField, gbc);
+                addSpecificField("Water Type:", waterTypeComboBox = new JComboBox<>(new String[]{"", "Sea", "Sweet"}), gbc);
+                addSpecificField("Diving Depth:", divingDepthField = new JTextField(15), gbc);
                 break;
         }
 
-        // Refresh the dialog to show the new specific fields
         specificFieldsPanel.revalidate();
         specificFieldsPanel.repaint();
+    }
+
+    private void addSpecificField(String label, JComponent component, GridBagConstraints gbc) {
+        specificFieldsPanel.add(new JLabel(label), gbc);
+        gbc.gridx = 1;
+        specificFieldsPanel.add(component, gbc);
+        gbc.gridx = 0;
+        gbc.gridy++;
     }
 
     private void validateAnimalAndCompetitionType() {
@@ -311,11 +261,103 @@ public class AddAnimalDialog extends JDialog {
         }
     }
 
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
     public String getAnimalType() {
         return (String) animalTypeComboBox.getSelectedItem();
     }
 
     public String getCompetitionType() {
         return (String) competitionTypeComboBox.getSelectedItem();
+    }
+
+    public JTextField getNameField() {
+        return nameField;
+    }
+
+    public JTextField getWeightField() {
+        return weightField;
+    }
+
+    public JTextField getSpeedField() {
+        return speedField;
+    }
+
+    public JTextField getMedalsField() {
+        return medalsField;
+    }
+
+    public JComboBox<String> getGenderComboBox() {
+        return genderComboBox;
+    }
+
+    public JComboBox<String> getDirectionComboBox() {
+        return directionComboBox;
+    }
+
+    public JTextField getSizeField() {
+        return sizeField;
+    }
+
+    public JTextField getIdField() {
+        return idField;
+    }
+
+    public JTextField getMaxEnergyField() {
+        return maxEnergyField;
+    }
+
+    public JTextField getEnergyPerMeterField() {
+        return energyPerMeterField;
+    }
+
+    public JTextField getBreedField() {
+        return breedField;
+    }
+
+    public JTextField getNumberOfLegsField() {
+        return numberOfLegsField;
+    }
+
+    public ComboBoxModel<String> getCastratedComboBox() {
+        return castratedComboBox.getModel();
+    }
+
+    public ComboBoxModel<String> getVenomLevelComboBox() {
+        return venomLevelComboBox.getModel();
+    }
+
+    public JTextField getAltitudeOfFlightField() {
+        return altitudeOfFlightField;
+    }
+
+    public JTextField getWingSpanField() {
+        return wingSpanField;
+    }
+
+    public JTextField getFamilyField() {
+        return familyField;
+    }
+
+    public JTextField getFoodTypeField() {
+        return foodTypeField;
+    }
+
+    public JTextField getDivingDepthField() {
+        return divingDepthField;
+    }
+
+    public ComboBoxModel<String> getWaterTypeComboBox() {
+        return waterTypeComboBox.getModel();
+    }
+
+    public JTextField getHabitatLocationField() {
+        return habitatLocationField;
+    }
+
+    public JTextField getLengthField() {
+        return LengthField;
     }
 }

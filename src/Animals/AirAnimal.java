@@ -7,7 +7,7 @@ import Olympics.Medal;
 import javax.xml.stream.Location;
 import java.awt.image.BufferedImage;
 
-public class AirAnimal extends Animal {
+public abstract class AirAnimal extends Animal {
     private double wingspan;
 
     public AirAnimal() {
@@ -52,5 +52,8 @@ public class AirAnimal extends Animal {
             return true;
         }
         return false;
+    }
+    public String getCategory() {
+        return "Air";
     }
 }

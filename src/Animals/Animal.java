@@ -12,7 +12,19 @@ import java.util.Arrays;
 /**
  * Abstract class representing an Animal, extending the Mobile class.
  */
-public abstract class Animal extends Mobile {
+public abstract class Animal extends Mobile implements ILocatable, IMoveable, IDrawable, IClonable  {
+
+    public Object getName() {
+        return name;
+    }
+
+    public Object getEnergyAmount() {
+        return energyPerMeter;
+    }
+
+    public Object getEnergyConsumption() {
+        return maxEnergy;
+    }
 
     /**
      * Enum representing the gender of the animal.
@@ -247,14 +259,24 @@ public abstract class Animal extends Mobile {
         return false;
     }
 
+    public double getSpeed() {
+        return speed;
+    }
+
+    public String getAnimaleName() {
+        return name;
+    }
+
+    @Override
+    public boolean move(Point p) {
+        return false;
+    }
+
     /**
      * Gets the speed of the animal.
      *
      * @return the speed of the animal
      */
-    public double getSpeed() {
-        return speed;
-    }
 
     /**
      * Gets the sound of the animal. This method should be overridden by subclasses.
@@ -270,6 +292,9 @@ public abstract class Animal extends Mobile {
      */
     public void makeSound() {
         System.out.println("Animal: " + getClass().getSimpleName() + " said " + getSound());
+    }
+    public String getCategory() {
+        return null;
     }
 
     /**

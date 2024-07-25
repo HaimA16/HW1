@@ -17,7 +17,7 @@ public class Snake extends TerrestrialAnimals implements IReptile{
     }
     public Snake(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
                  Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
-                 BufferedImage img1, int noLegs,double length, PoisonousLevel poisonousLevel){
+                 BufferedImage img1, int noLegs, double length, PoisonousLevel poisonousLevel){
         super(name, gender, weight, speed, medals, location, orientation, size, id, maxEnergy, energyPerMeter, pan, img1,noLegs);
         this.poisonousLevel = poisonousLevel;
         this.length = length;

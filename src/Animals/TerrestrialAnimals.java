@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  * Class representing a Terrestrial Animal.
  * Extends the Animal class and includes specific attributes for terrestrial animals.
  */
-public class TerrestrialAnimals extends Animal {
+public abstract class TerrestrialAnimals extends Animal {
     private int noLegs;
 
     /**
@@ -78,4 +78,10 @@ public class TerrestrialAnimals extends Animal {
         }
         this.noLegs = noLegs;
     }
-}
+
+    public String getCategory() {
+        return "Terrestrial";
+    }
+    }
+
+
