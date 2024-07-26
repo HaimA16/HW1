@@ -22,13 +22,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class CompetitionPanel extends JPanel {
     private BufferedImage backgroundImage;
     private JButton[] routeButtons;
     private String[] competitionsArray = {"Air", "Water", "Terrestrial"};
-    private List<Animal> animals = new ArrayList<>();
+    private Map<String, List<Animal>> competitionAnimals = new HashMap<>();
+    private Map<String, String> competitionNames = new HashMap<>(); // Map to store competition names for each type
     private List<Animal> removedAnimals = new ArrayList<>(); // רשימה לשמירת החיות שנמחקו
+    private String selectedCompetitionType; // משתנה לאחסון סוג התחרות שנבחרה
 
     public CompetitionPanel() {
         try {
@@ -46,8 +50,10 @@ public class CompetitionPanel extends JPanel {
                 if (backgroundImage != null) {
                     g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
                 }
-                for (Animal animal : animals) {
-                    animal.drawObject(g);
+                for (List<Animal> animalList : competitionAnimals.values()) {
+                    for (Animal animal : animalList) {
+                        animal.drawObject(g);
+                    }
                 }
             }
         };
@@ -64,7 +70,7 @@ public class CompetitionPanel extends JPanel {
 
         String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info", "Exit"};
         routeButtons = new JButton[routeNames.length];
-        int sumEnergy=0;
+        int sumEnergy = 0;
         for (int i = 0; i < routeNames.length; i++) {
             routeButtons[i] = new JButton(routeNames[i]);
             gbc.gridx = i;
@@ -79,11 +85,14 @@ public class CompetitionPanel extends JPanel {
                         public void actionPerformed(ActionEvent e) {
                             AddCompetitionDialog dialog = new AddCompetitionDialog();
                             dialog.setVisible(true);
-                            String competitionType = dialog.getCompetitionType();
-                            if (competitionType != null && !competitionType.isEmpty()) {
-                                // Handle the competition addition here if needed
+                            selectedCompetitionType = dialog.getCompetitionType();
+                            String competitionName = dialog.getCompetitionName();
+                            if (selectedCompetitionType != null && !selectedCompetitionType.isEmpty()) {
+                                // Initialize the list for the new competition type if not already present
+                                competitionAnimals.putIfAbsent(selectedCompetitionType, new ArrayList<>());
+                                competitionNames.put(selectedCompetitionType, competitionName); // Save the competition name
                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
-                                        "Competition added: " + competitionType,
+                                        "Competition added: " + competitionName + " (" + selectedCompetitionType + ")",
                                         "Competition Added",
                                         JOptionPane.INFORMATION_MESSAGE);
                             }
@@ -94,20 +103,28 @@ public class CompetitionPanel extends JPanel {
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            if (selectedCompetitionType == null || selectedCompetitionType.isEmpty()) {
+                                JOptionPane.showMessageDialog(CompetitionPanel.this,
+                                        "Please add a competition first.",
+                                        "No Competition",
+                                        JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }
+
                             AddAnimalDialog dialog = new AddAnimalDialog((Frame) SwingUtilities.getWindowAncestor(CompetitionPanel.this));
                             dialog.setVisible(true);
                             if (dialog.isConfirmed()) {
                                 try {
                                     String animalType = dialog.getAnimalType();
-                                    String competitionType = dialog.getCompetitionType();
+                                    String competitionType = selectedCompetitionType;
                                     if (!isValidCompetitionTypeForAnimal(animalType, competitionType)) {
                                         throw new Exception("The selected animal cannot participate in the chosen competition type.");
                                     } else {
                                         // Handle valid animal addition here
                                         Animal animal = createAnimalFromDialog(dialog);
-                                        animals.add(animal);
+                                        competitionAnimals.get(competitionType).add(animal);
                                         JOptionPane.showMessageDialog(CompetitionPanel.this,
-                                                "Animal added: " + animalType + " for " + competitionType + " competition",
+                                                "Animal added: " + animalType + " for " + competitionNames.get(competitionType) + " (" + competitionType + ") competition",
                                                 "Animal Added",
                                                 JOptionPane.INFORMATION_MESSAGE);
                                         repaint(); // עדכון המסך לאחר הוספת החיה
@@ -129,16 +146,20 @@ public class CompetitionPanel extends JPanel {
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (!animals.isEmpty()) {
+                            if (!competitionAnimals.isEmpty()) {
                                 Animal selectedAnimal = selectAnimal();
                                 if (selectedAnimal != null) {
-                                    animals.remove(selectedAnimal);
-                                    removedAnimals.add(selectedAnimal); // הוספת החיה לרשימת החיות שנמחקו
-                                    JOptionPane.showMessageDialog(CompetitionPanel.this,
-                                            "Animal removed: " + selectedAnimal.getName(),
-                                            "Animal Removed",
-                                            JOptionPane.INFORMATION_MESSAGE);
-                                    repaint(); // עדכון המסך לאחר הסרת החיה
+                                    for (List<Animal> animalList : competitionAnimals.values()) {
+                                        if (animalList.remove(selectedAnimal)) {
+                                            removedAnimals.add(selectedAnimal); // הוספת החיה לרשימת החיות שנמחקו
+                                            JOptionPane.showMessageDialog(CompetitionPanel.this,
+                                                    "Animal removed: " + selectedAnimal.getName(),
+                                                    "Animal Removed",
+                                                    JOptionPane.INFORMATION_MESSAGE);
+                                            repaint(); // עדכון המסך לאחר הסרת החיה
+                                            break;
+                                        }
+                                    }
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
@@ -153,7 +174,7 @@ public class CompetitionPanel extends JPanel {
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (!animals.isEmpty()) {
+                            if (!competitionAnimals.isEmpty()) {
                                 Animal selectedAnimal = selectAnimal();
                                 if (selectedAnimal != null) {
                                     String input = JOptionPane.showInputDialog(CompetitionPanel.this,
@@ -196,22 +217,49 @@ public class CompetitionPanel extends JPanel {
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if (!animals.isEmpty() || !removedAnimals.isEmpty()) { // בדיקה אם יש חיות ברשימה הראשית או ברשימת החיות שנמחקו
-                                String[] columnNames = {"Animal", "Category", "Type", "Speed", "Energy Amount", "Distance", "Energy Consumption"};
-                                DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-                                for (Animal animal : animals) {
-                                    model.addRow(new Object[]{animal.getName(), animal.getCategory(), animal.getClass().getSimpleName(), animal.getSpeed(),
-                                            animal.getEnergyAmount(), animal.getTotalDistance(), animal.getSumEnergy()});
+                            if (!competitionAnimals.isEmpty() || !removedAnimals.isEmpty()) { // Check if there are animals in the main list or the removed list
+                                JPanel infoPanel = new JPanel();
+                                infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+
+                                // Add animals in each competition
+                                for (String competitionType : competitionsArray) {
+                                    if (competitionAnimals.containsKey(competitionType) && !competitionAnimals.get(competitionType).isEmpty()) {
+                                        JLabel competitionLabel = new JLabel("Competition: " + competitionNames.get(competitionType));
+                                        competitionLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                                        infoPanel.add(competitionLabel);
+
+                                        String[] columnNames = {"Animal", "Category", "Type", "Speed", "Energy Amount", "Distance", "Energy Consumption"};
+                                        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+                                        for (Animal animal : competitionAnimals.get(competitionType)) {
+                                            model.addRow(new Object[]{animal.getName(), animal.getCategory(), animal.getClass().getSimpleName(), animal.getSpeed(),
+                                                    animal.getEnergyAmount(), animal.getTotalDistance(), animal.getSumEnergy()});
+                                        }
+                                        JTable table = new JTable(model);
+                                        JScrollPane scrollPane = new JScrollPane(table);
+                                        infoPanel.add(scrollPane);
+                                    }
                                 }
-                                for (Animal animal : removedAnimals) { // הוספת החיות שנמחקו לטבלה
-                                    model.addRow(new Object[]{animal.getName(), animal.getCategory(), animal.getClass().getSimpleName(), animal.getSpeed(),
-                                            animal.getEnergyAmount(), animal.getTotalDistance(), animal.getSumEnergy()});
+
+                                // Add removed animals
+                                if (!removedAnimals.isEmpty()) {
+                                    JLabel removedLabel = new JLabel("Removed Animals");
+                                    removedLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                                    infoPanel.add(removedLabel);
+
+                                    String[] columnNames = {"Animal", "Category", "Type", "Speed", "Energy Amount", "Distance", "Energy Consumption"};
+                                    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+                                    for (Animal animal : removedAnimals) {
+                                        model.addRow(new Object[]{animal.getName(), animal.getCategory(), animal.getClass().getSimpleName(), animal.getSpeed(),
+                                                animal.getEnergyAmount(), animal.getTotalDistance(), animal.getSumEnergy()});
+                                    }
+                                    JTable table = new JTable(model);
+                                    JScrollPane scrollPane = new JScrollPane(table);
+                                    infoPanel.add(scrollPane);
                                 }
-                                JTable table = new JTable(model);
-                                JScrollPane scrollPane = new JScrollPane(table);
+
                                 JFrame infoFrame = new JFrame("Animal Info");
                                 infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                                infoFrame.add(scrollPane);
+                                infoFrame.add(new JScrollPane(infoPanel));
                                 infoFrame.setSize(600, 400);
                                 infoFrame.setVisible(true);
                             } else {
@@ -223,6 +271,7 @@ public class CompetitionPanel extends JPanel {
                         }
                     });
                     break;
+
                 case "Exit":
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
@@ -309,17 +358,22 @@ public class CompetitionPanel extends JPanel {
     }
 
     private Animal selectAnimal() {
-        if (animals.isEmpty()) {
+        List<Animal> allAnimals = new ArrayList<>();
+        for (List<Animal> animalList : competitionAnimals.values()) {
+            allAnimals.addAll(animalList);
+        }
+
+        if (allAnimals.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No animals available.", "No Animals", JOptionPane.INFORMATION_MESSAGE);
             return null;
         }
 
-        String[] animalNames = animals.stream().map(Animal::getName).toArray(String[]::new);
+        String[] animalNames = allAnimals.stream().map(Animal::getName).toArray(String[]::new);
         String selectedName = (String) JOptionPane.showInputDialog(this, "Select an animal:", "Select Animal",
                 JOptionPane.QUESTION_MESSAGE, null, animalNames, animalNames[0]);
 
         if (selectedName != null) {
-            for (Animal animal : animals) {
+            for (Animal animal : allAnimals) {
                 if (animal.getName().equals(selectedName)) {
                     return animal;
                 }
@@ -334,9 +388,9 @@ public class CompetitionPanel extends JPanel {
             Animal.Gender gender = Animal.Gender.valueOf(dialog.getGenderComboBox().getSelectedItem().toString().toUpperCase());
             double weight = Double.parseDouble(dialog.getWeightField().getText());
             double speed = Double.parseDouble(dialog.getSpeedField().getText());
-            Point location = new Point(0, 0); // You might want to get this from the dialog or set it differently
-            Animal.Orientation orientation = Animal.Orientation.valueOf(dialog.getDirectionComboBox().getSelectedItem().toString().toUpperCase());
-            int size = Integer.parseInt(dialog.getSizeField().getText());
+            Point location = getInitialLocation(selectedCompetitionType); // Get initial location based on competition type
+            Animal.Orientation orientation = Animal.Orientation.EAST; // Set initial orientation to EAST
+            int size = 65; // Set size to 65 pixels
             int id = Integer.parseInt(dialog.getIdField().getText());
             int maxEnergy = Integer.parseInt(dialog.getMaxEnergyField().getText());
             int energyPerMeter = Integer.parseInt(dialog.getEnergyPerMeterField().getText());
@@ -344,42 +398,53 @@ public class CompetitionPanel extends JPanel {
             BufferedImage img1 = null; // You might want to load an image based on the animal type
 
             String animalType = dialog.getAnimalType();
+            Animal animal;
             switch (animalType) {
                 case "Dog":
                     String breed = dialog.getBreedField().getText();
                     int noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
-                    return new Dog(name, gender, weight, speed, null, location,null ,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, breed);
+                    animal = new Dog(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, breed);
+                    break;
                 case "Cat":
                     boolean castrated = dialog.getCastratedComboBox().getSelectedItem().toString().equalsIgnoreCase("Yes");
                     noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
-                    return new Cat(name, gender, weight, speed, null, location,null ,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, castrated);
+                    animal = new Cat(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, castrated);
+                    break;
                 case "Snake":
-                    Snake.PoisonousLevel venomLevel = Snake.PoisonousLevel.valueOf(dialog.getVenomLevelComboBox().getSelectedItem().toString());
+                    Snake.PoisonousLevel venomLevel = Snake.PoisonousLevel.valueOf(dialog.getVenomLevelComboBox().getSelectedItem().toString().toUpperCase());
                     double length = Double.parseDouble(dialog.getLengthField().getText());
-                    return new Snake(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1,0 ,length,venomLevel);
+                    animal = new Snake(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, 0, length, venomLevel);
+                    break;
                 case "Eagle":
                     double altitudeOfFlight = Double.parseDouble(dialog.getAltitudeOfFlightField().getText());
                     double wingSpan = Double.parseDouble(dialog.getWingSpanField().getText());
-                    return new Eagle(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, altitudeOfFlight, wingSpan);
+                    animal = new Eagle(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, altitudeOfFlight, wingSpan);
+                    break;
                 case "Pigeon":
                     String family = dialog.getFamilyField().getText();
                     wingSpan = Double.parseDouble(dialog.getWingSpanField().getText());
-                    return new Pigeon(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, wingSpan, family);
+                    animal = new Pigeon(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, wingSpan, family);
+                    break;
                 case "Alligator":
                     String habitatLocation = dialog.getHabitatLocationField().getText();
                     noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
-                    return new Alligator(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, habitatLocation);
+                    animal = new Alligator(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, habitatLocation);
+                    break;
                 case "Whale":
                     String foodType = dialog.getFoodTypeField().getText();
                     double divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
-                    return new Whale(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, foodType);
+                    animal = new Whale(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, foodType);
+                    break;
                 case "Dolphin":
-                    Dolphin.WaterType waterType = Dolphin.WaterType.valueOf(dialog.getWaterTypeComboBox().getSelectedItem().toString());
+                    Dolphin.WaterType waterType = Dolphin.WaterType.valueOf(dialog.getWaterTypeComboBox().getSelectedItem().toString().toUpperCase());
                     divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
-                    return new Dolphin(name, gender, weight, speed, null, location, null,orientation, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, waterType);
+                    animal = new Dolphin(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, waterType);
+                    break;
                 default:
                     throw new IllegalArgumentException("Invalid animal type!");
             }
+            animal.setLocation(location); // Ensure the location is set
+            return animal;
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error creating animal: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -387,4 +452,34 @@ public class CompetitionPanel extends JPanel {
         }
     }
 
+
+
+    private Point getInitialLocation(String competitionType) {
+        switch (competitionType) {
+            case "Terrestrial":
+                return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
+            case "Air":
+                return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
+            case "Water":
+                return new Point(0, selectRoute(1, 4) * 100); // Adjust y-coordinate based on route
+            default:
+                throw new IllegalArgumentException("Invalid competition type!");
+        }
+    }
+
+    private int selectRoute(int min, int max) {
+        Integer[] routes = new Integer[max - min + 1];
+        for (int i = 0; i < routes.length; i++) {
+            routes[i] = min + i;
+        }
+        Integer selectedRoute = (Integer) JOptionPane.showInputDialog(this, "Select a route:", "Select Route",
+                JOptionPane.QUESTION_MESSAGE, null, routes, routes[0]);
+        if (selectedRoute != null) {
+            return selectedRoute;
+        } else {
+            throw new IllegalArgumentException("No route selected!");
+        }
+    }
+
 }
+

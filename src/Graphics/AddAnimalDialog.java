@@ -224,7 +224,7 @@ public class AddAnimalDialog extends JDialog {
                 addSpecificField("Diving Depth:", divingDepthField = new JTextField(15), gbc);
                 break;
             case "Dolphin":
-                addSpecificField("Water Type:", waterTypeComboBox = new JComboBox<>(new String[]{"", "Sea", "Sweet"}), gbc);
+                addSpecificField("Water Type:", waterTypeComboBox = new JComboBox<>(new String[]{"", "SEA", "SWEET"}), gbc);
                 addSpecificField("Diving Depth:", divingDepthField = new JTextField(15), gbc);
                 break;
         }
@@ -232,6 +232,7 @@ public class AddAnimalDialog extends JDialog {
         specificFieldsPanel.revalidate();
         specificFieldsPanel.repaint();
     }
+
 
     private void addSpecificField(String label, JComponent component, GridBagConstraints gbc) {
         specificFieldsPanel.add(new JLabel(label), gbc);
