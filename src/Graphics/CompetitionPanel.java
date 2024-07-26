@@ -10,13 +10,13 @@ import Animals.Eagle;
 import Animals.Pigeon;
 import Animals.Snake;
 import Mobility.Point;
-
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class CompetitionPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info", "Exit"};
+        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info", "Play", "Exit"};
         routeButtons = new JButton[routeNames.length];
         int sumEnergy = 0;
         for (int i = 0; i < routeNames.length; i++) {
@@ -272,6 +272,30 @@ public class CompetitionPanel extends JPanel {
                     });
                     break;
 
+                case "Play":
+                    routeButtons[i].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (!competitionAnimals.isEmpty()) {
+                                Animal selectedAnimal = selectAnimal();
+                                if (selectedAnimal != null) {
+                                    moveAnimalToEnd(selectedAnimal);
+                                } else {
+                                    JOptionPane.showMessageDialog(CompetitionPanel.this,
+                                            "No animal selected.",
+                                            "No Animal",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(CompetitionPanel.this,
+                                        "No animals to move.",
+                                        "No Animals",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+                    });
+                    break;
+
                 case "Exit":
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
@@ -443,7 +467,6 @@ public class CompetitionPanel extends JPanel {
                 default:
                     throw new IllegalArgumentException("Invalid animal type!");
             }
-            animal.setLocation(location); // Ensure the location is set
             return animal;
         } catch (Exception e) {
             e.printStackTrace();
@@ -452,12 +475,10 @@ public class CompetitionPanel extends JPanel {
         }
     }
 
-
-
     private Point getInitialLocation(String competitionType) {
         switch (competitionType) {
             case "Terrestrial":
-                return new Point(0, 0); // Adjust y-coordinate based on route
+                return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
             case "Air":
                 return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
             case "Water":
@@ -481,5 +502,23 @@ public class CompetitionPanel extends JPanel {
         }
     }
 
+    private void moveAnimalToEnd(Animal animal) {
+        int delay = 100; // milliseconds
+        Timer timer = new Timer(delay, null);
+        timer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Point currentLocation = animal.getLocation();
+                int newX = currentLocation.getX() + (int) animal.getSpeed();
+                if (newX >= getWidth() - animal.getSize()) {
+                    newX = getWidth() - animal.getSize();
+                    timer.stop();
+                }
+                animal.setLocation(new Point(newX, currentLocation.getY()));
+                repaint();
+            }
+        });
+        timer.start();
+    }
 }
 
