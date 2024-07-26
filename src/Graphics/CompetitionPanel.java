@@ -260,7 +260,7 @@ public class CompetitionPanel extends JPanel {
                                 JFrame infoFrame = new JFrame("Animal Info");
                                 infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                                 infoFrame.add(new JScrollPane(infoPanel));
-                                infoFrame.setSize(600, 400);
+                                infoFrame.setSize(900, 600);
                                 infoFrame.setVisible(true);
                             } else {
                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
@@ -457,7 +457,7 @@ public class CompetitionPanel extends JPanel {
     private Point getInitialLocation(String competitionType) {
         switch (competitionType) {
             case "Terrestrial":
-                return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
+                return new Point(0, 0); // Adjust y-coordinate based on route
             case "Air":
                 return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
             case "Water":

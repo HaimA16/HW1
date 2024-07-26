@@ -56,7 +56,6 @@ public class AddCompetitionDialog extends JDialog {
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setModal(true);
-        setVisible(true);
     }
 
     public String getCompetitionType() {
