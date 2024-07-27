@@ -4,6 +4,6 @@ import Mobility.Point;
 
 public interface IMoveable {
     public String getAnimaleName();
-    public int getSpeed();
-    public boolean move(Point p);
+    public double getSpeed();
+    public double move(Point p);
 }

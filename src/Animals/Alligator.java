@@ -4,8 +4,12 @@ import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
 
+import javax.imageio.ImageIO;
 import javax.xml.stream.Location;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Class representing an Alligator, which is a type of Water Animal.
@@ -45,14 +49,15 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
      * @param diveDept      the dive depth of the alligator
      * @param areaOfLiving  the area of living of the alligator
      */
-    public Alligator(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+    public Alligator(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                      Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
                      BufferedImage img1, double diveDept,
                      String areaOfLiving) {
-        super(name, gender, weight,speed,medals, location,
+        super(name, gender, weight,speed,medals, location,loc,
                 orientation,size, id,maxEnergy,energyPerMeter,pan,
-                 img1, diveDept);
+                img1, diveDept);
         this.areaOfLiving = areaOfLiving;
+        loadImages("alligator");
     }
 
     /**
@@ -109,4 +114,16 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
     public void setAreaOfLiving(String areaOfLiving) {
         this.areaOfLiving = areaOfLiving;
     }
+
+    public void loadImages(String nm) {
+        try {
+            img1 = ImageIO.read(new File("C:\\Users\\yeuda\\IdeaProjects\\HW1\\src\\graphics2" +File.separator + nm + "1.png")); // תמונה לכיוון מזרח
+            img2 = ImageIO.read(new File("C:\\Users\\yeuda\\IdeaProjects\\HW1\\src\\graphics2" +File.separator + nm + "2.png")); // תמונה לכיוון דרום
+            img3 = ImageIO.read(new File("C:\\Users\\yeuda\\IdeaProjects\\HW1\\src\\graphics2" +File.separator + nm + "3.png")); // תמונה לכיוון מערב
+            img4 = ImageIO.read(new File("C:\\Users\\yeuda\\IdeaProjects\\HW1\\src\\graphics2" +File.separator + nm + "3.png")); // תמונה לכיוון צפון
+        } catch (IOException e) {
+            System.out.println("Cannot load image for " + nm);
+        }
+    }
+
 }

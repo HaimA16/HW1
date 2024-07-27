@@ -7,7 +7,7 @@ import Olympics.Medal;
 import javax.xml.stream.Location;
 import java.awt.image.BufferedImage;
 
-public class WaterAnimal extends Animal {
+public abstract class WaterAnimal extends Animal {
     private static final int MAX_DIVE = -800;
     private double diveDept;
 
@@ -36,10 +36,10 @@ public class WaterAnimal extends Animal {
 
      * @param diveDept       the dive depth of the water animal
      */
-    public WaterAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+    public WaterAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                        Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
                        BufferedImage img1, double diveDept) {
-        super(name, gender, weight, speed, medals, location, orientation, size, id, maxEnergy, energyPerMeter, pan, img1);
+        super(name, gender, weight, speed, medals, location,loc, orientation, size, id, maxEnergy, energyPerMeter, pan, img1);
         this.diveDept = diveDept;
     }
 
@@ -54,5 +54,8 @@ public class WaterAnimal extends Animal {
             diveDept = diveDept + dive;
         }
         return diveDept;
+    }
+    public String getCategory() {
+        return "Water";
     }
 }

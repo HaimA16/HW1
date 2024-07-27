@@ -7,7 +7,7 @@ import Olympics.Medal;
 import javax.xml.stream.Location;
 import java.awt.image.BufferedImage;
 
-public class AirAnimal extends Animal {
+public abstract class AirAnimal extends Animal {
     private double wingspan;
 
     public AirAnimal() {
@@ -35,10 +35,10 @@ public class AirAnimal extends Animal {
 
      * @param wingspan       the wingspan of the air animal
      */
-    public AirAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location,
+    public AirAnimal(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                      Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
                      BufferedImage img1, double wingspan) {
-        super(name, gender, weight, speed, medals, location, orientation, size, id, maxEnergy, energyPerMeter, pan, img1);
+        super(name, gender, weight, speed, medals, location,loc,orientation, size, id, maxEnergy, energyPerMeter, pan, img1);
         this.wingspan = wingspan;
     }
 
@@ -52,5 +52,8 @@ public class AirAnimal extends Animal {
             return true;
         }
         return false;
+    }
+    public String getCategory() {
+        return "Air";
     }
 }
