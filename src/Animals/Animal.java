@@ -40,10 +40,7 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
     private int maxEnergy, Energy,sumEnergy;
     private int energyPerMeter;
     private CompetitionPanel pan;
-    BufferedImage img1;
-    BufferedImage img2;
-    BufferedImage img3;
-    protected BufferedImage img4;
+    protected BufferedImage img1,img2,img3,img4;
 
     public Animal(){
         name = null;
@@ -287,14 +284,60 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         }
 
         double distance = calcDistance(point);
+        double requiredEnergy = energyPerMeter * distance;
+
+        if (Energy < requiredEnergy) {
+            // Not enough energy to move the full distance
+            distance = Energy / (double) energyPerMeter;
+            requiredEnergy = Energy;
+        }
+
         addTotalDistance(distance);
+
+        // Update location and orientation
+        Point currentLocation = this.getLocation();
+        if (point.getX() > currentLocation.getX()) {
+            this.orientation = Orientation.EAST;
+        } else if (point.getX() < currentLocation.getX()) {
+            this.orientation = Orientation.WEST;
+        } else if (point.getY() > currentLocation.getY()) {
+            this.orientation = Orientation.SOUTH;
+        } else if (point.getY() < currentLocation.getY()) {
+            this.orientation = Orientation.NORTH;
+        }
+
         this.getLocation().setX(point.getX());
         this.getLocation().setY(point.getY());
-        int lowerEnergy = (int) (Energy - energyPerMeter*distance);
-        setEnergy(lowerEnergy);
+        setEnergy(Energy - (int) requiredEnergy);
 
         return distance;
     }
+
+    @Override
+    public void drawObject(Graphics g) {
+        BufferedImage img = null;
+        switch (orientation) {
+            case EAST:
+                img = img1;
+                break;
+            case SOUTH:
+                img = img2;
+                break;
+            case WEST:
+                img = img3;
+                break;
+            case NORTH:
+                img = img4;
+                break;
+        }
+        if (img != null) {
+            g.drawImage(img, getLocation().getX(), getLocation().getY() - size / 10, size * 2, size, pan);
+        }
+    }
+
+
+
+
 
     @Override
     public boolean eat(int energy) {
@@ -330,7 +373,7 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         }
     }
 
-    @Override
+    /*@Override
     public void drawObject(Graphics g) {
         if (orientation == Orientation.EAST) {
             g.drawImage(img1, getLocation().getX(), getLocation().getY() - size / 10, size * 2, size, pan);
@@ -341,7 +384,7 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         } else if (orientation == Orientation.NORTH) {
             g.drawImage(img4, getLocation().getX() - size / 2, getLocation().getY() - size / 10, size, size * 2, pan);
         }
-    }
+    }*/
 
 
     /**
