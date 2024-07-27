@@ -1,14 +1,6 @@
 package Graphics;
 
-import Animals.Animal;
-import Animals.Whale;
-import Animals.Dolphin;
-import Animals.Alligator;
-import Animals.Cat;
-import Animals.Dog;
-import Animals.Eagle;
-import Animals.Pigeon;
-import Animals.Snake;
+import Animals.*;
 import Mobility.Point;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
@@ -503,7 +495,7 @@ public class CompetitionPanel extends JPanel {
     private Point getInitialLocation(String competitionType) {
         switch (competitionType) {
             case "Terrestrial":
-                return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
+                return new Point(0, 0); // Adjust y-coordinate based on route
             case "Air":
                 return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
             case "Water":
@@ -545,14 +537,46 @@ public class CompetitionPanel extends JPanel {
                 for (Animal animal : animals) {
                     if (!finishTimes.containsKey(animal)) { // Only move animals that haven't finished
                         Point currentLocation = animal.getLocation();
-                        int newX = currentLocation.getX() + (int) animal.getSpeed();
-                        if (newX < getWidth() - animal.getSize()) {
-                            allAnimalsAtEnd = false;
+                        int newX = currentLocation.getX();
+                        int newY = currentLocation.getY();
+
+                        if (selectedCompetitionType.equals("Terrestrial")) {
+                            // Move right
+                            if (newX < getWidth() - animal.getSize() && newY == 0) {
+                                newX += (int) animal.getSpeed();
+                                allAnimalsAtEnd = false;
+                            }
+                            // Move down
+                            else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize()) {
+                                newY += (int) animal.getSpeed();
+                                allAnimalsAtEnd = false;
+                            }
+                            // Move left
+                            else if (newY >= getHeight() - animal.getSize() && newX > 0) {
+                                newX -= (int) animal.getSpeed();
+                                allAnimalsAtEnd = false;
+                            }
+                            // Move up
+                            else if (newX <= 0 && newY > 0) {
+                                newY -= (int) animal.getSpeed();
+                                allAnimalsAtEnd = false;
+                            }
+                            // Finish
+                            if (newX <= 0 && newY <= 0) {
+                                finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
+                            }
                         } else {
-                            newX = getWidth() - animal.getSize();
-                            finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
+                            // Move right
+                            newX += (int) animal.getSpeed();
+                            if (newX < getWidth() - animal.getSize()) {
+                                allAnimalsAtEnd = false;
+                            } else {
+                                newX = getWidth() - animal.getSize();
+                                finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
+                            }
                         }
-                        animal.setLocation(new Point(newX, currentLocation.getY()));
+
+                        animal.setLocation(new Point(newX, newY));
                     }
                 }
                 repaint();
@@ -564,6 +588,8 @@ public class CompetitionPanel extends JPanel {
         });
         timer.start();
     }
+
+
 
 
     private void showResults(Map<Animal, Long> finishTimes) {
@@ -599,10 +625,6 @@ public class CompetitionPanel extends JPanel {
         }
         repaint();
     }
-
-
-
-
 
 }
 
