@@ -117,10 +117,10 @@ public class Alligator extends WaterAnimal implements IReptile, terrestrial_feat
 
     public void loadImages(String nm) {
         try {
-            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "1.png")); // תמונה לכיוון מזרח
-            img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "2.png")); // תמונה לכיוון דרום
-            img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "3.png")); // תמונה לכיוון מערב
-            img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "3.png")); // תמונה לכיוון צפון
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "1.png")); // תמונה לכיוון מזרח
+            img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "2.png")); // תמונה לכיוון דרום
+            img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "3.png")); // תמונה לכיוון מערב
+            img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "3.png")); // תמונה לכיוון צפון
         } catch (IOException e) {
             System.out.println("Cannot load image for " + nm);
         }

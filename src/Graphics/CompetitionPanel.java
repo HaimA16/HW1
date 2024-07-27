@@ -28,8 +28,6 @@ public class CompetitionPanel extends JPanel {
     private List<Animal> removedAnimals = new ArrayList<>(); // רשימה לשמירת החיות שנמחקו
     private String selectedCompetitionType; // משתנה לאחסון סוג התחרות שנבחרה
     private Map<Animal, Point> initialLocations = new HashMap<>();
-    private List<Animal> waitingForEnergy = new ArrayList<>(); // רשימה של חיות שמחכות לאנרגיה
-
 
     public CompetitionPanel() {
         try {
@@ -186,10 +184,6 @@ public class CompetitionPanel extends JPanel {
                                                         "Animal ate " + amount + " units of food. Current energy: " + selectedAnimal.getEnergyAmount(),
                                                         "Eating",
                                                         JOptionPane.INFORMATION_MESSAGE);
-                                                if (waitingForEnergy.contains(selectedAnimal)) {
-                                                    waitingForEnergy.remove(selectedAnimal); // Remove animal from waiting list if it gets energy
-                                                    moveAnimalsToEnd(competitionAnimals.get(selectedCompetitionType)); // Resume movement
-                                                }
                                             } else {
                                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
                                                         "Animal cannot eat that amount of food.",
@@ -445,12 +439,12 @@ public class CompetitionPanel extends JPanel {
             switch (animalType) {
                 case "Dog":
                     String breed = dialog.getBreedField().getText();
-                    int noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
+                    int noLegs = 4;
                     animal = new Dog(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, breed);
                     break;
                 case "Cat":
                     boolean castrated = dialog.getCastratedComboBox().getSelectedItem().toString().equalsIgnoreCase("Yes");
-                    noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
+                    noLegs = 4;
                     animal = new Cat(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, castrated);
                     break;
                 case "Snake":
@@ -470,7 +464,7 @@ public class CompetitionPanel extends JPanel {
                     break;
                 case "Alligator":
                     String habitatLocation = dialog.getHabitatLocationField().getText();
-                    noLegs = Integer.parseInt(dialog.getNumberOfLegsField().getText());
+                    noLegs = 4;
                     animal = new Alligator(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, habitatLocation);
                     break;
                 case "Whale":
@@ -541,56 +535,52 @@ public class CompetitionPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 boolean allAnimalsAtEnd = true;
                 for (Animal animal : animals) {
-                    if (!finishTimes.containsKey(animal) && !waitingForEnergy.contains(animal)) { // Only move animals that haven't finished and aren't waiting for energy
+                    if (!finishTimes.containsKey(animal)) { // Only move animals that haven't finished
                         Point currentLocation = animal.getLocation();
                         int newX = currentLocation.getX();
                         int newY = currentLocation.getY();
 
-                        if (animal.getEnergyAmount() > 0) { // Check if the animal has energy
-                            if (selectedCompetitionType.equals("Terrestrial")) {
-                                // Move right
-                                if (newX < getWidth() - animal.getSize() && newY == 0) {
-                                    newX += (int) animal.getSpeed();
-                                    allAnimalsAtEnd = false;
-                                }
-                                // Move down
-                                else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize()) {
-                                    newY += (int) animal.getSpeed();
-                                    allAnimalsAtEnd = false;
-                                }
-                                // Move left
-                                else if (newY >= getHeight() - animal.getSize() && newX > 0) {
-                                    newX -= (int) animal.getSpeed();
-                                    allAnimalsAtEnd = false;
-                                }
-                                // Move up
-                                else if (newX <= 0 && newY > 0) {
-                                    newY -= (int) animal.getSpeed();
-                                    allAnimalsAtEnd = false;
-                                }
-                                // Finish
-                                if (newX <= 0 && newY <= 0) {
-                                    finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
-                                }
-                            } else {
-                                // Move right
+                        if (selectedCompetitionType.equals("Terrestrial")) {
+                            // Move right
+                            if (newX < getWidth() - animal.getSize() && newY == 0) {
                                 newX += (int) animal.getSpeed();
-                                if (newX < getWidth() - animal.getSize()) {
-                                    allAnimalsAtEnd = false;
-                                } else {
-                                    newX = getWidth() - animal.getSize();
-                                    finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
-                                }
-                            }
-
-                            Point newLocation = new Point(newX, newY);
-                            double distance = animal.move(newLocation); // Update energy based on movement
-                            if (distance > 0) {
+                                animal.setOrientation(Animal.Orientation.EAST);
                                 allAnimalsAtEnd = false;
                             }
+                            // Move down
+                            else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize()) {
+                                newY += (int) animal.getSpeed();
+                                animal.setOrientation(Animal.Orientation.SOUTH);
+                                allAnimalsAtEnd = false;
+                            }
+                            // Move left
+                            else if (newY >= getHeight() - animal.getSize() && newX > 0) {
+                                newX -= (int) animal.getSpeed();
+                                animal.setOrientation(Animal.Orientation.WEST);
+                                allAnimalsAtEnd = false;
+                            }
+                            // Move up
+                            else if (newX <= 0 && newY > 0) {
+                                newY -= (int) animal.getSpeed();
+                                animal.setOrientation(Animal.Orientation.NORTH);
+                                allAnimalsAtEnd = false;
+                            }
+                            // Finish
+                            if (newX <= 0 && newY <= 0) {
+                                finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
+                            }
                         } else {
-                            waitingForEnergy.add(animal); // Add animal to waiting list if it runs out of energy
+                            // Move right
+                            newX += (int) animal.getSpeed();
+                            if (newX < getWidth() - animal.getSize()) {
+                                allAnimalsAtEnd = false;
+                            } else {
+                                newX = getWidth() - animal.getSize();
+                                finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
+                            }
                         }
+
+                        animal.setLocation(new Point(newX, newY));
                     }
                 }
                 repaint();
@@ -602,6 +592,8 @@ public class CompetitionPanel extends JPanel {
         });
         timer.start();
     }
+
+
 
 
 
@@ -639,10 +631,7 @@ public class CompetitionPanel extends JPanel {
         repaint();
     }
 
-
-
 }
-
 
 
 

@@ -1,7 +1,3 @@
-/**
- * @Author: Haim Armias 315569061
- * @Author: Yeuda Baza 208029819
- */
 package Mobility;
 
 /**
@@ -52,13 +48,6 @@ public abstract class Mobile implements ILocatable {
         int dy = point.getY() - this.location.getY();
         return Math.sqrt(dx * dx + dy * dy);
     }
-
-    /**
-     * Moves the mobile object to a new location and calculates the distance traveled.
-     *
-     * @param point the new location to move to
-     * @return the distance traveled to reach the new location
-     */
 
 
     /**
@@ -117,6 +106,4 @@ public abstract class Mobile implements ILocatable {
     public String toString() {
         return "Location: " + "(" + this.location.getX() + ", " + this.location.getY() + ")";
     }
-
-
 }

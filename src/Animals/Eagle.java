@@ -36,7 +36,7 @@ public class Eagle extends AirAnimal {
 
     public void loadImages(String nm) {
         try {
-            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + "1.png")); // תמונה לכיוון מזרח
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" +File.separator+ nm + "1.png")); // תמונה לכיוון מזרח
         } catch (IOException e) {
             System.out.println("Cannot load image for " + nm);
         }

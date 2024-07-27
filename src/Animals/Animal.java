@@ -313,6 +313,8 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return distance;
     }
 
+
+
     @Override
     public void drawObject(Graphics g) {
         BufferedImage img = null;

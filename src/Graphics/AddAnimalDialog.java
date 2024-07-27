@@ -16,8 +16,6 @@ public class AddAnimalDialog extends JDialog {
     private JComboBox<String> competitionTypeComboBox; // תיבת בחירה לסוג תחרות
 
     // Additional fields for all animals
-    private JComboBox<String> directionComboBox;
-    private JTextField sizeField;
     private JTextField idField;
     private JTextField maxEnergyField;
     private JTextField energyPerMeterField;
@@ -34,7 +32,6 @@ public class AddAnimalDialog extends JDialog {
     private JTextField foodTypeField; // Whale
     private JTextField divingDepthField; // Water animals
     private JTextField wingSpanField; // Air animals
-    private JTextField numberOfLegsField; // Terrestrial animals
 
     private JPanel specificFieldsPanel;
 
@@ -93,34 +90,20 @@ public class AddAnimalDialog extends JDialog {
         // Additional fields for all animals
         gbc.gridx = 0;
         gbc.gridy = 6;
-        add(new JLabel("Direction:"), gbc);
-        directionComboBox = new JComboBox<>(new String[] {"", "North", "South", "East", "West"});
-        gbc.gridx = 1;
-        add(directionComboBox, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        add(new JLabel("Size:"), gbc);
-        sizeField = new JTextField(15);
-        gbc.gridx = 1;
-        add(sizeField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 8;
         add(new JLabel("ID:"), gbc);
         idField = new JTextField(15);
         gbc.gridx = 1;
         add(idField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 7;
         add(new JLabel("Max Energy:"), gbc);
         maxEnergyField = new JTextField(15);
         gbc.gridx = 1;
         add(maxEnergyField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 8;
         add(new JLabel("Energy per Meter:"), gbc);
         energyPerMeterField = new JTextField(15);
         gbc.gridx = 1;
@@ -129,7 +112,7 @@ public class AddAnimalDialog extends JDialog {
         // Specific fields panel
         specificFieldsPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 9;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 2; // Make the panel span two columns
         add(specificFieldsPanel, gbc);
@@ -180,7 +163,7 @@ public class AddAnimalDialog extends JDialog {
         buttonPanel.add(closeButton);
 
         gbc.gridx = 0;
-        gbc.gridy = 13;
+        gbc.gridy = 11;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         add(buttonPanel, gbc);
@@ -197,11 +180,9 @@ public class AddAnimalDialog extends JDialog {
         switch (animalType) {
             case "Dog":
                 addSpecificField("Breed:", breedField = new JTextField(15), gbc);
-                addSpecificField("Number of Legs:", numberOfLegsField = new JTextField(15), gbc);
                 break;
             case "Cat":
                 addSpecificField("Castrated:", castratedComboBox = new JComboBox<>(new String[]{"", "Yes", "No"}), gbc);
-                addSpecificField("Number of Legs:", numberOfLegsField = new JTextField(15), gbc);
                 break;
             case "Snake":
                 addSpecificField("Venom Level:", venomLevelComboBox = new JComboBox<>(new String[]{"", "Low", "Medium", "High"}), gbc);
@@ -217,7 +198,6 @@ public class AddAnimalDialog extends JDialog {
                 break;
             case "Alligator":
                 addSpecificField("Area of living:", habitatLocationField = new JTextField(15), gbc);
-                addSpecificField("Number of Legs:", numberOfLegsField = new JTextField(15), gbc);
                 break;
             case "Whale":
                 addSpecificField("Food Type:", foodTypeField = new JTextField(15), gbc);
@@ -232,7 +212,6 @@ public class AddAnimalDialog extends JDialog {
         specificFieldsPanel.revalidate();
         specificFieldsPanel.repaint();
     }
-
 
     private void addSpecificField(String label, JComponent component, GridBagConstraints gbc) {
         specificFieldsPanel.add(new JLabel(label), gbc);
@@ -287,14 +266,6 @@ public class AddAnimalDialog extends JDialog {
         return genderComboBox;
     }
 
-    public JComboBox<String> getDirectionComboBox() {
-        return directionComboBox;
-    }
-
-    public JTextField getSizeField() {
-        return sizeField;
-    }
-
     public JTextField getIdField() {
         return idField;
     }
@@ -309,10 +280,6 @@ public class AddAnimalDialog extends JDialog {
 
     public JTextField getBreedField() {
         return breedField;
-    }
-
-    public JTextField getNumberOfLegsField() {
-        return numberOfLegsField;
     }
 
     public ComboBoxModel<String> getCastratedComboBox() {

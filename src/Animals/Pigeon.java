@@ -31,7 +31,7 @@ public class Pigeon extends AirAnimal{
 
     public void loadImages(String nm) {
         try {
-            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + nm + ".png")); // תמונה לכיוון מזרח
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" +File.separator+ nm + ".png")); // תמונה לכיוון מזרח
         } catch (IOException e) {
             System.out.println("Cannot load image for " + nm);
         }

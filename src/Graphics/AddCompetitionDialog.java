@@ -8,12 +8,14 @@ import java.awt.event.ActionListener;
 public class AddCompetitionDialog extends JDialog {
     private JComboBox<String> competitionTypeComboBox;
     private JTextField competitionNameField;
+    private JTextField distanceField; // שדה להזנת המרחק
     private String selectedCompetitionType;
     private String competitionName;
+    private int distance;
 
     public AddCompetitionDialog() {
         setTitle("Add Competition");
-        setSize(300, 200);
+        setSize(300, 250); // הגדלת גודל החלון
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
@@ -38,6 +40,14 @@ public class AddCompetitionDialog extends JDialog {
         gbc.gridx = 1;
         contentPanel.add(competitionTypeComboBox, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        contentPanel.add(new JLabel("Distance:"), gbc); // תווית להזנת המרחק
+
+        distanceField = new JTextField(15);
+        gbc.gridx = 1;
+        contentPanel.add(distanceField, gbc);
+
         add(contentPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
@@ -47,6 +57,12 @@ public class AddCompetitionDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 selectedCompetitionType = (String) competitionTypeComboBox.getSelectedItem();
                 competitionName = competitionNameField.getText();
+                try {
+                    distance = Integer.parseInt(distanceField.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(AddCompetitionDialog.this, "Please enter a valid distance.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 setVisible(false);
             }
         });
@@ -64,5 +80,9 @@ public class AddCompetitionDialog extends JDialog {
 
     public String getCompetitionName() {
         return competitionName;
+    }
+
+    public int getDistance() {
+        return distance;
     }
 }
