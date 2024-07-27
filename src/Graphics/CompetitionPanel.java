@@ -20,10 +20,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+
 
 public class CompetitionPanel extends JPanel {
     private BufferedImage backgroundImage;
@@ -33,6 +35,7 @@ public class CompetitionPanel extends JPanel {
     private Map<String, String> competitionNames = new HashMap<>(); // Map to store competition names for each type
     private List<Animal> removedAnimals = new ArrayList<>(); // רשימה לשמירת החיות שנמחקו
     private String selectedCompetitionType; // משתנה לאחסון סוג התחרות שנבחרה
+    private Map<Animal, Point> initialLocations = new HashMap<>();
 
     public CompetitionPanel() {
         try {
@@ -485,6 +488,10 @@ public class CompetitionPanel extends JPanel {
                 default:
                     throw new IllegalArgumentException("Invalid animal type!");
             }
+
+            // שמירת המיקום ההתחלתי של החיה
+            initialLocations.put(animal, location);
+
             return animal;
         } catch (Exception e) {
             e.printStackTrace();
@@ -511,40 +518,96 @@ public class CompetitionPanel extends JPanel {
         for (int i = 0; i < routes.length; i++) {
             routes[i] = min + i;
         }
-        Integer selectedRoute = (Integer) JOptionPane.showInputDialog(this, "Select a route:", "Select Route",
-                JOptionPane.QUESTION_MESSAGE, null, routes, routes[0]);
-        if (selectedRoute != null) {
-            return selectedRoute;
-        } else {
-            throw new IllegalArgumentException("No route selected!");
+
+        Integer selectedRoute = null;
+        while (selectedRoute == null) {
+            selectedRoute = (Integer) JOptionPane.showInputDialog(this, "Select a route:", "Select Route",
+                    JOptionPane.QUESTION_MESSAGE, null, routes, routes[0]);
+            if (selectedRoute == null) {
+                JOptionPane.showMessageDialog(this, "You must select a route!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
+
+        return selectedRoute;
     }
+
+
 
     private void moveAnimalsToEnd(List<Animal> animals) {
         int delay = 100; // milliseconds
+        Map<Animal, Long> finishTimes = new HashMap<>(); // Map to store finish times for each animal
+        long startTime = System.nanoTime(); // Start time in nanoseconds
         Timer timer = new Timer(delay, null);
         timer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean allAnimalsAtEnd = true;
                 for (Animal animal : animals) {
-                    Point currentLocation = animal.getLocation();
-                    int newX = currentLocation.getX() + (int) animal.getSpeed();
-                    if (newX < getWidth() - animal.getSize()) {
-                        allAnimalsAtEnd = false;
-                    } else {
-                        newX = getWidth() - animal.getSize();
+                    if (!finishTimes.containsKey(animal)) { // Only move animals that haven't finished
+                        Point currentLocation = animal.getLocation();
+                        int newX = currentLocation.getX() + (int) animal.getSpeed();
+                        if (newX < getWidth() - animal.getSize()) {
+                            allAnimalsAtEnd = false;
+                        } else {
+                            newX = getWidth() - animal.getSize();
+                            finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
+                        }
+                        animal.setLocation(new Point(newX, currentLocation.getY()));
                     }
-                    animal.setLocation(new Point(newX, currentLocation.getY()));
                 }
                 repaint();
                 if (allAnimalsAtEnd) {
                     timer.stop();
+                    showResults(finishTimes); // Show results and reset animals
                 }
             }
         });
         timer.start();
     }
 
+
+    private void showResults(Map<Animal, Long> finishTimes) {
+        StringBuilder results = new StringBuilder();
+        results.append("Results:\n");
+        DecimalFormat df = new DecimalFormat("#.##"); // Format to 2 decimal places
+
+        // Sort the finishTimes map by values (finish times)
+        List<Map.Entry<Animal, Long>> sortedEntries = new ArrayList<>(finishTimes.entrySet());
+        sortedEntries.sort(Map.Entry.comparingByValue());
+
+        int place = 1;
+        for (Map.Entry<Animal, Long> entry : sortedEntries) {
+            Animal animal = entry.getKey();
+            double finishTimeInSeconds = entry.getValue() / 1_000_000_000.0; // Convert nanoseconds to seconds
+            results.append(place).append(") ").append(animal.getName()).append(": ").append(df.format(finishTimeInSeconds)).append(" seconds\n");
+            place++;
+        }
+
+        JOptionPane.showMessageDialog(this, results.toString(), "Race Results", JOptionPane.INFORMATION_MESSAGE);
+
+        // Reset animals to initial positions
+        resetAnimals(new ArrayList<>(finishTimes.keySet()));
+    }
+
+
+    private void resetAnimals(List<Animal> animals) {
+        for (Animal animal : animals) {
+            Point initialLocation = initialLocations.get(animal);
+            if (initialLocation != null) {
+                animal.setLocation(initialLocation);
+            }
+        }
+        repaint();
+    }
+
+
+
+
+
 }
+
+
+
+
+
 
