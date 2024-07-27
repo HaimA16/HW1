@@ -26,7 +26,7 @@ public class Dolphin extends WaterAnimal{
                 orientation, size, id,maxEnergy, energyPerMeter, pan,
                 img1, diveDept);
         this.waterType = waterType;
-        loadImages("");
+        loadImages("dolphin");
     }
 
     @Override
