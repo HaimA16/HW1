@@ -548,13 +548,13 @@ public class CompetitionPanel extends JPanel {
                                 allAnimalsAtEnd = false;
                             }
                             // Move down
-                            else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize()) {
+                            else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize() - 50) { // Adjusted y-coordinate
                                 newY += (int) animal.getSpeed();
                                 animal.setOrientation(Animal.Orientation.SOUTH);
                                 allAnimalsAtEnd = false;
                             }
                             // Move left
-                            else if (newY >= getHeight() - animal.getSize() && newX > 0) {
+                            else if (newY >= getHeight() - animal.getSize() - 50 && newX > 0) { // Adjusted y-coordinate
                                 newX -= (int) animal.getSpeed();
                                 animal.setOrientation(Animal.Orientation.WEST);
                                 allAnimalsAtEnd = false;
@@ -592,6 +592,7 @@ public class CompetitionPanel extends JPanel {
         });
         timer.start();
     }
+
 
 
 
