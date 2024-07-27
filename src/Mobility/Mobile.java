@@ -31,8 +31,9 @@ public abstract class Mobile implements ILocatable {
      * @param distance the distance to add
      */
     public void addTotalDistance(double distance) {
-        totalDistance += distance;
+        this.totalDistance += distance;
     }
+
 
     /**
      * Calculates the Euclidean distance between the current location and a given point.
@@ -41,13 +42,9 @@ public abstract class Mobile implements ILocatable {
      * @return the Euclidean distance between the current location and the given point
      */
     public double calcDistance(Point point) {
-        if (point == null || point.equals(this.location)) {
-            return 0;
-        }
-        int dx = point.getX() - this.location.getX();
-        int dy = point.getY() - this.location.getY();
-        return Math.sqrt(dx * dx + dy * dy);
+        return Math.sqrt(Math.pow(point.getX() - this.getLocation().getX(), 2) + Math.pow(point.getY() - this.getLocation().getY(), 2));
     }
+
 
 
     /**

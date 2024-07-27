@@ -86,6 +86,7 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         this.id = id;
         this.maxEnergy = maxEnergy;
         this.energyPerMeter = energyPerMeter;
+        this.sumEnergy=0;
         this.pan = pan;
         this.img1 = img1;
         this.Energy = maxEnergy;
@@ -286,10 +287,13 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         double distance = calcDistance(point);
         double requiredEnergy = energyPerMeter * distance;
 
-        if (Energy < requiredEnergy) {
-            // Not enough energy to move the full distance
-            distance = Energy / (double) energyPerMeter;
-            requiredEnergy = Energy;
+        while (Energy < requiredEnergy) {
+            // Wait until the animal is fed
+            try {
+                Thread.sleep(1000); // Sleep for 1 second before checking again
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         addTotalDistance(distance);
@@ -312,6 +316,14 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
 
         return distance;
     }
+
+
+    public void consumeEnergy(double distance) {
+        double energyConsumed = distance * this.energyPerMeter;
+        this.Energy -= energyConsumed;
+    }
+
+
 
 
 
@@ -345,11 +357,12 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
     public boolean eat(int energy) {
         if (energy > 0 && getEnergy() + energy <= getMaxEnergy()) {
             setEnergy(getEnergy() + energy);
-            sumEnergy+=energy;
+            sumEnergy += energy; // Add the consumed energy to sumEnergy
             return true;
         }
         return false;
     }
+
 
     public int getSumEnergy(){
         return sumEnergy;

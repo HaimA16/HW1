@@ -223,11 +223,18 @@ public class CompetitionPanel extends JPanel {
                                         competitionLabel.setFont(new Font("Arial", Font.BOLD, 16));
                                         infoPanel.add(competitionLabel);
 
-                                        String[] columnNames = {"Animal", "Category", "Type", "Speed", "Energy Amount", "Distance", "Energy Consumption"};
+                                        String[] columnNames = {"Animal", "Category", "Type", "Speed", "Energy Amount", "Distance", "Energy Consumed"};
                                         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
                                         for (Animal animal : competitionAnimals.get(competitionType)) {
-                                            model.addRow(new Object[]{animal.getName(), animal.getCategory(), animal.getClass().getSimpleName(), animal.getSpeed(),
-                                                    animal.getEnergyAmount(), animal.getTotalDistance(), animal.getSumEnergy()});
+                                            model.addRow(new Object[]{
+                                                    animal.getName(),
+                                                    animal.getCategory(),
+                                                    animal.getClass().getSimpleName(),
+                                                    animal.getSpeed(),
+                                                    animal.getEnergyAmount(), // Current energy amount
+                                                    animal.getTotalDistance(), // Distance traveled
+                                                    animal.getSumEnergy() // Energy consumed (food eaten)
+                                            });
                                         }
                                         JTable table = new JTable(model);
                                         JScrollPane scrollPane = new JScrollPane(table);
@@ -241,11 +248,18 @@ public class CompetitionPanel extends JPanel {
                                     removedLabel.setFont(new Font("Arial", Font.BOLD, 16));
                                     infoPanel.add(removedLabel);
 
-                                    String[] columnNames = {"Animal", "Category", "Type", "Speed", "Energy Amount", "Distance", "Energy Consumption"};
+                                    String[] columnNames = {"Animal", "Category", "Type", "Speed", "Energy Amount", "Distance", "Energy Consumed"};
                                     DefaultTableModel model = new DefaultTableModel(columnNames, 0);
                                     for (Animal animal : removedAnimals) {
-                                        model.addRow(new Object[]{animal.getName(), animal.getCategory(), animal.getClass().getSimpleName(), animal.getSpeed(),
-                                                animal.getEnergyAmount(), animal.getTotalDistance(), animal.getSumEnergy()});
+                                        model.addRow(new Object[]{
+                                                animal.getName(),
+                                                animal.getCategory(),
+                                                animal.getClass().getSimpleName(),
+                                                animal.getSpeed(),
+                                                animal.getEnergyAmount(), // Current energy amount
+                                                animal.getTotalDistance(), // Distance traveled
+                                                animal.getSumEnergy() // Energy consumed (food eaten)
+                                        });
                                     }
                                     JTable table = new JTable(model);
                                     JScrollPane scrollPane = new JScrollPane(table);
@@ -266,6 +280,9 @@ public class CompetitionPanel extends JPanel {
                         }
                     });
                     break;
+
+
+
 
                 case "Play":
                     routeButtons[i].addActionListener(new ActionListener() {
@@ -539,29 +556,34 @@ public class CompetitionPanel extends JPanel {
                         Point currentLocation = animal.getLocation();
                         int newX = currentLocation.getX();
                         int newY = currentLocation.getY();
+                        double distanceMoved = 0;
 
                         if (selectedCompetitionType.equals("Terrestrial")) {
                             // Move right
                             if (newX < getWidth() - animal.getSize() && newY == 0) {
                                 newX += (int) animal.getSpeed();
+                                distanceMoved = animal.getSpeed();
                                 animal.setOrientation(Animal.Orientation.EAST);
                                 allAnimalsAtEnd = false;
                             }
                             // Move down
                             else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize() - 50) { // Adjusted y-coordinate
                                 newY += (int) animal.getSpeed();
+                                distanceMoved = animal.getSpeed();
                                 animal.setOrientation(Animal.Orientation.SOUTH);
                                 allAnimalsAtEnd = false;
                             }
                             // Move left
                             else if (newY >= getHeight() - animal.getSize() - 50 && newX > 0) { // Adjusted y-coordinate
                                 newX -= (int) animal.getSpeed();
+                                distanceMoved = animal.getSpeed();
                                 animal.setOrientation(Animal.Orientation.WEST);
                                 allAnimalsAtEnd = false;
                             }
                             // Move up
                             else if (newX <= 0 && newY > 0) {
                                 newY -= (int) animal.getSpeed();
+                                distanceMoved = animal.getSpeed();
                                 animal.setOrientation(Animal.Orientation.NORTH);
                                 allAnimalsAtEnd = false;
                             }
@@ -572,6 +594,7 @@ public class CompetitionPanel extends JPanel {
                         } else {
                             // Move right
                             newX += (int) animal.getSpeed();
+                            distanceMoved = animal.getSpeed();
                             if (newX < getWidth() - animal.getSize()) {
                                 allAnimalsAtEnd = false;
                             } else {
@@ -581,6 +604,8 @@ public class CompetitionPanel extends JPanel {
                         }
 
                         animal.setLocation(new Point(newX, newY));
+                        animal.addTotalDistance(distanceMoved); // Update total distance
+                        animal.consumeEnergy(distanceMoved); // Consume energy based on distance
                     }
                 }
                 repaint();
@@ -633,6 +658,7 @@ public class CompetitionPanel extends JPanel {
     }
 
 }
+
 
 
 
