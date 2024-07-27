@@ -277,19 +277,37 @@ public class CompetitionPanel extends JPanel {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if (!competitionAnimals.isEmpty()) {
-                                Animal selectedAnimal = selectAnimal();
-                                if (selectedAnimal != null) {
-                                    moveAnimalToEnd(selectedAnimal);
+                                // Open a dialog to select a competition
+                                String selectedCompetition = (String) JOptionPane.showInputDialog(
+                                        CompetitionPanel.this,
+                                        "Select a competition:",
+                                        "Select Competition",
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        competitionsArray,
+                                        competitionsArray[0]
+                                );
+
+                                if (selectedCompetition != null && competitionAnimals.containsKey(selectedCompetition)) {
+                                    List<Animal> animalsInCompetition = competitionAnimals.get(selectedCompetition);
+                                    if (!animalsInCompetition.isEmpty()) {
+                                        moveAnimalsToEnd(animalsInCompetition);
+                                    } else {
+                                        JOptionPane.showMessageDialog(CompetitionPanel.this,
+                                                "No animals in the selected competition.",
+                                                "No Animals",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                    }
                                 } else {
                                     JOptionPane.showMessageDialog(CompetitionPanel.this,
-                                            "No animal selected.",
-                                            "No Animal",
-                                            JOptionPane.INFORMATION_MESSAGE);
+                                            "No competition selected or competition does not exist.",
+                                            "Invalid Selection",
+                                            JOptionPane.WARNING_MESSAGE);
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
-                                        "No animals to move.",
-                                        "No Animals",
+                                        "No competitions available.",
+                                        "No Competitions",
                                         JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
@@ -502,23 +520,31 @@ public class CompetitionPanel extends JPanel {
         }
     }
 
-    private void moveAnimalToEnd(Animal animal) {
+    private void moveAnimalsToEnd(List<Animal> animals) {
         int delay = 100; // milliseconds
         Timer timer = new Timer(delay, null);
         timer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Point currentLocation = animal.getLocation();
-                int newX = currentLocation.getX() + (int) animal.getSpeed();
-                if (newX >= getWidth() - animal.getSize()) {
-                    newX = getWidth() - animal.getSize();
+                boolean allAnimalsAtEnd = true;
+                for (Animal animal : animals) {
+                    Point currentLocation = animal.getLocation();
+                    int newX = currentLocation.getX() + (int) animal.getSpeed();
+                    if (newX < getWidth() - animal.getSize()) {
+                        allAnimalsAtEnd = false;
+                    } else {
+                        newX = getWidth() - animal.getSize();
+                    }
+                    animal.setLocation(new Point(newX, currentLocation.getY()));
+                }
+                repaint();
+                if (allAnimalsAtEnd) {
                     timer.stop();
                 }
-                animal.setLocation(new Point(newX, currentLocation.getY()));
-                repaint();
             }
         });
         timer.start();
     }
+
 }
 

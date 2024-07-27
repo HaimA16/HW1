@@ -369,6 +369,8 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return null;
     }
 
+
+
     /**
      * Checks if two animals are equal.
      *

@@ -17,6 +17,7 @@ public class Dolphin extends WaterAnimal{
     public Dolphin(){
         super();
         waterType = null;
+        loadImages("dolphin");
     }
     public Dolphin(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                    Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
