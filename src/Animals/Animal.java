@@ -271,29 +271,24 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    public double getSpeed() {
-        return speed;
+    public int getSpeed() {
+        return (int) speed;
     }
 
     public String getAnimaleName() {
         return name;
     }
 
-    public double move(Point point) {
+    public boolean move(Point point) {
         if (point == null || point.equals(this.getLocation())) {
-            return 0;
+            return true; // No movement needed, considered successful
         }
 
         double distance = calcDistance(point);
         double requiredEnergy = energyPerMeter * distance;
 
-        while (Energy < requiredEnergy) {
-            // Wait until the animal is fed
-            try {
-                Thread.sleep(1000); // Sleep for 1 second before checking again
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if (Energy < requiredEnergy) {
+            return false; // Not enough energy to move
         }
 
         addTotalDistance(distance);
@@ -314,8 +309,9 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         this.getLocation().setY(point.getY());
         setEnergy(Energy - (int) requiredEnergy);
 
-        return distance;
+        return true; // Move was successful
     }
+
 
 
     public void consumeEnergy(double distance) {
@@ -368,7 +364,7 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return sumEnergy;
     }
 
-    private void setEnergy(int e) {
+    public void setEnergy(int e) {
         Energy = e;
     }
 

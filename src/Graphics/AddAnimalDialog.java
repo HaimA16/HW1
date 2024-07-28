@@ -15,6 +15,7 @@ public class AddAnimalDialog extends JDialog {
     private JComboBox<String> genderComboBox;
     private JComboBox<String> competitionTypeComboBox; // תיבת בחירה לסוג תחרות
 
+
     // Additional fields for all animals
     private JTextField idField;
     private JTextField maxEnergyField;
@@ -24,7 +25,7 @@ public class AddAnimalDialog extends JDialog {
     private JTextField breedField; // Dog
     private JComboBox<String> castratedComboBox; // Cat
     private JComboBox<String> venomLevelComboBox; // Snake
-    private JTextField LengthField; // snake animals
+    private JTextField lengthField; // snake animals
     private JTextField habitatLocationField; // Alligator
     private JTextField altitudeOfFlightField; // Eagle
     private JTextField familyField; // Pigeon
@@ -41,7 +42,7 @@ public class AddAnimalDialog extends JDialog {
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(2, 2, 2, 2); // רווחים מינימליים
+        gbc.insets = new Insets(2, 2, 2, 2); // Minimal margins
         gbc.anchor = GridBagConstraints.WEST;
 
         gbc.gridx = 0;
@@ -79,7 +80,6 @@ public class AddAnimalDialog extends JDialog {
         gbc.gridx = 1;
         add(genderComboBox, gbc);
 
-        // תווית ותיבת בחירה לסוג תחרות
         gbc.gridx = 0;
         gbc.gridy = 5;
         add(new JLabel("Competition Type:"), gbc);
@@ -87,7 +87,6 @@ public class AddAnimalDialog extends JDialog {
         gbc.gridx = 1;
         add(competitionTypeComboBox, gbc);
 
-        // Additional fields for all animals
         gbc.gridx = 0;
         gbc.gridy = 6;
         add(new JLabel("ID:"), gbc);
@@ -109,7 +108,6 @@ public class AddAnimalDialog extends JDialog {
         gbc.gridx = 1;
         add(energyPerMeterField, gbc);
 
-        // Specific fields panel
         specificFieldsPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
         gbc.gridy = 9;
@@ -141,12 +139,14 @@ public class AddAnimalDialog extends JDialog {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    validateAnimalAndCompetitionType();
-                    confirmed = true;
-                    setVisible(false);
-                } catch (IllegalArgumentException ex) {
-                    JOptionPane.showMessageDialog(AddAnimalDialog.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                if (validateFields()) {
+                    try {
+                        validateAnimalAndCompetitionType();
+                        confirmed = true;
+                        setVisible(false);
+                    } catch (IllegalArgumentException ex) {
+                        JOptionPane.showMessageDialog(AddAnimalDialog.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -186,7 +186,7 @@ public class AddAnimalDialog extends JDialog {
                 break;
             case "Snake":
                 addSpecificField("Venom Level:", venomLevelComboBox = new JComboBox<>(new String[]{"", "Low", "Medium", "High"}), gbc);
-                addSpecificField("Length:", LengthField = new JTextField(15), gbc);
+                addSpecificField("Length:", lengthField = new JTextField(15), gbc);
                 break;
             case "Eagle":
                 addSpecificField("Altitude of Flight:", altitudeOfFlightField = new JTextField(15), gbc);
@@ -232,6 +232,32 @@ public class AddAnimalDialog extends JDialog {
         } else if ((animalType.equals("Whale") || animalType.equals("Dolphin")) && !competitionType.equals("Water")) {
             throw new IllegalArgumentException("The selected animal type is not suitable for the selected competition type.");
         }
+    }
+
+    private boolean validateFields() {
+        try {
+            Double.parseDouble(weightField.getText());
+            Double.parseDouble(speedField.getText());
+            Integer.parseInt(idField.getText());
+            Integer.parseInt(maxEnergyField.getText());
+            Integer.parseInt(energyPerMeterField.getText());
+            if (lengthField != null) {
+                Double.parseDouble(lengthField.getText());
+            }
+            if (altitudeOfFlightField != null) {
+                Double.parseDouble(altitudeOfFlightField.getText());
+            }
+            if (wingSpanField != null) {
+                Double.parseDouble(wingSpanField.getText());
+            }
+            if (divingDepthField != null) {
+                Double.parseDouble(divingDepthField.getText());
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter valid numeric values in the fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     public boolean isConfirmed() {
@@ -319,6 +345,6 @@ public class AddAnimalDialog extends JDialog {
     }
 
     public JTextField getLengthField() {
-        return LengthField;
+        return lengthField;
     }
 }

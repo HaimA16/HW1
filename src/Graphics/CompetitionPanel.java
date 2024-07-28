@@ -2,7 +2,7 @@ package Graphics;
 
 import Animals.*;
 import Mobility.Point;
-import javax.swing.Timer;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.imageio.ImageIO;
@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,13 +20,13 @@ import java.util.HashMap;
 
 public class CompetitionPanel extends JPanel {
     private BufferedImage backgroundImage;
-    private JButton[] routeButtons;
     private String[] competitionsArray = {"Air", "Water", "Terrestrial"};
     private Map<String, List<Animal>> competitionAnimals = new HashMap<>();
     private Map<String, String> competitionNames = new HashMap<>(); // Map to store competition names for each type
     private List<Animal> removedAnimals = new ArrayList<>(); // רשימה לשמירת החיות שנמחקו
     private String selectedCompetitionType; // משתנה לאחסון סוג התחרות שנבחרה
     private Map<Animal, Point> initialLocations = new HashMap<>();
+    private List<String> createdCompetitions = new ArrayList<>();
 
     public CompetitionPanel() {
         try {
@@ -63,8 +62,8 @@ public class CompetitionPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info", "Play", "Exit"};
-        routeButtons = new JButton[routeNames.length];
+        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info" /*"Play"*/, "Exit"};
+        JButton[] routeButtons = new JButton[routeNames.length];
         int sumEnergy = 0;
         for (int i = 0; i < routeNames.length; i++) {
             routeButtons[i] = new JButton(routeNames[i]);
@@ -284,7 +283,7 @@ public class CompetitionPanel extends JPanel {
 
 
 
-                case "Play":
+                /* case "Play":
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -325,7 +324,7 @@ public class CompetitionPanel extends JPanel {
                         }
                     });
                     break;
-
+*/
                 case "Exit":
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
@@ -391,21 +390,12 @@ public class CompetitionPanel extends JPanel {
     private boolean isValidCompetitionTypeForAnimal(String animalType, String competitionType) {
         for (String competition : competitionsArray) {
             if (competition.equals(competitionType)) {
-                switch (animalType) {
-                    case "Dog":
-                    case "Cat":
-                    case "Snake":
-                    case "Alligator":
-                        return competition.equals("Terrestrial");
-                    case "Eagle":
-                    case "Pigeon":
-                        return competition.equals("Air");
-                    case "Whale":
-                    case "Dolphin":
-                        return competition.equals("Water");
-                    default:
-                        return false;
-                }
+                return switch (animalType) {
+                    case "Dog", "Cat", "Snake", "Alligator" -> competition.equals("Terrestrial");
+                    case "Eagle", "Pigeon" -> competition.equals("Air");
+                    case "Whale", "Dolphin" -> competition.equals("Water");
+                    default -> false;
+                };
             }
         }
         return false;
@@ -501,6 +491,9 @@ public class CompetitionPanel extends JPanel {
             // שמירת המיקום ההתחלתי של החיה
             initialLocations.put(animal, location);
 
+            // הדפסת המיקום של החיה שנוספה
+            System.out.println("Added animal: " + animal.getName() + " - Location: (" + location.getX() + ", " + location.getY() + ")");
+
             return animal;
         } catch (Exception e) {
             e.printStackTrace();
@@ -510,22 +503,44 @@ public class CompetitionPanel extends JPanel {
     }
 
     private Point getInitialLocation(String competitionType) {
-        switch (competitionType) {
-            case "Terrestrial":
-                return new Point(0, 0); // Adjust y-coordinate based on route
-            case "Air":
-                return new Point(0, selectRoute(1, 5) * 100); // Adjust y-coordinate based on route
-            case "Water":
-                return new Point(0, selectRoute(1, 4) * 100); // Adjust y-coordinate based on route
-            default:
-                throw new IllegalArgumentException("Invalid competition type!");
-        }
+        return switch (competitionType) {
+            case "Terrestrial" -> new Point(0, 0); // Adjust y-coordinate based on route
+            case "Air" -> getAirInitialLocation(selectRoute(5));
+            case "Water" -> getWaterInitialLocation(selectRoute(4));
+            default -> throw new IllegalArgumentException("Invalid competition type!");
+        };
     }
 
-    private int selectRoute(int min, int max) {
-        Integer[] routes = new Integer[max - min + 1];
+    private Point getAirInitialLocation(int route) {
+        int height = getHeight();
+        int add = 20;
+        return switch (route) {
+            case 1 -> new Point(0, 0);
+            case 2 -> new Point(0, height / 5+add);
+            case 3 -> new Point(0, height / 5 * 2+add);
+            case 4 -> new Point(0, height / 5 * 3+add);
+            case 5 -> new Point(0, height / 5 * 4+add);
+            default -> throw new IllegalArgumentException("Invalid route for Air!");
+        };
+    }
+
+    private Point getWaterInitialLocation(int route) {
+        int height = getHeight();
+        int red = 60;
+        return switch (route) {
+            case 1 -> new Point(0, height / 5-red);
+            case 2 -> new Point(0, height / 5 * 2-red);
+            case 3 -> new Point(0, height / 5 * 3-red);
+            case 4 -> new Point(0, height / 5 * 4-red);
+            default -> throw new IllegalArgumentException("Invalid route for Water!");
+        };
+    }
+
+
+    private int selectRoute(int max) {
+        Integer[] routes = new Integer[max - 1 + 1];
         for (int i = 0; i < routes.length; i++) {
-            routes[i] = min + i;
+            routes[i] = 1 + i;
         }
 
         Integer selectedRoute = null;
@@ -537,16 +552,27 @@ public class CompetitionPanel extends JPanel {
             }
         }
 
+        // הדפסת המיקום שנבחר
+        System.out.println("Selected route: " + selectedRoute);
+
+        // הדפסת המיקומים של כל החיות
+
         return selectedRoute;
     }
 
 
 
-    private void moveAnimalsToEnd(List<Animal> animals) {
-        int delay = 100; // milliseconds
+
+
+
+
+    /*private void moveAnimalsToEnd(List<Animal> animals) {
+        int delay = 16; // milliseconds
         Map<Animal, Long> finishTimes = new HashMap<>(); // Map to store finish times for each animal
         long startTime = System.nanoTime(); // Start time in nanoseconds
         Timer timer = new Timer(delay, null);
+        final int fixedDistancePerMove = 10; // Fixed distance for each movement
+
         timer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -556,67 +582,63 @@ public class CompetitionPanel extends JPanel {
                         Point currentLocation = animal.getLocation();
                         int newX = currentLocation.getX();
                         int newY = currentLocation.getY();
-                        double distanceMoved = 0;
+                        double distanceToMove = (animal.getSpeed() / 50.0) * fixedDistancePerMove; // Adjust speed factor as needed
 
                         if (selectedCompetitionType.equals("Terrestrial")) {
                             // Move right
                             if (newX < getWidth() - animal.getSize() && newY == 0) {
-                                newX += (int) animal.getSpeed();
-                                distanceMoved = animal.getSpeed();
+                                newX += distanceToMove;
                                 animal.setOrientation(Animal.Orientation.EAST);
                                 allAnimalsAtEnd = false;
                             }
                             // Move down
-                            else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize() - 50) { // Adjusted y-coordinate
-                                newY += (int) animal.getSpeed();
-                                distanceMoved = animal.getSpeed();
+                            else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize() - 50) {
+                                newY += distanceToMove;
                                 animal.setOrientation(Animal.Orientation.SOUTH);
                                 allAnimalsAtEnd = false;
                             }
                             // Move left
-                            else if (newY >= getHeight() - animal.getSize() - 50 && newX > 0) { // Adjusted y-coordinate
-                                newX -= (int) animal.getSpeed();
-                                distanceMoved = animal.getSpeed();
+                            else if (newY >= getHeight() - animal.getSize() - 50 && newX > 0) {
+                                newX -= distanceToMove;
                                 animal.setOrientation(Animal.Orientation.WEST);
                                 allAnimalsAtEnd = false;
                             }
                             // Move up
                             else if (newX <= 0 && newY > 0) {
-                                newY -= (int) animal.getSpeed();
-                                distanceMoved = animal.getSpeed();
+                                newY -= distanceToMove;
                                 animal.setOrientation(Animal.Orientation.NORTH);
                                 allAnimalsAtEnd = false;
                             }
                             // Finish
                             if (newX <= 0 && newY <= 0) {
-                                finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
+                                finishTimes.put(animal, System.nanoTime() - startTime);
                             }
                         } else {
-                            // Move right
-                            newX += (int) animal.getSpeed();
-                            distanceMoved = animal.getSpeed();
+                            // Move right for Air and Water competitions
+                            newX += distanceToMove;
                             if (newX < getWidth() - animal.getSize()) {
                                 allAnimalsAtEnd = false;
                             } else {
                                 newX = getWidth() - animal.getSize();
-                                finishTimes.put(animal, System.nanoTime() - startTime); // Record finish time in nanoseconds
+                                finishTimes.put(animal, System.nanoTime() - startTime);
                             }
                         }
 
                         animal.setLocation(new Point(newX, newY));
-                        animal.addTotalDistance(distanceMoved); // Update total distance
-                        animal.consumeEnergy(distanceMoved); // Consume energy based on distance
+                        animal.addTotalDistance(distanceToMove);
+                        animal.consumeEnergy(distanceToMove);
                     }
                 }
                 repaint();
                 if (allAnimalsAtEnd) {
                     timer.stop();
-                    showResults(finishTimes); // Show results and reset animals
+                    showResults(finishTimes);
                 }
             }
         });
         timer.start();
     }
+
 
 
 
@@ -656,11 +678,7 @@ public class CompetitionPanel extends JPanel {
         }
         repaint();
     }
-
+*/
 }
-
-
-
-
 
 
