@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class CompetitionPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info" /*"Play"*/, "Exit"};
+        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info" ,"Play", "Exit"};
         JButton[] routeButtons = new JButton[routeNames.length];
         int sumEnergy = 0;
         for (int i = 0; i < routeNames.length; i++) {
@@ -283,7 +284,7 @@ public class CompetitionPanel extends JPanel {
 
 
 
-                /* case "Play":
+                case "Play":
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -324,7 +325,7 @@ public class CompetitionPanel extends JPanel {
                         }
                     });
                     break;
-*/
+
                 case "Exit":
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
@@ -470,13 +471,14 @@ public class CompetitionPanel extends JPanel {
                     animal = new Pigeon(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, wingSpan, family);
                     break;
                 case "Alligator":
+                    double divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
                     String habitatLocation = dialog.getHabitatLocationField().getText();
                     noLegs = 4;
-                    animal = new Alligator(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, habitatLocation);
+                    animal = new Alligator(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, noLegs, habitatLocation);
                     break;
                 case "Whale":
                     String foodType = dialog.getFoodTypeField().getText();
-                    double divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
+                    divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
                     animal = new Whale(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, foodType);
                     break;
                 case "Dolphin":
@@ -516,10 +518,10 @@ public class CompetitionPanel extends JPanel {
         int add = 20;
         return switch (route) {
             case 1 -> new Point(0, 0);
-            case 2 -> new Point(0, height / 5+add);
-            case 3 -> new Point(0, height / 5 * 2+add);
-            case 4 -> new Point(0, height / 5 * 3+add);
-            case 5 -> new Point(0, height / 5 * 4+add);
+            case 2 -> new Point(0, height / 5 + add);
+            case 3 -> new Point(0, height / 5 * 2 + add);
+            case 4 -> new Point(0, height / 5 * 3 + add);
+            case 5 -> new Point(0, height / 5 * 4 + add);
             default -> throw new IllegalArgumentException("Invalid route for Air!");
         };
     }
@@ -528,14 +530,13 @@ public class CompetitionPanel extends JPanel {
         int height = getHeight();
         int red = 60;
         return switch (route) {
-            case 1 -> new Point(0, height / 5-red);
-            case 2 -> new Point(0, height / 5 * 2-red);
-            case 3 -> new Point(0, height / 5 * 3-red);
-            case 4 -> new Point(0, height / 5 * 4-red);
+            case 1 -> new Point(0, height / 5 - red);
+            case 2 -> new Point(0, height / 5 * 2 - red);
+            case 3 -> new Point(0, height / 5 * 3 - red);
+            case 4 -> new Point(0, height / 5 * 4 - red);
             default -> throw new IllegalArgumentException("Invalid route for Water!");
         };
     }
-
 
     private int selectRoute(int max) {
         Integer[] routes = new Integer[max - 1 + 1];
@@ -560,13 +561,7 @@ public class CompetitionPanel extends JPanel {
         return selectedRoute;
     }
 
-
-
-
-
-
-
-    /*private void moveAnimalsToEnd(List<Animal> animals) {
+    private void moveAnimalsToEnd(List<Animal> animals) {
         int delay = 16; // milliseconds
         Map<Animal, Long> finishTimes = new HashMap<>(); // Map to store finish times for each animal
         long startTime = System.nanoTime(); // Start time in nanoseconds
@@ -639,12 +634,6 @@ public class CompetitionPanel extends JPanel {
         timer.start();
     }
 
-
-
-
-
-
-
     private void showResults(Map<Animal, Long> finishTimes) {
         StringBuilder results = new StringBuilder();
         results.append("Results:\n");
@@ -668,17 +657,15 @@ public class CompetitionPanel extends JPanel {
         resetAnimals(new ArrayList<>(finishTimes.keySet()));
     }
 
-
     private void resetAnimals(List<Animal> animals) {
         for (Animal animal : animals) {
             Point initialLocation = initialLocations.get(animal);
             if (initialLocation != null) {
                 animal.setLocation(initialLocation);
+                animal.setOrientation(Animal.Orientation.EAST); // Reset orientation to EAST
             }
         }
         repaint();
     }
-*/
 }
-
 

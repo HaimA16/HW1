@@ -279,45 +279,56 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return name;
     }
 
-    public boolean move(Point point) {
-        if (point == null || point.equals(this.getLocation())) {
-            return true; // No movement needed, considered successful
-        }
-
-        double distance = calcDistance(point);
-        double requiredEnergy = energyPerMeter * distance;
-
-        if (Energy < requiredEnergy) {
-            return false; // Not enough energy to move
-        }
-
-        addTotalDistance(distance);
-
-        // Update location and orientation
+    public boolean move(Point p) {
         Point currentLocation = this.getLocation();
-        if (point.getX() > currentLocation.getX()) {
-            this.orientation = Orientation.EAST;
-        } else if (point.getX() < currentLocation.getX()) {
-            this.orientation = Orientation.WEST;
-        } else if (point.getY() > currentLocation.getY()) {
-            this.orientation = Orientation.SOUTH;
-        } else if (point.getY() < currentLocation.getY()) {
-            this.orientation = Orientation.NORTH;
+        int panelWidth = this.pan.getWidth();
+        int panelHeight = this.pan.getHeight();
+
+        switch (this.orientation) {
+            case EAST:
+                if (currentLocation.getX() + this.speed < panelWidth - this.size) {
+                    this.setLocation(new Point(currentLocation.getX() + (int)this.speed, currentLocation.getY()));
+                } else {
+                    this.orientation = Orientation.SOUTH; // Change direction to SOUTH
+                }
+                break;
+            case SOUTH:
+                if (currentLocation.getY() + this.speed < panelHeight - this.size) {
+                    this.setLocation(new Point(currentLocation.getX(), currentLocation.getY() + (int)this.speed));
+                } else {
+                    this.orientation = Orientation.WEST; // Change direction to WEST
+                }
+                break;
+            case WEST:
+                if (currentLocation.getX() - this.speed > 0) {
+                    this.setLocation(new Point(currentLocation.getX() - (int)this.speed, currentLocation.getY()));
+                } else {
+                    this.orientation = Orientation.NORTH; // Change direction to NORTH
+                }
+                break;
+            case NORTH:
+                if (currentLocation.getY() - this.speed > 0) {
+                    this.setLocation(new Point(currentLocation.getX(), currentLocation.getY() - (int)this.speed));
+                } else {
+                    this.orientation = Orientation.EAST; // Reset to EAST and possibly complete the lap
+                }
+                break;
         }
 
-        this.getLocation().setX(point.getX());
-        this.getLocation().setY(point.getY());
-        setEnergy(Energy - (int) requiredEnergy);
-
-        return true; // Move was successful
+        return true; // Always return true for simplicity
     }
 
 
 
     public void consumeEnergy(double distance) {
         double energyConsumed = distance * this.energyPerMeter;
-        this.Energy -= energyConsumed;
+        if (this.Energy >= energyConsumed) {
+            this.Energy -= energyConsumed;
+        } else {
+            this.Energy = 0; // Ensure energy does not go negative
+        }
     }
+
 
 
 
@@ -328,22 +339,23 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         BufferedImage img = null;
         switch (orientation) {
             case EAST:
-                img = img1;
+                img = img1; // Image facing east
                 break;
             case SOUTH:
-                img = img2;
+                img = img2; // Image facing south
                 break;
             case WEST:
-                img = img3;
+                img = img3; // Image facing west
                 break;
             case NORTH:
-                img = img4;
+                img = img4; // Image facing north
                 break;
         }
         if (img != null) {
             g.drawImage(img, getLocation().getX(), getLocation().getY() - size / 10, size * 2, size, pan);
         }
     }
+
 
 
 
@@ -360,6 +372,7 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
     }
 
 
+
     public int getSumEnergy(){
         return sumEnergy;
     }
@@ -372,17 +385,17 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return Energy;
     }
 
-    @Override
     public void loadImages(String nm) {
         try {
-            img1 = ImageIO.read(new File(nm + "_east.png")); // תמונה לכיוון מזרח
-            img2 = ImageIO.read(new File(nm + "_south.png")); // תמונה לכיוון דרום
-            img3 = ImageIO.read(new File(nm + "_west.png")); // תמונה לכיוון מערב
-            img4 = ImageIO.read(new File(nm + "_north.png")); // תמונה לכיוון צפון
+            img1 = ImageIO.read(new File("path_to_images/" + nm + "_east.png"));
+            img2 = ImageIO.read(new File("path_to_images/" + nm + "_south.png"));
+            img3 = ImageIO.read(new File("path_to_images/" + nm + "_west.png"));
+            img4 = ImageIO.read(new File("path_to_images/" + nm + "_north.png"));
         } catch (IOException e) {
             System.out.println("Cannot load image for " + nm);
         }
     }
+
 
     /*@Override
     public void drawObject(Graphics g) {

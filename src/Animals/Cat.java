@@ -31,9 +31,9 @@ public class Cat extends TerrestrialAnimals {
         try {
             String basePath = "C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\";
             img1 = ImageIO.read(new File(basePath+File.separator + nm + "1.png")); // תמונה לכיוון מזרח
-            img2 = ImageIO.read(new File(basePath+File.separator + nm + "2.png")); // תמונה לכיוון דרום
-            img3 = ImageIO.read(new File(basePath+File.separator + nm + "1.png")); // תמונה לכיוון מערב
-            img4 = ImageIO.read(new File(basePath+File.separator + nm + "2.png")); // תמונה לכיוון צפון
+            img2 = ImageIO.read(new File(basePath+File.separator + nm + "S.png")); // תמונה לכיוון דרום
+            img3 = ImageIO.read(new File(basePath+File.separator + nm + "W.png")); // תמונה לכיוון מערב
+            img4 = ImageIO.read(new File(basePath+File.separator + nm + "N.png")); // תמונה לכיוון צפון
             System.out.println("Loaded images for " + nm);
         } catch (IOException e) {
             System.out.println("Cannot load image for " + nm);

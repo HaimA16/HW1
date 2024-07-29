@@ -58,4 +58,7 @@ public abstract class WaterAnimal extends Animal {
     public String getCategory() {
         return "Water";
     }
+    double getDiveDepth() {
+        return diveDept;
+    }
 }

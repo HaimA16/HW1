@@ -3,127 +3,74 @@ package Animals;
 import Graphics.CompetitionPanel;
 import Mobility.Point;
 import Olympics.Medal;
-
 import javax.imageio.ImageIO;
 import javax.xml.stream.Location;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Class representing an Alligator, which is a type of Water Animal.
- * Implements the IReptile and terrestrial_feature interfaces.
- * Includes specific attributes for alligators.
- */
-public class Alligator extends WaterAnimal implements IReptile, terrestrial_feature {
+public class Alligator extends WaterAnimal implements IAquaticTerrestrial, IReptile {
     private String areaOfLiving;
+    private int noLegs;
 
-    /**
-     * Default constructor for Alligator.
-     * Initializes the area of living to null.
-     */
-    public Alligator() {
-        super();
-        this.areaOfLiving = null;
-    }
-
-    /**
-     * Constructor for the Alligator class.
-     *
-     * @param name          the name of the alligator
-     * @param gender        the gender of the alligator
-     * @param weight        the weight of the alligator
-     * @param speed         the speed of the alligator
-     * @param medals        an array of medals won by the alligator
-     * @param location      the initial location of the alligator
-
-     * @param orientation   the initial orientation of the alligator
-     * @param size          the size of the alligator
-     * @param id            the id of the alligator
-     * @param maxEnergy     the maximum energy of the alligator
-     * @param energyPerMeter the energy consumption per meter of the alligator
-     * @param pan           the competition panel associated with the alligator
-     * @param img1          the first image of the alligator
-
-     * @param diveDept      the dive depth of the alligator
-     * @param areaOfLiving  the area of living of the alligator
-     */
     public Alligator(String name, Gender gender, double weight, double speed, Medal[] medals, Point location, Location loc,
                      Orientation orientation, int size, int id, int maxEnergy, int energyPerMeter, CompetitionPanel pan,
-                     BufferedImage img1, double diveDept,
-                     String areaOfLiving) {
-        super(name, gender, weight,speed,medals, location,loc,
-                orientation,size, id,maxEnergy,energyPerMeter,pan,
-                img1, diveDept);
+                     BufferedImage img1, double diveDepth, int noLegs, String areaOfLiving) {
+        super(name, gender, weight, speed, medals, location, loc, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, diveDepth);
+        this.noLegs = noLegs;
         this.areaOfLiving = areaOfLiving;
         loadImages("alligator");
     }
 
-    /**
-     * Gets the sound the alligator makes.
-     *
-     * @return the sound of the alligator
-     */
+    @Override
+    public int getNoLegs() {
+        return noLegs;
+    }
+
+    @Override
+    public void setNoLegs(int noLegs) {
+        if (noLegs >= 0) {
+            this.noLegs = noLegs;
+        }
+    }
+
+    public String getAreaOfLiving() {
+        return areaOfLiving;
+    }
+
+    public void setAreaOfLiving(String areaOfLiving) {
+        this.areaOfLiving = areaOfLiving;
+    }
+
     @Override
     public String getSound() {
         return "Roar";
     }
 
-    /**
-     * Increases the speed of the alligator.
-     * Checks if the new speed is less than the maximum allowed speed.
-     *
-     * @param speeder the amount to increase the speed
-     * @return true if the speed was successfully increased, false otherwise
-     */
-    @Override
-    public boolean speedUp(int speeder) {
-        double newSpeed = getSpeed() + speeder;
-        if (newSpeed <= MAX_SPEED) {
-            return setSpeed(newSpeed);
-        }
-        return false;
-    }
-
-    /**
-     * Gets the number of legs the alligator has.
-     * Alligators typically have 4 legs.
-     *
-     * @return the number of legs
-     */
-    @Override
-    public int getNoLegs() {
-        return 4; // Alligators typically have 4 legs
-    }
-
-    /**
-     * Gets the area of living of the alligator.
-     *
-     * @return the area of living
-     */
-    public String getAreaOfLiving() {
-        return areaOfLiving;
-    }
-
-    /**
-     * Sets the area of living of the alligator.
-     *
-     * @param areaOfLiving the new area of living
-     */
-    public void setAreaOfLiving(String areaOfLiving) {
-        this.areaOfLiving = areaOfLiving;
-    }
-
     public void loadImages(String nm) {
         try {
-            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "1.png")); // תמונה לכיוון מזרח
-            img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "2.png")); // תמונה לכיוון דרום
-            img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "3.png")); // תמונה לכיוון מערב
-            img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "3.png")); // תמונה לכיוון צפון
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "2.png"));
+            img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "S.png"));
+            img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "W.png"));
+            img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "N.png"));
         } catch (IOException e) {
             System.out.println("Cannot load image for " + nm);
         }
     }
 
+    @Override
+    public boolean speedUp(int speeder) {
+        double newSpeed = getSpeed() + speeder;
+        if (newSpeed < MAX_SPEED) {
+            setSpeed(newSpeed);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getCategory() {
+        // This method should return a category that reflects both terrestrial and aquatic nature.
+        return "Water/Terrestrial";
+    }
 }

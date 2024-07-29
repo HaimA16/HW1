@@ -11,7 +11,6 @@ public class AddAnimalDialog extends JDialog {
     private JTextField nameField;
     private JTextField weightField;
     private JTextField speedField;
-    private JTextField medalsField;
     private JComboBox<String> genderComboBox;
     private JComboBox<String> competitionTypeComboBox; // תיבת בחירה לסוג תחרות
 
@@ -146,10 +145,12 @@ public class AddAnimalDialog extends JDialog {
                         setVisible(false);
                     } catch (IllegalArgumentException ex) {
                         JOptionPane.showMessageDialog(AddAnimalDialog.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        // Do not close the dialog, allow user to correct the input
                     }
                 }
             }
         });
+
         buttonPanel.add(addButton);
 
         JButton closeButton = new JButton("CLOSE");
@@ -198,6 +199,7 @@ public class AddAnimalDialog extends JDialog {
                 break;
             case "Alligator":
                 addSpecificField("Area of living:", habitatLocationField = new JTextField(15), gbc);
+                addSpecificField("Diving Depth:", divingDepthField = new JTextField(15), gbc);
                 break;
             case "Whale":
                 addSpecificField("Food Type:", foodTypeField = new JTextField(15), gbc);
@@ -225,22 +227,48 @@ public class AddAnimalDialog extends JDialog {
         String animalType = getAnimalType();
         String competitionType = getCompetitionType();
 
-        if ((animalType.equals("Dog") || animalType.equals("Cat") || animalType.equals("Snake") || animalType.equals("Alligator")) && !competitionType.equals("Terrestrial")) {
+        if ((animalType.equals("Dog") || animalType.equals("Cat") || animalType.equals("Snake")) && !competitionType.equals("Terrestrial")) {
             throw new IllegalArgumentException("The selected animal type is not suitable for the selected competition type.");
         } else if ((animalType.equals("Eagle") || animalType.equals("Pigeon")) && !competitionType.equals("Air")) {
             throw new IllegalArgumentException("The selected animal type is not suitable for the selected competition type.");
         } else if ((animalType.equals("Whale") || animalType.equals("Dolphin")) && !competitionType.equals("Water")) {
             throw new IllegalArgumentException("The selected animal type is not suitable for the selected competition type.");
+        } else if (animalType.equals("Alligator") && !(competitionType.equals("Water") || competitionType.equals("Terrestrial"))) {
+            throw new IllegalArgumentException("Alligator can participate in both Water and Terrestrial competitions.");
         }
     }
 
+
     private boolean validateFields() {
         try {
-            Double.parseDouble(weightField.getText());
-            Double.parseDouble(speedField.getText());
-            Integer.parseInt(idField.getText());
-            Integer.parseInt(maxEnergyField.getText());
-            Integer.parseInt(energyPerMeterField.getText());
+            double weight = Double.parseDouble(weightField.getText());
+            double speed = Double.parseDouble(speedField.getText());
+            int id = Integer.parseInt(idField.getText());
+            int maxEnergy = Integer.parseInt(maxEnergyField.getText());
+            int energyPerMeter = Integer.parseInt(energyPerMeterField.getText());
+
+            // Check for specific animal speed limits
+            String animalType = getAnimalType();
+            if (("Snake".equals(animalType) || "Alligator".equals(animalType)) && speed > 5) {
+                throw new IllegalArgumentException("Speed limit exceeded. Snakes and Alligators cannot run faster than 5 m/s.");
+            }
+
+            if (weight <= 0) {
+                throw new IllegalArgumentException("Weight must be a positive number.");
+            }
+            if (speed <= 0) {
+                throw new IllegalArgumentException("Speed must be a positive number.");
+            }
+            if (id <= 0) {
+                throw new IllegalArgumentException("ID must be a positive number.");
+            }
+            if (maxEnergy <= 0) {
+                throw new IllegalArgumentException("Max Energy must be a positive number.");
+            }
+            if (energyPerMeter <= 0) {
+                throw new IllegalArgumentException("Energy per meter must be a positive number.");
+            }
+
             if (lengthField != null) {
                 Double.parseDouble(lengthField.getText());
             }
@@ -255,6 +283,9 @@ public class AddAnimalDialog extends JDialog {
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Please enter valid numeric values in the fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -282,10 +313,6 @@ public class AddAnimalDialog extends JDialog {
 
     public JTextField getSpeedField() {
         return speedField;
-    }
-
-    public JTextField getMedalsField() {
-        return medalsField;
     }
 
     public JComboBox<String> getGenderComboBox() {
