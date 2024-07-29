@@ -100,7 +100,7 @@ public class CompetitionPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info" ,"Play", "Exit"};
+        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info" /*"Play"*/, "Exit"};
         JButton[] routeButtons = new JButton[routeNames.length];
         for (int i = 0; i < routeNames.length; i++) {
             routeButtons[i] = new JButton(routeNames[i]);
@@ -323,7 +323,7 @@ public class CompetitionPanel extends JPanel {
 
 
 
-                case "Play":
+                /*case "Play":
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -363,7 +363,7 @@ public class CompetitionPanel extends JPanel {
                             }
                         }
                     });
-                    break;
+                    break;*/
 
                 case "Exit":
                     routeButtons[i].addActionListener(new ActionListener() {
