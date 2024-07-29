@@ -529,11 +529,12 @@ public class CompetitionPanel extends JPanel {
     private Point getWaterInitialLocation(int route) {
         int height = getHeight();
         int red = 60;
+        int right = 100;
         return switch (route) {
-            case 1 -> new Point(0, height / 5 - red);
-            case 2 -> new Point(0, height / 5 * 2 - red);
-            case 3 -> new Point(0, height / 5 * 3 - red);
-            case 4 -> new Point(0, height / 5 * 4 - red);
+            case 1 -> new Point(right, height / 5 - red);
+            case 2 -> new Point(right, height / 5 * 2 - red);
+            case 3 -> new Point(right, height / 5 * 3 - red);
+            case 4 -> new Point(right, height / 5 * 4 - red);
             default -> throw new IllegalArgumentException("Invalid route for Water!");
         };
     }
@@ -552,11 +553,6 @@ public class CompetitionPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "You must select a route!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
-        // הדפסת המיקום שנבחר
-        System.out.println("Selected route: " + selectedRoute);
-
-        // הדפסת המיקומים של כל החיות
 
         return selectedRoute;
     }

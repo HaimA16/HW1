@@ -37,7 +37,7 @@ public class Snake extends TerrestrialAnimals implements IReptile{
 
     public void loadImages(String nm) {
         try {
-            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" +File.separator + nm + "1.png")); // תמונה לכיוון מזרח
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" +File.separator + nm + "E.jpg")); // תמונה לכיוון מזרח
             img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" +File.separator + nm + "S.png")); // תמונה לכיוון דרום
             img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" +File.separator + nm + "1.png")); // תמונה לכיוון מערב
             img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" +File.separator + nm + "N.png"));

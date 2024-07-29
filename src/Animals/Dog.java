@@ -29,7 +29,7 @@ public class Dog extends TerrestrialAnimals {
     @Override
     public void loadImages(String nm) {
         try {
-            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator + nm + "2E.png")); // תמונה לכיוון מזרח
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator + nm + "E.jpg")); // תמונה לכיוון מזרח
             img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "2S.png")); // תמונה לכיוון דרום
             img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "2W.png")); // תמונה לכיוון מערב
             img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\"+File.separator  + nm + "2N.png")); // תמונה לכיוון צפון

@@ -49,10 +49,10 @@ public class Alligator extends WaterAnimal implements IAquaticTerrestrial, IRept
 
     public void loadImages(String nm) {
         try {
-            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "2.png"));
-            img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "S.png"));
-            img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "W.png"));
-            img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "N.png"));
+            img1 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "E.jpg"));
+            img2 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "S.jpg"));
+            img3 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "W.jpg"));
+            img4 = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\" + File.separator + nm + "N.jpg"));
         } catch (IOException e) {
             System.out.println("Cannot load image for " + nm);
         }

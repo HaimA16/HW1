@@ -11,7 +11,7 @@ public class CompetitionFrame extends JFrame {
         add(panel);
         this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 800);
+        setSize(1300, 800);
         setVisible(true);
     }
     public static void main(String[] args) {
