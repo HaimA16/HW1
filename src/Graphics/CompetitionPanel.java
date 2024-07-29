@@ -79,6 +79,8 @@ public class CompetitionPanel extends JPanel {
                 repaint();
             }
         });
+        backgroundPanel.setLayout(new BorderLayout());
+        backgroundPanel.setOpaque(false);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridBagLayout());
@@ -545,12 +547,13 @@ public class CompetitionPanel extends JPanel {
     private Point getAirInitialLocation(int route) {
         int height = getHeight();
         int add = 20;
+        int right = 70;
         return switch (route) {
-            case 1 -> new Point(0, 0);
-            case 2 -> new Point(0, height / 5 + add);
-            case 3 -> new Point(0, height / 5 * 2 + add);
-            case 4 -> new Point(0, height / 5 * 3 + add);
-            case 5 -> new Point(0, height / 5 * 4 + add);
+            case 1 -> new Point(right, 0);
+            case 2 -> new Point(right, height / 5 + add);
+            case 3 -> new Point(right, height / 5 * 2 + add);
+            case 4 -> new Point(right, height / 5 * 3 + add);
+            case 5 -> new Point(right, height / 5 * 4 + add);
             default -> throw new IllegalArgumentException("Invalid route for Air!");
         };
     }
@@ -558,7 +561,7 @@ public class CompetitionPanel extends JPanel {
     private Point getWaterInitialLocation(int route) {
         int height = getHeight();
         int red = 60;
-        int right = 80;
+        int right = 70;
         return switch (route) {
             case 1 -> new Point(right, height / 5 - red);
             case 2 -> new Point(right, height / 5 * 2 - red);
