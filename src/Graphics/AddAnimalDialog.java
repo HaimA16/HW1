@@ -1,10 +1,16 @@
+/**
+ * @Author: Haim Armias 315569061
+ * @Author: Yeuda Baza 208029819
+ */
 package Graphics;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * A dialog for adding an animal with various attributes.
+ */
 public class AddAnimalDialog extends JDialog {
     private boolean confirmed = false;
     private JComboBox<String> animalTypeComboBox;
@@ -13,7 +19,6 @@ public class AddAnimalDialog extends JDialog {
     private JTextField speedField;
     private JComboBox<String> genderComboBox;
     private JComboBox<String> competitionTypeComboBox; // תיבת בחירה לסוג תחרות
-
 
     // Additional fields for all animals
     private JTextField idField;
@@ -35,6 +40,11 @@ public class AddAnimalDialog extends JDialog {
 
     private JPanel specificFieldsPanel;
 
+    /**
+     * Constructs an AddAnimalDialog.
+     *
+     * @param owner the owner frame of the dialog
+     */
     public AddAnimalDialog(Frame owner) {
         super(owner, "Add Animal", true);
         setSize(300, 500);
@@ -170,6 +180,11 @@ public class AddAnimalDialog extends JDialog {
         add(buttonPanel, gbc);
     }
 
+    /**
+     * Displays specific fields based on the selected animal type.
+     *
+     * @param animalType the selected animal type
+     */
     private void showSpecificFields(String animalType) {
         specificFieldsPanel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
@@ -215,6 +230,13 @@ public class AddAnimalDialog extends JDialog {
         specificFieldsPanel.repaint();
     }
 
+    /**
+     * Adds a specific field to the panel.
+     *
+     * @param label     the label for the field
+     * @param component the component for the field
+     * @param gbc       the GridBagConstraints for layout
+     */
     private void addSpecificField(String label, JComponent component, GridBagConstraints gbc) {
         specificFieldsPanel.add(new JLabel(label), gbc);
         gbc.gridx = 1;
@@ -223,6 +245,11 @@ public class AddAnimalDialog extends JDialog {
         gbc.gridy++;
     }
 
+    /**
+     * Validates the selected animal type and competition type.
+     *
+     * @throws IllegalArgumentException if the selected animal type is not suitable for the selected competition type
+     */
     private void validateAnimalAndCompetitionType() {
         String animalType = getAnimalType();
         String competitionType = getCompetitionType();
@@ -238,7 +265,11 @@ public class AddAnimalDialog extends JDialog {
         }
     }
 
-
+    /**
+     * Validates the fields in the dialog.
+     *
+     * @return true if all fields are valid, false otherwise
+     */
     private boolean validateFields() {
         try {
             double weight = Double.parseDouble(weightField.getText());
@@ -279,7 +310,10 @@ public class AddAnimalDialog extends JDialog {
                 Double.parseDouble(wingSpanField.getText());
             }
             if (divingDepthField != null) {
-                Double.parseDouble(divingDepthField.getText());
+                double divingDepth = Double.parseDouble(divingDepthField.getText());
+                if (divingDepth > 0 || divingDepth < -800) {
+                    throw new IllegalArgumentException("Diving Depth must be lower than 0 and greater than -800.");
+                }
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Please enter valid numeric values in the fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -291,14 +325,29 @@ public class AddAnimalDialog extends JDialog {
         return true;
     }
 
+    /**
+     * Returns whether the dialog was confirmed.
+     *
+     * @return true if the dialog was confirmed, false otherwise
+     */
     public boolean isConfirmed() {
         return confirmed;
     }
 
+    /**
+     * Returns the selected animal type.
+     *
+     * @return the selected animal type
+     */
     public String getAnimalType() {
         return (String) animalTypeComboBox.getSelectedItem();
     }
 
+    /**
+     * Returns the selected competition type.
+     *
+     * @return the selected competition type
+     */
     public String getCompetitionType() {
         return (String) competitionTypeComboBox.getSelectedItem();
     }

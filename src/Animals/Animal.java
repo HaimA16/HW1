@@ -1,3 +1,7 @@
+/**
+ * @Author: Haim Armias 315569061
+ * @Author: Yeuda Baza 208029819
+ */
 package Animals;
 
 import Graphics.*;
@@ -19,12 +23,14 @@ import java.util.Arrays;
  */
 public abstract class Animal extends Mobile implements ILocatable, IMoveable, IDrawable, IClonable, IAnimal {
 
-
-
     /**
      * Enum representing the gender of the animal.
      */
     public enum Gender { MALE, FEMALE, HERMAPHRODITE }
+
+    /**
+     * Enum representing the orientation of the animal.
+     */
     public enum Orientation {
         NORTH, SOUTH, EAST, WEST
     }
@@ -37,17 +43,35 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
     private int id;
     private Location loc;
     private Orientation orientation;
-    private int maxEnergy, Energy,sumEnergy;
+    private int maxEnergy, Energy, sumEnergy;
     private int energyPerMeter;
     private CompetitionPanel pan;
-    protected BufferedImage img1,img2,img3,img4;
+    private BufferedImage img1, img2, img3, img4;
 
-    public Animal(){
+
+    /**
+     * Default constructor for the Animal class.
+     */
+    public Animal() {
         name = null;
         gender = null;
         weight = 0;
         speed = 0;
         medals = null;
+        final String PICTURE_PATH = "";
+        loc = null;
+        orientation = null;
+        size = 0;
+        id = 0;
+        maxEnergy = 0;
+        Energy = 0;
+        sumEnergy = 0;
+        energyPerMeter = 0;
+        pan = null;
+        img1 = null;
+        img2 = null;
+        img3 = null;
+        img4 = null;
     }
 
     /**
@@ -86,12 +110,18 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         this.id = id;
         this.maxEnergy = maxEnergy;
         this.energyPerMeter = energyPerMeter;
-        this.sumEnergy=0;
+        this.sumEnergy = 0;
         this.pan = pan;
         this.img1 = img1;
         this.Energy = maxEnergy;
     }
 
+    /**
+     * Sets the medals of the animal.
+     *
+     * @param medals an array of medals
+     * @return true if the medals are set, false otherwise
+     */
     public boolean setMedals(Medal[] medals) {
         if (medals != null) {
             this.medals = medals;
@@ -100,12 +130,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-
-    // Getter and Setter for size
+    /**
+     * Gets the size of the animal.
+     *
+     * @return the size of the animal
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * Sets the size of the animal.
+     *
+     * @param size the new size of the animal
+     * @return true if the size is valid and set, false otherwise
+     */
     public boolean setSize(int size) {
         if (size > 0) {
             this.size = size;
@@ -114,11 +153,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for id
+    /**
+     * Gets the ID of the animal.
+     *
+     * @return the ID of the animal
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the ID of the animal.
+     *
+     * @param id the new ID of the animal
+     * @return true if the ID is valid and set, false otherwise
+     */
     public boolean setId(int id) {
         if (id > 0) {
             this.id = id;
@@ -127,11 +176,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for loc
+    /**
+     * Gets the location of the animal.
+     *
+     * @return the location of the animal
+     */
     public Location getLoc() {
         return loc;
     }
 
+    /**
+     * Sets the location of the animal.
+     *
+     * @param loc the new location of the animal
+     * @return true if the location is valid and set, false otherwise
+     */
     public boolean setLoc(Location loc) {
         if (loc != null) {
             this.loc = loc;
@@ -140,11 +199,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for orientation
+    /**
+     * Gets the orientation of the animal.
+     *
+     * @return the orientation of the animal
+     */
     public Orientation getOrientation() {
         return orientation;
     }
 
+    /**
+     * Sets the orientation of the animal.
+     *
+     * @param orientation the new orientation of the animal
+     * @return true if the orientation is valid and set, false otherwise
+     */
     public boolean setOrientation(Orientation orientation) {
         if (orientation != null) {
             this.orientation = orientation;
@@ -153,11 +222,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for maxEnergy
+    /**
+     * Gets the maximum energy of the animal.
+     *
+     * @return the maximum energy of the animal
+     */
     public int getMaxEnergy() {
         return maxEnergy;
     }
 
+    /**
+     * Sets the maximum energy of the animal.
+     *
+     * @param maxEnergy the new maximum energy of the animal
+     * @return true if the maximum energy is valid and set, false otherwise
+     */
     public boolean setMaxEnergy(int maxEnergy) {
         if (maxEnergy > 0) {
             this.maxEnergy = maxEnergy;
@@ -166,24 +245,48 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for energyPerMeter
+    /**
+     * Gets the energy consumption per meter of the animal.
+     *
+     * @return the energy consumption per meter of the animal
+     */
     public int getEnergyPerMeter() {
         return energyPerMeter;
     }
 
+    /**
+     * Gets the name of the animal.
+     *
+     * @return the name of the animal
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the current energy amount of the animal.
+     *
+     * @return the current energy amount of the animal
+     */
     public int getEnergyAmount() {
         return Energy;
     }
 
-
+    /**
+     * Gets the energy consumption of the animal.
+     *
+     * @return the energy consumption of the animal
+     */
     public int getEnergyConsumption() {
         return maxEnergy;
     }
 
+    /**
+     * Sets the energy consumption per meter of the animal.
+     *
+     * @param energyPerMeter the new energy consumption per meter of the animal
+     * @return true if the energy consumption per meter is valid and set, false otherwise
+     */
     public boolean setEnergyPerMeter(int energyPerMeter) {
         if (energyPerMeter > 0) {
             this.energyPerMeter = energyPerMeter;
@@ -192,11 +295,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for pan
+    /**
+     * Gets the competition panel associated with the animal.
+     *
+     * @return the competition panel associated with the animal
+     */
     public CompetitionPanel getPan() {
         return pan;
     }
 
+    /**
+     * Sets the competition panel associated with the animal.
+     *
+     * @param pan the new competition panel associated with the animal
+     * @return true if the competition panel is valid and set, false otherwise
+     */
     public boolean setPan(CompetitionPanel pan) {
         if (pan != null) {
             this.pan = pan;
@@ -205,11 +318,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for img1
+    /**
+     * Gets the first image of the animal.
+     *
+     * @return the first image of the animal
+     */
     public BufferedImage getImg1() {
         return img1;
     }
 
+    /**
+     * Sets the first image of the animal.
+     *
+     * @param img1 the new first image of the animal
+     * @return true if the first image is valid and set, false otherwise
+     */
     public boolean setImg1(BufferedImage img1) {
         if (img1 != null) {
             this.img1 = img1;
@@ -218,11 +341,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for img2
+    /**
+     * Gets the second image of the animal.
+     *
+     * @return the second image of the animal
+     */
     public BufferedImage getImg2() {
         return img2;
     }
 
+    /**
+     * Sets the second image of the animal.
+     *
+     * @param img2 the new second image of the animal
+     * @return true if the second image is valid and set, false otherwise
+     */
     public boolean setImg2(BufferedImage img2) {
         if (img2 != null) {
             this.img2 = img2;
@@ -231,11 +364,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for img3
+    /**
+     * Gets the third image of the animal.
+     *
+     * @return the third image of the animal
+     */
     public BufferedImage getImg3() {
         return img3;
     }
 
+    /**
+     * Sets the third image of the animal.
+     *
+     * @param img3 the new third image of the animal
+     * @return true if the third image is valid and set, false otherwise
+     */
     public boolean setImg3(BufferedImage img3) {
         if (img3 != null) {
             this.img3 = img3;
@@ -244,11 +387,21 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-    // Getter and Setter for img4
+    /**
+     * Gets the fourth image of the animal.
+     *
+     * @return the fourth image of the animal
+     */
     public BufferedImage getImg4() {
         return img4;
     }
 
+    /**
+     * Sets the fourth image of the animal.
+     *
+     * @param img4 the new fourth image of the animal
+     * @return true if the fourth image is valid and set, false otherwise
+     */
     public boolean setImg4(BufferedImage img4) {
         if (img4 != null) {
             this.img4 = img4;
@@ -271,15 +424,36 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
+    /**
+     * Gets the speed of the animal.
+     *
+     * @return the speed of the animal
+     */
     public int getSpeed() {
         return (int) speed;
     }
 
+    /**
+     * Gets the name of the animal.
+     *
+     * @return the name of the animal
+     */
     public String getAnimaleName() {
         return name;
     }
 
+    /**
+     * Moves the animal to a new point.
+     *
+     * @param p the new point to move to
+     * @return true if the animal moves successfully, false otherwise
+     */
+    @Override
     public boolean move(Point p) {
+        if (this.Energy <= 0) {
+            return false; // Stop moving when energy is depleted
+        }
+
         Point currentLocation = this.getLocation();
         int panelWidth = this.pan.getWidth();
         int panelHeight = this.pan.getHeight();
@@ -287,39 +461,42 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         switch (this.orientation) {
             case EAST:
                 if (currentLocation.getX() + this.speed < panelWidth - this.size) {
-                    this.setLocation(new Point(currentLocation.getX() + (int)this.speed, currentLocation.getY()));
+                    this.setLocation(new Point(currentLocation.getX() + (int) this.speed, currentLocation.getY()));
                 } else {
                     this.orientation = Orientation.SOUTH; // Change direction to SOUTH
                 }
                 break;
             case SOUTH:
                 if (currentLocation.getY() + this.speed < panelHeight - this.size) {
-                    this.setLocation(new Point(currentLocation.getX(), currentLocation.getY() + (int)this.speed));
+                    this.setLocation(new Point(currentLocation.getX(), currentLocation.getY() + (int) this.speed));
                 } else {
                     this.orientation = Orientation.WEST; // Change direction to WEST
                 }
                 break;
             case WEST:
                 if (currentLocation.getX() - this.speed > 0) {
-                    this.setLocation(new Point(currentLocation.getX() - (int)this.speed, currentLocation.getY()));
+                    this.setLocation(new Point(currentLocation.getX() - (int) this.speed, currentLocation.getY()));
                 } else {
                     this.orientation = Orientation.NORTH; // Change direction to NORTH
                 }
                 break;
             case NORTH:
                 if (currentLocation.getY() - this.speed > 0) {
-                    this.setLocation(new Point(currentLocation.getX(), currentLocation.getY() - (int)this.speed));
+                    this.setLocation(new Point(currentLocation.getX(), currentLocation.getY() - (int) this.speed));
                 } else {
-                    this.orientation = Orientation.EAST; // Reset to EAST and possibly complete the lap
+                    return false; // Stop moving when reaching the end of the lap
                 }
                 break;
         }
 
-        return true; // Always return true for simplicity
+        return true;
     }
 
-
-
+    /**
+     * Consumes energy based on the distance traveled.
+     *
+     * @param distance the distance traveled
+     */
     public void consumeEnergy(double distance) {
         double energyConsumed = distance * this.energyPerMeter;
         if (this.Energy >= energyConsumed) {
@@ -329,11 +506,11 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         }
     }
 
-
-
-
-
-
+    /**
+     * Draws the animal on the given graphics context.
+     *
+     * @param g the graphics context
+     */
     @Override
     public void drawObject(Graphics g) {
         BufferedImage img = null;
@@ -356,11 +533,12 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         }
     }
 
-
-
-
-
-
+    /**
+     * Allows the animal to eat and gain energy.
+     *
+     * @param energy the amount of energy to gain
+     * @return true if the animal successfully eats, false otherwise
+     */
     @Override
     public boolean eat(int energy) {
         if (energy > 0 && getEnergy() + energy <= getMaxEnergy()) {
@@ -371,20 +549,38 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
         return false;
     }
 
-
-
-    public int getSumEnergy(){
+    /**
+     * Gets the total energy consumed by the animal.
+     *
+     * @return the total energy consumed by the animal
+     */
+    public int getSumEnergy() {
         return sumEnergy;
     }
 
+    /**
+     * Sets the current energy of the animal.
+     *
+     * @param e the new energy amount
+     */
     public void setEnergy(int e) {
         Energy = e;
     }
 
+    /**
+     * Gets the current energy of the animal.
+     *
+     * @return the current energy of the animal
+     */
     private int getEnergy() {
         return Energy;
     }
 
+    /**
+     * Loads images for the animal based on the given name.
+     *
+     * @param nm the name of the animal
+     */
     public void loadImages(String nm) {
         try {
             img1 = ImageIO.read(new File("path_to_images/" + nm + "_east.png"));
@@ -395,27 +591,6 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
             System.out.println("Cannot load image for " + nm);
         }
     }
-
-
-    /*@Override
-    public void drawObject(Graphics g) {
-        if (orientation == Orientation.EAST) {
-            g.drawImage(img1, getLocation().getX(), getLocation().getY() - size / 10, size * 2, size, pan);
-        } else if (orientation == Orientation.SOUTH) {
-            g.drawImage(img2, getLocation().getX(), getLocation().getY() - size / 10, size, size, pan);
-        } else if (orientation == Orientation.WEST) {
-            g.drawImage(img3, getLocation().getX(), getLocation().getY() - size / 10, size * 2, size, pan);
-        } else if (orientation == Orientation.NORTH) {
-            g.drawImage(img4, getLocation().getX() - size / 2, getLocation().getY() - size / 10, size, size * 2, pan);
-        }
-    }*/
-
-
-    /**
-     * Gets the speed of the animal.
-     *
-     * @return the speed of the animal
-     */
 
     /**
      * Gets the sound of the animal. This method should be overridden by subclasses.
@@ -432,11 +607,15 @@ public abstract class Animal extends Mobile implements ILocatable, IMoveable, ID
     public void makeSound() {
         System.out.println("Animal: " + getClass().getSimpleName() + " said " + getSound());
     }
+
+    /**
+     * Gets the category of the animal. This method should be overridden by subclasses.
+     *
+     * @return the category of the animal
+     */
     public String getCategory() {
         return null;
     }
-
-
 
     /**
      * Checks if two animals are equal.

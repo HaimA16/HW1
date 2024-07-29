@@ -1,8 +1,11 @@
+/**
+ * @Author: Haim Armias 315569061
+ * @Author: Yeuda Baza 208029819
+ */
 package Graphics;
 
 import Animals.*;
 import Mobility.Point;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.imageio.ImageIO;
@@ -184,6 +187,8 @@ public class CompetitionPanel extends JPanel {
                                                         "Animal ate " + amount + " units of food. Current energy: " + selectedAnimal.getEnergyAmount(),
                                                         "Eating",
                                                         JOptionPane.INFORMATION_MESSAGE);
+                                                // הפעלת התנועה מחדש לאחר ההאכלה
+                                                moveAnimalsToEnd(List.of(selectedAnimal));
                                             } else {
                                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
                                                         "Animal cannot eat that amount of food.",
@@ -207,6 +212,7 @@ public class CompetitionPanel extends JPanel {
                         }
                     });
                     break;
+
 
                 case "Info":
                     routeButtons[i].addActionListener(new ActionListener() {
@@ -392,15 +398,17 @@ public class CompetitionPanel extends JPanel {
         for (String competition : competitionsArray) {
             if (competition.equals(competitionType)) {
                 return switch (animalType) {
-                    case "Dog", "Cat", "Snake", "Alligator" -> competition.equals("Terrestrial");
+                    case "Dog", "Cat", "Snake" -> competition.equals("Terrestrial");
                     case "Eagle", "Pigeon" -> competition.equals("Air");
                     case "Whale", "Dolphin" -> competition.equals("Water");
+                    case "Alligator" -> competition.equals("Terrestrial") || competition.equals("Water");
                     default -> false;
                 };
             }
         }
         return false;
     }
+
 
     private Animal selectAnimal() {
         List<Animal> allAnimals = new ArrayList<>();
@@ -426,6 +434,7 @@ public class CompetitionPanel extends JPanel {
         }
         return null;
     }
+
 
     private Animal createAnimalFromDialog(AddAnimalDialog dialog) {
         try {
@@ -493,8 +502,6 @@ public class CompetitionPanel extends JPanel {
             // שמירת המיקום ההתחלתי של החיה
             initialLocations.put(animal, location);
 
-            // הדפסת המיקום של החיה שנוספה
-            System.out.println("Added animal: " + animal.getName() + " - Location: (" + location.getX() + ", " + location.getY() + ")");
 
             return animal;
         } catch (Exception e) {
@@ -503,6 +510,7 @@ public class CompetitionPanel extends JPanel {
             return null;
         }
     }
+
 
     private Point getInitialLocation(String competitionType) {
         return switch (competitionType) {
@@ -529,7 +537,7 @@ public class CompetitionPanel extends JPanel {
     private Point getWaterInitialLocation(int route) {
         int height = getHeight();
         int red = 60;
-        int right = 100;
+        int right = 80;
         return switch (route) {
             case 1 -> new Point(right, height / 5 - red);
             case 2 -> new Point(right, height / 5 * 2 - red);
@@ -557,12 +565,13 @@ public class CompetitionPanel extends JPanel {
         return selectedRoute;
     }
 
-    private void moveAnimalsToEnd(List<Animal> animals) {
+    public void moveAnimalsToEnd(List<Animal> animals) {
         int delay = 16; // milliseconds
         Map<Animal, Long> finishTimes = new HashMap<>(); // Map to store finish times for each animal
         long startTime = System.nanoTime(); // Start time in nanoseconds
         Timer timer = new Timer(delay, null);
         final int fixedDistancePerMove = 10; // Fixed distance for each movement
+        final int bufferDistance = 150; // Distance from the edge of the screen to stop
 
         timer.addActionListener(new ActionListener() {
             @Override
@@ -571,51 +580,29 @@ public class CompetitionPanel extends JPanel {
                 for (Animal animal : animals) {
                     if (!finishTimes.containsKey(animal)) { // Only move animals that haven't finished
                         Point currentLocation = animal.getLocation();
-                        int newX = currentLocation.getX();
-                        int newY = currentLocation.getY();
                         double distanceToMove = (animal.getSpeed() / 50.0) * fixedDistancePerMove; // Adjust speed factor as needed
 
+                        Point newLocation = new Point(currentLocation.getX(), currentLocation.getY());
                         if (selectedCompetitionType.equals("Terrestrial")) {
-                            // Move right
-                            if (newX < getWidth() - animal.getSize() && newY == 0) {
-                                newX += distanceToMove;
-                                animal.setOrientation(Animal.Orientation.EAST);
+                            // Move the animal using its own move method
+                            if (animal.move(newLocation)) {
                                 allAnimalsAtEnd = false;
-                            }
-                            // Move down
-                            else if (newX >= getWidth() - animal.getSize() && newY < getHeight() - animal.getSize() - 50) {
-                                newY += distanceToMove;
-                                animal.setOrientation(Animal.Orientation.SOUTH);
-                                allAnimalsAtEnd = false;
-                            }
-                            // Move left
-                            else if (newY >= getHeight() - animal.getSize() - 50 && newX > 0) {
-                                newX -= distanceToMove;
-                                animal.setOrientation(Animal.Orientation.WEST);
-                                allAnimalsAtEnd = false;
-                            }
-                            // Move up
-                            else if (newX <= 0 && newY > 0) {
-                                newY -= distanceToMove;
-                                animal.setOrientation(Animal.Orientation.NORTH);
-                                allAnimalsAtEnd = false;
-                            }
-                            // Finish
-                            if (newX <= 0 && newY <= 0) {
+                            } else if (animal.getEnergyAmount() > 0) {
                                 finishTimes.put(animal, System.nanoTime() - startTime);
                             }
-                        } else {
-                            // Move right for Air and Water competitions
-                            newX += distanceToMove;
-                            if (newX < getWidth() - animal.getSize()) {
+                        } else if (selectedCompetitionType.equals("Air") || selectedCompetitionType.equals("Water")) {
+                            // Move right for Air and Water competitions using their own move method
+                            newLocation.setX(currentLocation.getX() + (int) distanceToMove);
+                            if (newLocation.getX() >= getWidth() - bufferDistance) {
+                                // If the animal is close to the edge, stop it
+                                finishTimes.put(animal, System.nanoTime() - startTime);
+                            } else if (animal.move(newLocation)) {
                                 allAnimalsAtEnd = false;
-                            } else {
-                                newX = getWidth() - animal.getSize();
+                            } else if (animal.getEnergyAmount() > 0) {
                                 finishTimes.put(animal, System.nanoTime() - startTime);
                             }
                         }
 
-                        animal.setLocation(new Point(newX, newY));
                         animal.addTotalDistance(distanceToMove);
                         animal.consumeEnergy(distanceToMove);
                     }
@@ -630,7 +617,13 @@ public class CompetitionPanel extends JPanel {
         timer.start();
     }
 
+
+
     private void showResults(Map<Animal, Long> finishTimes) {
+        if (finishTimes.isEmpty()) {
+            return; // Do not show results if no animals have finished
+        }
+
         StringBuilder results = new StringBuilder();
         results.append("Results:\n");
         DecimalFormat df = new DecimalFormat("#.##"); // Format to 2 decimal places
@@ -663,5 +656,9 @@ public class CompetitionPanel extends JPanel {
         }
         repaint();
     }
+
+
+
+
 }
 

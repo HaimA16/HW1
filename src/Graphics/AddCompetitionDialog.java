@@ -1,3 +1,7 @@
+/**
+ * @Author: Haim Armias 315569061
+ * @Author: Yeuda Baza 208029819
+ */
 package Graphics;
 
 import javax.swing.*;
@@ -5,17 +9,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * A dialog for adding a new competition.
+ * This dialog allows the user to input the competition name and select the competition type.
+ */
 public class AddCompetitionDialog extends JDialog {
     private JComboBox<String> competitionTypeComboBox;
     private JTextField competitionNameField;
-    private JTextField distanceField; // שדה להזנת המרחק
     private String selectedCompetitionType;
     private String competitionName;
-    private int distance;
 
+    /**
+     * Constructs a new AddCompetitionDialog.
+     * Initializes the dialog components and layout.
+     */
     public AddCompetitionDialog() {
         setTitle("Add Competition");
-        setSize(300, 250); // הגדלת גודל החלון
+        setSize(300, 200); // Adjusted size after removing distance field
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
@@ -40,14 +50,6 @@ public class AddCompetitionDialog extends JDialog {
         gbc.gridx = 1;
         contentPanel.add(competitionTypeComboBox, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        contentPanel.add(new JLabel("Distance:"), gbc); // תווית להזנת המרחק
-
-        distanceField = new JTextField(15);
-        gbc.gridx = 1;
-        contentPanel.add(distanceField, gbc);
-
         add(contentPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
@@ -57,12 +59,6 @@ public class AddCompetitionDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 selectedCompetitionType = (String) competitionTypeComboBox.getSelectedItem();
                 competitionName = competitionNameField.getText();
-                try {
-                    distance = Integer.parseInt(distanceField.getText());
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(AddCompetitionDialog.this, "Please enter a valid distance.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
                 setVisible(false);
             }
         });
@@ -74,15 +70,21 @@ public class AddCompetitionDialog extends JDialog {
         setModal(true);
     }
 
+    /**
+     * Returns the selected competition type.
+     *
+     * @return the selected competition type
+     */
     public String getCompetitionType() {
         return selectedCompetitionType;
     }
 
+    /**
+     * Returns the competition name entered by the user.
+     *
+     * @return the competition name
+     */
     public String getCompetitionName() {
         return competitionName;
-    }
-
-    public int getDistance() {
-        return distance;
     }
 }
