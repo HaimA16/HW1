@@ -12,6 +12,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -53,10 +55,30 @@ public class CompetitionPanel extends JPanel {
                         animal.drawObject(g);
                     }
                 }
+
             }
+
         };
+
         backgroundPanel.setLayout(new BorderLayout());
         backgroundPanel.setOpaque(false);
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                // עדכון מיקום התמונות
+                for (List<Animal> animalList : competitionAnimals.values()) {
+                    for (Animal animal : animalList) {
+                        Point initialLocation = initialLocations.get(animal);
+                        if (initialLocation != null) {
+                            // חישוב מיקום חדש בהתבסס על גודל המסך החדש
+                            int newX = (int) (initialLocation.getX() * getWidth() / 900.0);
+                            int newY = (int) (initialLocation.getY() * getHeight() / 800.0);
+                            animal.setLocation(new Point(newX, newY));
+                        }
+                    }
+                }
+                repaint();
+            }
+        });
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridBagLayout());
@@ -68,7 +90,6 @@ public class CompetitionPanel extends JPanel {
 
         String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info" ,"Play", "Exit"};
         JButton[] routeButtons = new JButton[routeNames.length];
-        int sumEnergy = 0;
         for (int i = 0; i < routeNames.length; i++) {
             routeButtons[i] = new JButton(routeNames[i]);
             gbc.gridx = i;
