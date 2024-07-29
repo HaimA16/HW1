@@ -1,7 +1,12 @@
 /**
+ * CompetitionPanel is a custom JPanel that manages and displays a competition of animals.
+ * It allows adding competitions, adding animals to competitions, removing animals, feeding animals,
+ * displaying information about the animals, and starting the competition.
+ *
  * @Author: Haim Armias 315569061
  * @Author: Yeuda Baza 208029819
  */
+
 package Graphics;
 
 import Animals.*;
@@ -34,6 +39,11 @@ public class CompetitionPanel extends JPanel {
     private Map<Animal, Point> initialLocations = new HashMap<>();
     private List<String> createdCompetitions = new ArrayList<>();
 
+    /**
+     * Constructs a new CompetitionPanel.
+     * Initializes the background image, layout, and UI components.
+     */
+
     public CompetitionPanel() {
         try {
             backgroundImage = ImageIO.read(new File("C:\\Users\\haima\\IdeaProjects\\HW1\\src\\graphics2\\competitionBackground.png"));
@@ -64,12 +74,12 @@ public class CompetitionPanel extends JPanel {
         backgroundPanel.setOpaque(false);
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                // עדכון מיקום התמונות
+                // Update image locations
                 for (List<Animal> animalList : competitionAnimals.values()) {
                     for (Animal animal : animalList) {
                         Point initialLocation = initialLocations.get(animal);
                         if (initialLocation != null) {
-                            // חישוב מיקום חדש בהתבסס על גודל המסך החדש
+                            // Calculate new location based on new screen size
                             int newX = (int) (initialLocation.getX() * getWidth() / 900.0);
                             int newY = (int) (initialLocation.getY() * getHeight() / 800.0);
                             animal.setLocation(new Point(newX, newY));
@@ -148,7 +158,7 @@ public class CompetitionPanel extends JPanel {
                                                 "Animal added: " + animalType + " for " + competitionNames.get(competitionType) + " (" + competitionType + ") competition",
                                                 "Animal Added",
                                                 JOptionPane.INFORMATION_MESSAGE);
-                                        repaint(); // עדכון המסך לאחר הוספת החיה
+                                        repaint(); // Update screen after adding the animal
                                     }
                                 } catch (Exception ex) {
                                     JOptionPane.showMessageDialog(
@@ -177,7 +187,7 @@ public class CompetitionPanel extends JPanel {
                                                     "Animal removed: " + selectedAnimal.getName(),
                                                     "Animal Removed",
                                                     JOptionPane.INFORMATION_MESSAGE);
-                                            repaint(); // עדכון המסך לאחר הסרת החיה
+                                            repaint(); // Update screen after removing
                                             break;
                                         }
                                     }
@@ -210,7 +220,7 @@ public class CompetitionPanel extends JPanel {
                                                         "Animal ate " + amount + " units of food. Current energy: " + selectedAnimal.getEnergyAmount(),
                                                         "Eating",
                                                         JOptionPane.INFORMATION_MESSAGE);
-                                                // הפעלת התנועה מחדש לאחר ההאכלה
+                                                // Restart movement after feeding
                                                 moveAnimalsToEnd(List.of(selectedAnimal));
                                             } else {
                                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
@@ -416,6 +426,13 @@ public class CompetitionPanel extends JPanel {
         add(backgroundPanel, BorderLayout.CENTER);
         add(overlayPanel, BorderLayout.SOUTH);
     }
+    /**
+     * Validates if the given animal type can participate in the specified competition type.
+     *
+     * @param animalType The type of the animal.
+     * @param competitionType The type of the competition.
+     * @return true if the animal type is valid for the competition type, false otherwise.
+     */
 
     private boolean isValidCompetitionTypeForAnimal(String animalType, String competitionType) {
         for (String competition : competitionsArray) {
@@ -432,7 +449,11 @@ public class CompetitionPanel extends JPanel {
         return false;
     }
 
-
+    /**
+     * Opens a dialog to select an animal from the list of all animals in the competitions.
+     *
+     * @return The selected animal, or null if no animal is selected.
+     */
     private Animal selectAnimal() {
         List<Animal> allAnimals = new ArrayList<>();
         for (List<Animal> animalList : competitionAnimals.values()) {
@@ -457,7 +478,12 @@ public class CompetitionPanel extends JPanel {
         }
         return null;
     }
-
+    /**
+     * Creates an animal from the dialog input.
+     *
+     * @param dialog The dialog containing the animal details.
+     * @return The created animal.
+     */
 
     private Animal createAnimalFromDialog(AddAnimalDialog dialog) {
         try {
@@ -522,7 +548,7 @@ public class CompetitionPanel extends JPanel {
                     throw new IllegalArgumentException("Invalid animal type!");
             }
 
-            // שמירת המיקום ההתחלתי של החיה
+            // Save the initial location of the animal
             initialLocations.put(animal, location);
 
 
@@ -533,7 +559,12 @@ public class CompetitionPanel extends JPanel {
             return null;
         }
     }
-
+    /**
+     * Gets the initial location for an animal based on the competition type.
+     *
+     * @param competitionType The type of the competition.
+     * @return The initial location as a Point.
+     */
 
     private Point getInitialLocation(String competitionType) {
         return switch (competitionType) {
@@ -543,6 +574,12 @@ public class CompetitionPanel extends JPanel {
             default -> throw new IllegalArgumentException("Invalid competition type!");
         };
     }
+    /**
+     * Gets the initial location for an air competition based on the selected route.
+     *
+     * @param route The selected route.
+     * @return The initial location as a Point.
+     */
 
     private Point getAirInitialLocation(int route) {
         int height = getHeight();
@@ -557,6 +594,12 @@ public class CompetitionPanel extends JPanel {
             default -> throw new IllegalArgumentException("Invalid route for Air!");
         };
     }
+    /**
+     * Gets the initial location for a water competition based on the selected route.
+     *
+     * @param route The selected route.
+     * @return The initial location as a Point.
+     */
 
     private Point getWaterInitialLocation(int route) {
         int height = getHeight();
@@ -570,6 +613,13 @@ public class CompetitionPanel extends JPanel {
             default -> throw new IllegalArgumentException("Invalid route for Water!");
         };
     }
+
+    /**
+     * Selects a route for the competition.
+     *
+     * @param max The maximum number of routes.
+     * @return The selected route.
+     */
 
     private int selectRoute(int max) {
         Integer[] routes = new Integer[max - 1 + 1];
@@ -588,6 +638,12 @@ public class CompetitionPanel extends JPanel {
 
         return selectedRoute;
     }
+
+    /**
+     * Moves the animals to the end of the competition.
+     *
+     * @param animals The list of animals to move.
+     */
 
     public void moveAnimalsToEnd(List<Animal> animals) {
         int delay = 16; // milliseconds
@@ -641,7 +697,11 @@ public class CompetitionPanel extends JPanel {
         timer.start();
     }
 
-
+    /**
+     * Shows the results of the competition.
+     *
+     * @param finishTimes The map of animals and their finish times.
+     */
 
     private void showResults(Map<Animal, Long> finishTimes) {
         if (finishTimes.isEmpty()) {
@@ -669,6 +729,11 @@ public class CompetitionPanel extends JPanel {
         // Reset animals to initial positions
         resetAnimals(new ArrayList<>(finishTimes.keySet()));
     }
+    /**
+     * Resets the animals to their initial positions.
+     *
+     * @param animals The list of animals to reset.
+     */
 
     private void resetAnimals(List<Animal> animals) {
         for (Animal animal : animals) {
@@ -680,9 +745,6 @@ public class CompetitionPanel extends JPanel {
         }
         repaint();
     }
-
-
-
 
 }
 
