@@ -18,7 +18,7 @@ public class AddAnimalDialog extends JDialog {
     private JTextField weightField;
     private JTextField speedField;
     private JComboBox<String> genderComboBox;
-    private JComboBox<String> competitionTypeComboBox; // תיבת בחירה לסוג תחרות
+    private JComboBox<String> competitionTypeComboBox; // For all animals
 
     // Additional fields for all animals
     private JTextField idField;
@@ -301,13 +301,22 @@ public class AddAnimalDialog extends JDialog {
             }
 
             if (lengthField != null) {
-                Double.parseDouble(lengthField.getText());
+                double length =Double.parseDouble(lengthField.getText());
+                if (length <= 0) {
+                    throw new IllegalArgumentException("Length must be grater than 0.");
+                }
             }
             if (altitudeOfFlightField != null) {
-                Double.parseDouble(altitudeOfFlightField.getText());
+                double altitudeOfFlight = Double.parseDouble(altitudeOfFlightField.getText());
+                if(altitudeOfFlight <= 0 || altitudeOfFlight > 100) {
+                    throw new IllegalArgumentException("Altitude of Flight must be grater than 0 and lower than 100.");
+                }
             }
             if (wingSpanField != null) {
-                Double.parseDouble(wingSpanField.getText());
+                double wingSpan = Double.parseDouble(wingSpanField.getText());
+                if (wingSpan <= 0) {
+                    throw new IllegalArgumentException("Wing Span must be grater than 0.");
+                }
             }
             if (divingDepthField != null) {
                 double divingDepth = Double.parseDouble(divingDepthField.getText());

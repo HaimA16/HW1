@@ -9,7 +9,6 @@ import Mobility.ILocatable;
 import Mobility.Mobile;
 import Olympics.Medal;
 import Mobility.Point;
-
 import javax.imageio.ImageIO;
 import javax.xml.stream.Location;
 import java.awt.*;

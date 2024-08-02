@@ -1,10 +1,7 @@
-/**
- * @Author: Haim Armias 315569061
- * @Author: Yeuda Baza 208029819
- */
 package Graphics;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,10 +11,13 @@ import java.awt.event.ActionListener;
  * This dialog allows the user to input the competition name and select the competition type.
  */
 public class AddCompetitionDialog extends JDialog {
-    private JComboBox<String> competitionTypeComboBox;
+    private JRadioButton relayRaceButton;
+    private JRadioButton regularRaceButton;
     private JTextField competitionNameField;
-    private String selectedCompetitionType;
+    private JTable animalTable;
+    private DefaultTableModel tableModel;
     private String competitionName;
+    private boolean isRelayRace;
 
     /**
      * Constructs a new AddCompetitionDialog.
@@ -25,7 +25,7 @@ public class AddCompetitionDialog extends JDialog {
      */
     public AddCompetitionDialog() {
         setTitle("Add Competition");
-        setSize(300, 200); // Adjusted size after removing distance field
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
@@ -46,19 +46,44 @@ public class AddCompetitionDialog extends JDialog {
         gbc.gridy = 1;
         contentPanel.add(new JLabel("Select Competition Type:"), gbc);
 
-        competitionTypeComboBox = new JComboBox<>(new String[]{"Air", "Water", "Terrestrial"});
-        gbc.gridx = 1;
-        contentPanel.add(competitionTypeComboBox, gbc);
+        relayRaceButton = new JRadioButton("Relay Race");
+        regularRaceButton = new JRadioButton("Regular Race");
+        ButtonGroup raceTypeGroup = new ButtonGroup();
+        raceTypeGroup.add(relayRaceButton);
+        raceTypeGroup.add(regularRaceButton);
 
-        add(contentPanel, BorderLayout.CENTER);
+        JPanel raceTypePanel = new JPanel();
+        raceTypePanel.add(relayRaceButton);
+        raceTypePanel.add(regularRaceButton);
+
+        gbc.gridx = 1;
+        contentPanel.add(raceTypePanel, gbc);
+
+        add(contentPanel, BorderLayout.NORTH);
+
+        // Table for animal groups
+        String[] columnNames = {"Group 1", "Group 2", "Group 3"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        animalTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(animalTable);
+        add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
+        JButton addButton = new JButton("Add Animal");
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addAnimal();
+            }
+        });
+        buttonPanel.add(addButton);
+
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                selectedCompetitionType = (String) competitionTypeComboBox.getSelectedItem();
                 competitionName = competitionNameField.getText();
+                isRelayRace = relayRaceButton.isSelected();
                 setVisible(false);
             }
         });
@@ -71,12 +96,17 @@ public class AddCompetitionDialog extends JDialog {
     }
 
     /**
-     * Returns the selected competition type.
-     *
-     * @return the selected competition type
+     * Adds a new animal to the selected group.
      */
-    public String getCompetitionType() {
-        return selectedCompetitionType;
+    private void addAnimal() {
+        String animalName = JOptionPane.showInputDialog(this, "Enter animal name:");
+        if (animalName != null && !animalName.isEmpty()) {
+            int selectedColumn = animalTable.getSelectedColumn();
+            if (selectedColumn == -1) {
+                selectedColumn = 0;
+            }
+            tableModel.addRow(new Object[]{animalName, "", ""});
+        }
     }
 
     /**
@@ -86,5 +116,22 @@ public class AddCompetitionDialog extends JDialog {
      */
     public String getCompetitionName() {
         return competitionName;
+    }
+
+    /**
+     * Returns whether the competition is a relay race.
+     *
+     * @return true if the competition is a relay race, false otherwise
+     */
+    public boolean isRelayRace() {
+        return isRelayRace;
+    }
+
+    public String getCompetitionType() {
+        if (relayRaceButton.isSelected()) {
+            return "Relay Race";
+        } else {
+            return "Regular Race";
+        }
     }
 }

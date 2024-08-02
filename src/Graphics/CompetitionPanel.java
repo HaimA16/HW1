@@ -34,8 +34,8 @@ public class CompetitionPanel extends JPanel {
     private String[] competitionsArray = {"Air", "Water", "Terrestrial"};
     private Map<String, List<Animal>> competitionAnimals = new HashMap<>();
     private Map<String, String> competitionNames = new HashMap<>(); // Map to store competition names for each type
-    private List<Animal> removedAnimals = new ArrayList<>(); // רשימה לשמירת החיות שנמחקו
-    private String selectedCompetitionType; // משתנה לאחסון סוג התחרות שנבחרה
+    private List<Animal> removedAnimals = new ArrayList<>(); // list for removed animals
+    private String selectedCompetitionType; // variable to store the selected competition type
     private Map<Animal, Point> initialLocations = new HashMap<>();
     private List<String> createdCompetitions = new ArrayList<>();
 
@@ -100,7 +100,7 @@ public class CompetitionPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info" /*"Play"*/, "Exit"};
+        String[] routeNames = {"Add Competition", "Add Animal", "Clear", "Eat", "Info" ,"Play", "Exit"};
         JButton[] routeButtons = new JButton[routeNames.length];
         for (int i = 0; i < routeNames.length; i++) {
             routeButtons[i] = new JButton(routeNames[i]);
@@ -220,8 +220,6 @@ public class CompetitionPanel extends JPanel {
                                                         "Animal ate " + amount + " units of food. Current energy: " + selectedAnimal.getEnergyAmount(),
                                                         "Eating",
                                                         JOptionPane.INFORMATION_MESSAGE);
-                                                // Restart movement after feeding
-                                                moveAnimalsToEnd(List.of(selectedAnimal));
                                             } else {
                                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
                                                         "Animal cannot eat that amount of food.",
@@ -323,7 +321,7 @@ public class CompetitionPanel extends JPanel {
 
 
 
-                /*case "Play":
+                case "Play":
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -363,7 +361,7 @@ public class CompetitionPanel extends JPanel {
                             }
                         }
                     });
-                    break;*/
+                    break;
 
                 case "Exit":
                     routeButtons[i].addActionListener(new ActionListener() {
