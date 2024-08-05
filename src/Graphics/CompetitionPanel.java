@@ -65,8 +65,8 @@ public class CompetitionPanel extends JPanel {
                         animal.drawObject(g);
                     }
                 }
-
             }
+
 
         };
 
@@ -114,14 +114,13 @@ public class CompetitionPanel extends JPanel {
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            AddCompetitionDialog dialog = new AddCompetitionDialog((Frame) SwingUtilities.getWindowAncestor(CompetitionPanel.this));
+                            AddCompetitionDialog dialog = new AddCompetitionDialog((Frame) SwingUtilities.getWindowAncestor(CompetitionPanel.this), CompetitionPanel.this);
                             dialog.setVisible(true);
                             selectedCompetitionType = dialog.getCompetitionType();
                             String competitionName = dialog.getCompetitionName();
                             if (selectedCompetitionType != null && !selectedCompetitionType.isEmpty()) {
-                                // Initialize the list for the new competition type if not already present
                                 competitionAnimals.putIfAbsent(selectedCompetitionType, new ArrayList<>());
-                                competitionNames.put(selectedCompetitionType, competitionName); // Save the competition name
+                                competitionNames.put(selectedCompetitionType, competitionName);
                                 JOptionPane.showMessageDialog(CompetitionPanel.this,
                                         "Competition added: " + competitionName + " (" + selectedCompetitionType + ")",
                                         "Competition Added",
@@ -743,6 +742,37 @@ public class CompetitionPanel extends JPanel {
         }
         repaint();
     }
+
+    public void addAnimalFromCompetitionDialog(Animal animal, String competitionType, int route) {
+        if (competitionAnimals.containsKey(competitionType)) {
+            List<Animal> animalList = competitionAnimals.get(competitionType);
+            animalList.add(animal);
+
+            // Set the animal's location based on the route
+            Point location;
+            if (competitionType.equals("Air")) {
+                location = getAirInitialLocation(route);
+            } else if (competitionType.equals("Water")) {
+                location = getWaterInitialLocation(route);
+            } else {
+                location = new Point(0, route * 100); // Adjust for Terrestrial
+            }
+            animal.setLocation(location);
+            initialLocations.put(animal, location);
+
+            repaint();
+        }
+    }
+
+    public void addAnimal(Animal animal, String competitionType) {
+        if (!competitionAnimals.containsKey(competitionType)) {
+            competitionAnimals.put(competitionType, new ArrayList<>());
+        }
+        competitionAnimals.get(competitionType).add(animal);
+        initialLocations.put(animal, animal.getLocation());
+        repaint();
+    }
+
 
 }
 

@@ -1,9 +1,15 @@
 package Graphics;
 
+import Animals.*;
+import Mobility.Point;
+
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddCompetitionDialog extends JDialog {
     private JTextField competitionNameField;
@@ -15,10 +21,14 @@ public class AddCompetitionDialog extends JDialog {
     private JButton addGroupButton;
     private String selectedCompetitionType;
     private int maxAnimalsPerGroup;
+    private CompetitionPanel competitionPanel;
     private boolean competitionTypeSet = false;
+    private Map<Animal, Point> initialLocations = new HashMap<>();
+    private Map<String, List<Animal>> competitionAnimals = new HashMap<>();
 
-    public AddCompetitionDialog(Frame owner) {
+    public AddCompetitionDialog(Frame owner, CompetitionPanel competitionPanel) {
         super(owner, "Add Competition", true);
+        this.competitionPanel = competitionPanel;
         setSize(700, 600);
         setLocationRelativeTo(owner);
         setLayout(new BorderLayout(10, 10));
@@ -235,11 +245,180 @@ public class AddCompetitionDialog extends JDialog {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            String animalName = addAnimalDialog.getNameField().getText();
-            groups.get(groupIndex).add(animalName);
-            updateGroupsPanel();
+
+            Animal animal = createAnimalFromDialog(addAnimalDialog);
+            if (animal != null) {
+                String animalName = addAnimalDialog.getNameField().getText();
+                groups.get(groupIndex).add(animalName);
+
+                int route;
+                if (regularCompetitionRadio.isSelected()) {
+                    route = selectRoute(selectedCompetitionType.equals("Air") ? 5 : 4);
+                } else {
+                    route = groupIndex + 1; // For relay, use group index as route
+                }
+
+                // Update the animal's location based on the route
+                Point location;
+                if (selectedCompetitionType.equals("Air")) {
+                    location = getAirInitialLocation(route);
+                } else if (selectedCompetitionType.equals("Water")) {
+                    location = getWaterInitialLocation(route);
+                } else { // Terrestrial
+                    location = new Point(0, route * 100);
+                }
+                animal.setLocation(location);
+
+                // Add the animal directly to the CompetitionPanel
+                competitionPanel.addAnimal(animal, selectedCompetitionType);
+
+                updateGroupsPanel();
+
+                // Force repaint of the CompetitionPanel
+                competitionPanel.repaint();
+            }
         }
     }
+
+
+    private Animal createAnimalFromDialog(AddAnimalDialog dialog) {
+        try {
+            String name = dialog.getNameField().getText();
+            Animal.Gender gender = Animal.Gender.valueOf(dialog.getGenderComboBox().getSelectedItem().toString().toUpperCase());
+            double weight = Double.parseDouble(dialog.getWeightField().getText());
+            double speed = Double.parseDouble(dialog.getSpeedField().getText());
+            Point location = getInitialLocation(selectedCompetitionType); // Get initial location based on competition type
+            Animal.Orientation orientation = Animal.Orientation.EAST; // Set initial orientation to EAST
+            int size = 65; // Set size to 65 pixels
+            int id = Integer.parseInt(dialog.getIdField().getText());
+            int maxEnergy = Integer.parseInt(dialog.getMaxEnergyField().getText());
+            int energyPerMeter = Integer.parseInt(dialog.getEnergyPerMeterField().getText());
+            CompetitionPanel pan = this.competitionPanel;
+            BufferedImage img1 = null; // You might want to load an image based on the animal type
+
+            String animalType = dialog.getAnimalType();
+            Animal animal;
+            switch (animalType) {
+                case "Dog":
+                    String breed = dialog.getBreedField().getText();
+                    int noLegs = 4;
+                    animal = new Dog(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, breed);
+                    break;
+                case "Cat":
+                    boolean castrated = dialog.getCastratedComboBox().getSelectedItem().toString().equalsIgnoreCase("Yes");
+                    noLegs = 4;
+                    animal = new Cat(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, noLegs, castrated);
+                    break;
+                case "Snake":
+                    Snake.PoisonousLevel venomLevel = Snake.PoisonousLevel.valueOf(dialog.getVenomLevelComboBox().getSelectedItem().toString().toUpperCase());
+                    double length = Double.parseDouble(dialog.getLengthField().getText());
+                    animal = new Snake(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, 0, length, venomLevel);
+                    break;
+                case "Eagle":
+                    double altitudeOfFlight = Double.parseDouble(dialog.getAltitudeOfFlightField().getText());
+                    double wingSpan = Double.parseDouble(dialog.getWingSpanField().getText());
+                    animal = new Eagle(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, altitudeOfFlight, wingSpan);
+                    break;
+                case "Pigeon":
+                    String family = dialog.getFamilyField().getText();
+                    wingSpan = Double.parseDouble(dialog.getWingSpanField().getText());
+                    animal = new Pigeon(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, wingSpan, family);
+                    break;
+                case "Alligator":
+                    double divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
+                    String habitatLocation = dialog.getHabitatLocationField().getText();
+                    noLegs = 4;
+                    animal = new Alligator(name, gender, weight, speed, null, location, null, orientation, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, noLegs, habitatLocation);
+                    break;
+                case "Whale":
+                    String foodType = dialog.getFoodTypeField().getText();
+                    divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
+                    animal = new Whale(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, foodType);
+                    break;
+                case "Dolphin":
+                    Dolphin.WaterType waterType = Dolphin.WaterType.valueOf(dialog.getWaterTypeComboBox().getSelectedItem().toString().toUpperCase());
+                    divingDepth = Double.parseDouble(dialog.getDivingDepthField().getText());
+                    animal = new Dolphin(name, gender, weight, speed, null, location, null, Animal.Orientation.EAST, size, id, maxEnergy, energyPerMeter, pan, img1, divingDepth, waterType);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid animal type!");
+            }
+
+            // Save the initial location of the animal
+            initialLocations.put(animal, location);
+
+
+            return animal;
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error creating animal: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+    private Point getInitialLocation(String competitionType) {
+        return switch (competitionType) {
+            case "Terrestrial" -> new Point(0, 0); // Adjust y-coordinate based on route
+            case "Air" -> getAirInitialLocation(selectRoute(5));
+            case "Water" -> getWaterInitialLocation(selectRoute(4));
+            default -> throw new IllegalArgumentException("Invalid competition type!");
+        };
+    }
+    /**
+     * Gets the initial location for an air competition based on the selected route.
+     *
+     * @param route The selected route.
+     * @return The initial location as a Point.
+     */
+
+    private Point getAirInitialLocation(int route) {
+        int height = getHeight();
+        int add = 20;
+        int right = 70;
+        return switch (route) {
+            case 1 -> new Point(right, 0);
+            case 2 -> new Point(right, height / 5 + add);
+            case 3 -> new Point(right, height / 5 * 2 + add);
+            case 4 -> new Point(right, height / 5 * 3 + add);
+            case 5 -> new Point(right, height / 5 * 4 + add);
+            default -> throw new IllegalArgumentException("Invalid route for Air!");
+        };
+    }
+    /**
+     * Gets the initial location for a water competition based on the selected route.
+     *
+     * @param route The selected route.
+     * @return The initial location as a Point.
+     */
+
+    private Point getWaterInitialLocation(int route) {
+        int height = getHeight();
+        int red = 60;
+        int right = 70;
+        return switch (route) {
+            case 1 -> new Point(right, height / 5 - red);
+            case 2 -> new Point(right, height / 5 * 2 - red);
+            case 3 -> new Point(right, height / 5 * 3 - red);
+            case 4 -> new Point(right, height / 5 * 4 - red);
+            default -> throw new IllegalArgumentException("Invalid route for Water!");
+        };
+    }
+
+
+    private int selectRoute(int max) {
+        Integer[] routes = new Integer[max];
+        for (int i = 0; i < routes.length; i++) {
+            routes[i] = i + 1;
+        }
+
+        return (Integer) JOptionPane.showInputDialog(this,
+                "Select a route:",
+                "Select Route",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                routes,
+                routes[0]);
+    }
+
 
     private boolean isAnimalTypeValidForCompetition(String animalType) {
         switch (selectedCompetitionType) {
@@ -274,6 +453,8 @@ public class AddCompetitionDialog extends JDialog {
         return true;
     }
 
+
+
     public String getCompetitionName() {
         return competitionNameField.getText();
     }
@@ -288,5 +469,25 @@ public class AddCompetitionDialog extends JDialog {
 
     public List<List<String>> getGroups() {
         return groups;
+    }
+    public void addAnimalFromCompetitionDialog(Animal animal, String competitionType, int route) {
+        if (competitionAnimals.containsKey(competitionType)) {
+            List<Animal> animalList = competitionAnimals.get(competitionType);
+            animalList.add(animal);
+
+            // Set the animal's location based on the route
+            Point location;
+            if (competitionType.equals("Air")) {
+                location = getAirInitialLocation(route);
+            } else if (competitionType.equals("Water")) {
+                location = getWaterInitialLocation(route);
+            } else {
+                location = new Point(0, route * 100); // Adjust for Terrestrial
+            }
+            animal.setLocation(location);
+            initialLocations.put(animal, location);
+
+            repaint();
+        }
     }
 }
