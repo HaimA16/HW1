@@ -14,6 +14,8 @@ public class AddCompetitionDialog extends JDialog {
     private List<List<String>> groups;
     private JButton addGroupButton;
     private String selectedCompetitionType;
+    private int maxAnimalsPerGroup;
+    private boolean competitionTypeSet = false;
 
     public AddCompetitionDialog(Frame owner) {
         super(owner, "Add Competition", true);
@@ -89,18 +91,24 @@ public class AddCompetitionDialog extends JDialog {
         // Action Listeners
         addGroupButton.addActionListener(e -> addGroup());
         regularCompetitionRadio.addActionListener(e -> {
-            updateSelectedCompetitionType();
-            lockCompetitionType();
-            updateGroupsPanel();
+            if (!competitionTypeSet) {
+                updateSelectedCompetitionType();
+                updateGroupsPanel();
+                lockCompetitionType();
+            }
         });
         relayCompetitionRadio.addActionListener(e -> {
-            updateSelectedCompetitionType();
-            lockCompetitionType();
-            updateGroupsPanel();
+            if (!competitionTypeSet) {
+                updateSelectedCompetitionType();
+                updateGroupsPanel();
+                lockCompetitionType();
+            }
         });
         competitionTypeComboBox.addActionListener(e -> {
-            updateSelectedCompetitionType();
-            updateGroupsPanel();
+            if (!competitionTypeSet) {
+                updateSelectedCompetitionType();
+                updateGroupsPanel();
+            }
         });
         okButton.addActionListener(e -> {
             if (validateInput()) {
@@ -112,12 +120,34 @@ public class AddCompetitionDialog extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    private void updateSelectedCompetitionType() {
-        selectedCompetitionType = (String) competitionTypeComboBox.getSelectedItem();
+    private void lockCompetitionType() {
+        competitionTypeSet = true;
+        regularCompetitionRadio.setEnabled(false);
+        relayCompetitionRadio.setEnabled(false);
+        competitionTypeComboBox.setEnabled(false);
     }
 
-    private void lockCompetitionType() {
-        competitionTypeComboBox.setEnabled(false);
+    private void updateSelectedCompetitionType() {
+        selectedCompetitionType = (String) competitionTypeComboBox.getSelectedItem();
+        updateMaxAnimalsPerGroup();
+    }
+
+    private void updateMaxAnimalsPerGroup() {
+        if (regularCompetitionRadio.isSelected()) {
+            maxAnimalsPerGroup = Integer.MAX_VALUE; // No limit for regular competition
+        } else {
+            switch (selectedCompetitionType) {
+                case "Air":
+                case "Water":
+                    maxAnimalsPerGroup = 2;
+                    break;
+                case "Terrestrial":
+                    maxAnimalsPerGroup = 4;
+                    break;
+                default:
+                    maxAnimalsPerGroup = 0;
+            }
+        }
     }
 
     private void addGroup() {
@@ -165,6 +195,7 @@ public class AddCompetitionDialog extends JDialog {
             JButton addAnimalButton = new JButton("Add Animal");
             final int groupIndex = i;
             addAnimalButton.addActionListener(e -> addAnimal(groupIndex));
+            addAnimalButton.setEnabled(regularCompetitionRadio.isSelected() || groups.get(i).size() < maxAnimalsPerGroup);
             groupPanel.add(addAnimalButton, BorderLayout.SOUTH);
 
             gbc.gridx = i;
@@ -181,6 +212,14 @@ public class AddCompetitionDialog extends JDialog {
             JOptionPane.showMessageDialog(this,
                     "Please select a competition type first.",
                     "No Competition Type",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!regularCompetitionRadio.isSelected() && groups.get(groupIndex).size() >= maxAnimalsPerGroup) {
+            JOptionPane.showMessageDialog(this,
+                    "Maximum number of animals reached for this group in relay competition.",
+                    "Group Full",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
