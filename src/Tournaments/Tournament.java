@@ -23,5 +23,8 @@ public abstract class Tournament {
      * Return the thread of the tournament.
      * @return Thread.
      */
-    public TournamentThread getThread(){return thread;}
+    public TournamentThread getThread() {
+        return thread;
+    }
+
 }

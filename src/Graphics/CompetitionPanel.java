@@ -114,7 +114,7 @@ public class CompetitionPanel extends JPanel {
                     routeButtons[i].addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            AddCompetitionDialog dialog = new AddCompetitionDialog();
+                            AddCompetitionDialog dialog = new AddCompetitionDialog((Frame) SwingUtilities.getWindowAncestor(CompetitionPanel.this));
                             dialog.setVisible(true);
                             selectedCompetitionType = dialog.getCompetitionType();
                             String competitionName = dialog.getCompetitionName();

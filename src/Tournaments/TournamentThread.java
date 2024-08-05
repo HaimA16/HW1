@@ -1,63 +1,94 @@
-
 package Tournaments;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Date;
+import java.util.Map;
 
-/**
- * the tournament thread class
- */
 public class TournamentThread implements Runnable {
-    private Scores scores;
+    private final Scores scores;
     private Boolean startSignal;
-    private int groups;
+    private final int groups;
+    private final JFrame resultsFrame;
 
-    /**
-     * Constructor
-     * @param score Scores
-     * @param start StartSignal
-     * @param group number of groups
-     */
-    public TournamentThread(Scores score, Boolean start,int group){
-        scores=score;
-        startSignal=start;
-        groups=group;
+    public TournamentThread(Scores scores, Boolean startSignal, int groups) {
+        this.scores = scores;
+        this.startSignal = startSignal;
+        this.groups = groups;
+        this.resultsFrame = createResultsFrame();
     }
 
-
-
-
-    /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
-     *
-     * @see Thread#run()
-     */
     @Override
     public void run() {
-        int teamsFinished=0;
-        synchronized (startSignal){
-
+        // Start the competition
+        synchronized (startSignal) {
+            startSignal = true;
             startSignal.notifyAll();
         }
-        while (true){
-            synchronized (scores){
-                try {
-                    scores.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            teamsFinished++;
 
-            System.out.println("Scores updated");
-            if(teamsFinished==groups){
+        while (true) {
+            Map<String, Date> allScores = scores.getAll();
+            updateResultsDisplay(allScores);
+
+            if (allScores.size() == groups) {
+                break;
+            }
+
+            try {
+                Thread.sleep(1000); // Update every second
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 break;
             }
         }
+
+        // Show final results
+        showFinalResults(scores.getAll());
+    }
+
+    private JFrame createResultsFrame() {
+        JFrame frame = new JFrame("Tournament Results");
+        frame.setSize(300, 200);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.add(new JLabel("Results will appear here", SwingConstants.CENTER), BorderLayout.CENTER);
+        frame.setVisible(true);
+        return frame;
+    }
+
+    private void updateResultsDisplay(Map<String, Date> currentScores) {
+        StringBuilder results = new StringBuilder("<html><body>");
+        for (int i = 1; i <= groups; i++) {
+            String groupName = "Group " + i;
+            Date finishTime = currentScores.get(groupName);
+            if (finishTime != null) {
+                results.append(groupName).append(": ").append(finishTime).append("<br>");
+            } else {
+                results.append(groupName).append(": Not finished<br>");
+            }
+        }
+        results.append("</body></html>");
+
+        SwingUtilities.invokeLater(() -> {
+            resultsFrame.getContentPane().removeAll();
+            resultsFrame.add(new JLabel(results.toString(), SwingConstants.CENTER));
+            resultsFrame.revalidate();
+            resultsFrame.repaint();
+        });
+    }
+
+    private void showFinalResults(Map<String, Date> finalScores) {
+        StringBuilder finalResults = new StringBuilder("<html><body><h2>Final Results:</h2>");
+        finalScores.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .forEach(entry -> finalResults.append(entry.getKey()).append(": ").append(entry.getValue()).append("<br>"));
+        finalResults.append("</body></html>");
+
+        SwingUtilities.invokeLater(() -> {
+            resultsFrame.getContentPane().removeAll();
+            resultsFrame.add(new JLabel(finalResults.toString(), SwingConstants.CENTER));
+            resultsFrame.revalidate();
+            resultsFrame.repaint();
+        });
     }
 }

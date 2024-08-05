@@ -3,33 +3,14 @@ package Tournaments;
 
 import java.util.*;
 
-/**
- * the scores class
- */
 public class Scores {
-    private Map<String, Date> scores;
+    private Map<String, Date> scores = Collections.synchronizedMap(new HashMap<>());
 
-    /**
-     * Constructor
-     */
-    public Scores(){
-        scores= Collections.synchronizedMap(new HashMap<>());
+    public void add(String name) {
+        scores.put(name, new Date());
     }
 
-    /**
-     * Adding String,Date to scores
-     * @param name of the team
-     */
-    public void add(String name){
-        scores.put(name,new Date());
-        System.out.println(scores);
-    }
-
-    /**
-     * get all
-     * @return Scores
-     */
-    public Map getAll(){
+    public Map<String, Date> getAll() {
         return scores;
     }
 }

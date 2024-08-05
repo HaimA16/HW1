@@ -1,6 +1,4 @@
 package Animals;
-
-import java.awt.*;
 import Mobility.Point;
 
 public class AnimalThread extends Thread implements Runnable {
@@ -12,23 +10,21 @@ public class AnimalThread extends Thread implements Runnable {
 
     /**
      * Constructor
-     * @param ani animal to run
-     * @param nD Distance
-     * @param sf Start flag
-     * @param ff Finish flag
+     * @param animal animal to run
+     * @param distance Distance
+     * @param startF Start flag
+     * @param finalF Finish flag
      */
-    public AnimalThread(Animal ani, double nD, Boolean sf, Boolean ff) {
-        participant = ani;
-        neededDistance = nD;
-        startFlag = sf;
-        finishFlag = ff;
+    public AnimalThread(Animal animal, double distance, Boolean startF, Boolean finalF) {
+        participant = animal;
+        neededDistance = distance;
+        startFlag = startF;
+        finishFlag = finalF;
     }
 
     @Override
     public void run() {
-        double moved = 0;
-
-        // Wait for the start signal
+        // 1. Wait until startFlag is true
         synchronized (startFlag) {
             while (!startFlag) {
                 try {
@@ -40,37 +36,34 @@ public class AnimalThread extends Thread implements Runnable {
             }
         }
 
-        // Running loop
-        while (true) {
-            // Check if the thread is interrupted
+        double distanceCovered = 0;
+
+        while (!Thread.interrupted() && distanceCovered < neededDistance) {
+            // 2. Check if the thread is interrupted
             if (Thread.interrupted()) {
                 return;
             }
 
+            // 3. Move the animal forward
             synchronized (participant) {
-                // Move the animal forward
-                Point currentLocation = participant.getLocation();
-                boolean movedSuccessfully = participant.move(currentLocation);
-
-                if (movedSuccessfully) {
-                    moved += participant.getSpeed();
+                if (participant.move(new Point(participant.getLocation().getX() + (int) participant.getSpeed(), participant.getLocation().getY()))) {
+                    distanceCovered += participant.getSpeed();
                     participant.consumeEnergy(participant.getSpeed());
-
-                    // Check if the required distance has been reached
-                    if (moved >= neededDistance) {
-                        synchronized (finishFlag) {
-                            finishFlag = true;
-                            finishFlag.notify();
-                        }
-                        return;
-                    }
                 } else {
-                    // If the animal cannot move, break the loop
-                    return;
+                    break;
+                }
+
+                // Check if the needed distance is covered
+                if (distanceCovered >= neededDistance) {
+                    synchronized (finishFlag) {
+                        finishFlag = true;
+                        finishFlag.notifyAll();
+                    }
+                    break;
                 }
             }
 
-            // Sleep for a certain amount of time
+            // 4. Sleep for the specified time
             try {
                 Thread.sleep(sleepTime);
             } catch (InterruptedException e) {

@@ -1,137 +1,253 @@
 package Graphics;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A dialog for adding a new competition.
- * This dialog allows the user to input the competition name and select the competition type.
- */
 public class AddCompetitionDialog extends JDialog {
-    private JRadioButton relayRaceButton;
-    private JRadioButton regularRaceButton;
     private JTextField competitionNameField;
-    private JTable animalTable;
-    private DefaultTableModel tableModel;
-    private String competitionName;
-    private boolean isRelayRace;
+    private JRadioButton regularCompetitionRadio;
+    private JRadioButton relayCompetitionRadio;
+    private JComboBox<String> competitionTypeComboBox;
+    private JPanel groupsPanel;
+    private List<List<String>> groups;
+    private JButton addGroupButton;
+    private String selectedCompetitionType;
 
-    /**
-     * Constructs a new AddCompetitionDialog.
-     * Initializes the dialog components and layout.
-     */
-    public AddCompetitionDialog() {
-        setTitle("Add Competition");
-        setSize(500, 400);
-        setLocationRelativeTo(null);
+    public AddCompetitionDialog(Frame owner) {
+        super(owner, "Add Competition", true);
+        setSize(700, 600);
+        setLocationRelativeTo(owner);
         setLayout(new BorderLayout(10, 10));
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new GridBagLayout());
+        JPanel contentPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Competition Name
         gbc.gridx = 0;
         gbc.gridy = 0;
-
         contentPanel.add(new JLabel("Competition Name:"), gbc);
         competitionNameField = new JTextField(15);
         gbc.gridx = 1;
+        gbc.gridwidth = 2;
         contentPanel.add(competitionNameField, gbc);
 
+        // Competition Type
         gbc.gridx = 0;
         gbc.gridy = 1;
-        contentPanel.add(new JLabel("Select Competition Type:"), gbc);
-
-        relayRaceButton = new JRadioButton("Relay Race");
-        regularRaceButton = new JRadioButton("Regular Race");
-        ButtonGroup raceTypeGroup = new ButtonGroup();
-        raceTypeGroup.add(relayRaceButton);
-        raceTypeGroup.add(regularRaceButton);
-
-        JPanel raceTypePanel = new JPanel();
-        raceTypePanel.add(relayRaceButton);
-        raceTypePanel.add(regularRaceButton);
-
+        gbc.gridwidth = 1;
+        contentPanel.add(new JLabel("Competition Type:"), gbc);
+        competitionTypeComboBox = new JComboBox<>(new String[]{"Air", "Water", "Terrestrial"});
         gbc.gridx = 1;
-        contentPanel.add(raceTypePanel, gbc);
+        gbc.gridwidth = 2;
+        contentPanel.add(competitionTypeComboBox, gbc);
 
-        add(contentPanel, BorderLayout.NORTH);
+        // Radio Buttons for Regular/Relay
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        regularCompetitionRadio = new JRadioButton("Regular Competition");
+        relayCompetitionRadio = new JRadioButton("Relay Competition");
+        ButtonGroup competitionGroup = new ButtonGroup();
+        competitionGroup.add(regularCompetitionRadio);
+        competitionGroup.add(relayCompetitionRadio);
+        contentPanel.add(regularCompetitionRadio, gbc);
+        gbc.gridx = 1;
+        contentPanel.add(relayCompetitionRadio, gbc);
 
-        // Table for animal groups
-        String[] columnNames = {"Group 1", "Group 2", "Group 3"};
-        tableModel = new DefaultTableModel(columnNames, 0);
-        animalTable = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(animalTable);
-        add(scrollPane, BorderLayout.CENTER);
+        // Groups Panel
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        groupsPanel = new JPanel(new GridBagLayout());
+        JScrollPane scrollPane = new JScrollPane(groupsPanel);
+        contentPanel.add(scrollPane, gbc);
+
+        // Add Group Button
+        gbc.gridy = 4;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        addGroupButton = new JButton("Add Group");
+        contentPanel.add(addGroupButton, gbc);
+
+        add(contentPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
-        JButton addButton = new JButton("Add Animal");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addAnimal();
-            }
-        });
-        buttonPanel.add(addButton);
-
         JButton okButton = new JButton("OK");
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                competitionName = competitionNameField.getText();
-                isRelayRace = relayRaceButton.isSelected();
+        JButton cancelButton = new JButton("Cancel");
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        groups = new ArrayList<>();
+
+        // Action Listeners
+        addGroupButton.addActionListener(e -> addGroup());
+        regularCompetitionRadio.addActionListener(e -> {
+            updateSelectedCompetitionType();
+            lockCompetitionType();
+            updateGroupsPanel();
+        });
+        relayCompetitionRadio.addActionListener(e -> {
+            updateSelectedCompetitionType();
+            lockCompetitionType();
+            updateGroupsPanel();
+        });
+        competitionTypeComboBox.addActionListener(e -> {
+            updateSelectedCompetitionType();
+            updateGroupsPanel();
+        });
+        okButton.addActionListener(e -> {
+            if (validateInput()) {
                 setVisible(false);
             }
         });
-        buttonPanel.add(okButton);
-
-        add(buttonPanel, BorderLayout.SOUTH);
+        cancelButton.addActionListener(e -> setVisible(false));
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setModal(true);
     }
 
-    /**
-     * Adds a new animal to the selected group.
-     */
-    private void addAnimal() {
-        String animalName = JOptionPane.showInputDialog(this, "Enter animal name:");
-        if (animalName != null && !animalName.isEmpty()) {
-            int selectedColumn = animalTable.getSelectedColumn();
-            if (selectedColumn == -1) {
-                selectedColumn = 0;
+    private void updateSelectedCompetitionType() {
+        selectedCompetitionType = (String) competitionTypeComboBox.getSelectedItem();
+    }
+
+    private void lockCompetitionType() {
+        competitionTypeComboBox.setEnabled(false);
+    }
+
+    private void addGroup() {
+        if (regularCompetitionRadio.isSelected()) {
+            // For regular competition, only one group is allowed
+            return;
+        }
+        List<String> newGroup = new ArrayList<>();
+        groups.add(newGroup);
+        updateGroupsPanel();
+    }
+
+    private void updateGroupsPanel() {
+        groupsPanel.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weighty = 1.0;
+
+        if (regularCompetitionRadio.isSelected()) {
+            // For regular competition, ensure there's only one group
+            if (groups.isEmpty()) {
+                groups.add(new ArrayList<>());
+            } else if (groups.size() > 1) {
+                groups = new ArrayList<>(groups.subList(0, 1));
             }
-            tableModel.addRow(new Object[]{animalName, "", ""});
+            addGroupButton.setEnabled(false);
+        } else {
+            addGroupButton.setEnabled(true);
+        }
+
+        for (int i = 0; i < groups.size(); i++) {
+            JPanel groupPanel = new JPanel(new BorderLayout());
+            groupPanel.setBorder(BorderFactory.createTitledBorder("Group " + (i + 1)));
+
+            // Create a list for animals
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+            for (String animal : groups.get(i)) {
+                listModel.addElement(animal);
+            }
+            JList<String> animalList = new JList<>(listModel);
+            JScrollPane listScrollPane = new JScrollPane(animalList);
+            groupPanel.add(listScrollPane, BorderLayout.CENTER);
+
+            JButton addAnimalButton = new JButton("Add Animal");
+            final int groupIndex = i;
+            addAnimalButton.addActionListener(e -> addAnimal(groupIndex));
+            groupPanel.add(addAnimalButton, BorderLayout.SOUTH);
+
+            gbc.gridx = i;
+            gbc.gridy = 0;
+            groupsPanel.add(groupPanel, gbc);
+        }
+
+        groupsPanel.revalidate();
+        groupsPanel.repaint();
+    }
+
+    private void addAnimal(int groupIndex) {
+        if (selectedCompetitionType == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Please select a competition type first.",
+                    "No Competition Type",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        AddAnimalDialog addAnimalDialog = new AddAnimalDialog(null);
+        addAnimalDialog.setVisible(true);
+        if (addAnimalDialog.isConfirmed()) {
+            String animalType = addAnimalDialog.getAnimalType();
+            if (!isAnimalTypeValidForCompetition(animalType)) {
+                JOptionPane.showMessageDialog(this,
+                        "This animal type is not valid for " + selectedCompetitionType + " competition.",
+                        "Invalid Animal Type",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String animalName = addAnimalDialog.getNameField().getText();
+            groups.get(groupIndex).add(animalName);
+            updateGroupsPanel();
         }
     }
 
-    /**
-     * Returns the competition name entered by the user.
-     *
-     * @return the competition name
-     */
-    public String getCompetitionName() {
-        return competitionName;
+    private boolean isAnimalTypeValidForCompetition(String animalType) {
+        switch (selectedCompetitionType) {
+            case "Air":
+                return animalType.equals("Eagle") || animalType.equals("Pigeon");
+            case "Water":
+                return animalType.equals("Alligator") || animalType.equals("Whale") || animalType.equals("Dolphin");
+            case "Terrestrial":
+                return animalType.equals("Dog") || animalType.equals("Cat") || animalType.equals("Snake") || animalType.equals("Alligator");
+            default:
+                return false;
+        }
     }
 
-    /**
-     * Returns whether the competition is a relay race.
-     *
-     * @return true if the competition is a relay race, false otherwise
-     */
-    public boolean isRelayRace() {
-        return isRelayRace;
+    private boolean validateInput() {
+        if (competitionNameField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a competition name.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!regularCompetitionRadio.isSelected() && !relayCompetitionRadio.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Please select a competition type (Regular or Relay).", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (selectedCompetitionType == null) {
+            JOptionPane.showMessageDialog(this, "Please select a competition type (Air, Water, or Terrestrial).", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (groups.isEmpty() || groups.get(0).isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please add at least one animal to the group.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    public String getCompetitionName() {
+        return competitionNameField.getText();
     }
 
     public String getCompetitionType() {
-        if (relayRaceButton.isSelected()) {
-            return "Relay Race";
-        } else {
-            return "Regular Race";
-        }
+        return selectedCompetitionType;
+    }
+
+    public boolean isRelayCompetition() {
+        return relayCompetitionRadio.isSelected();
+    }
+
+    public List<List<String>> getGroups() {
+        return groups;
     }
 }

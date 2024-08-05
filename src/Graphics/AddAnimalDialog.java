@@ -85,7 +85,7 @@ public class AddAnimalDialog extends JDialog {
         gbc.gridx = 0;
         gbc.gridy = 4;
         add(new JLabel("Gender:"), gbc);
-        genderComboBox = new JComboBox<>(new String[] {"Male", "Female"});
+        genderComboBox = new JComboBox<>(new String[] {"Male", "Female", "Hermaphrodite"});
         gbc.gridx = 1;
         add(genderComboBox, gbc);
 
